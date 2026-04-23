@@ -1,0 +1,1690 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cursed Era II ⛩️</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;900&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --void: #000000;
+      --abyss: #050507;
+      --dark: #0a090f;
+      --surface: #100e18;
+      --panel: #14111f;
+      --border: #2a2140;
+      --border-glow: #4a3a6a;
+      --cursed-purple: #6b21a8;
+      --cursed-mid: #9333ea;
+      --cursed-bright: #c084fc;
+      --cursed-light: #e9d5ff;
+      --gold: #d4a853;
+      --gold-dim: #8a6a2a;
+      --crimson: #7f1d1d;
+      --crimson-bright: #dc2626;
+      --text: #e2ddf0;
+      --text-dim: #9490aa;
+      --text-faint: #4a4560;
+      --glow-purple: 0 0 20px rgba(147, 51, 234, 0.5);
+      --glow-gold: 0 0 20px rgba(212, 168, 83, 0.4);
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--abyss);
+      color: var(--text);
+      font-family: 'EB Garamond', Georgia, serif;
+      overflow-x: hidden;
+      cursor: default;
+    }
+
+    /* ─── NOISE OVERLAY ─── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 0.4;
+    }
+
+    /* ─── SCROLLBAR ─── */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--abyss); }
+    ::-webkit-scrollbar-thumb { background: var(--cursed-purple); border-radius: 2px; }
+
+    /* ─── HERO ─── */
+    .hero {
+      position: relative;
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      overflow: hidden;
+    }
+
+    .hero-banner {
+      position: absolute;
+      inset: 0;
+      background-image: url('https://i.imgur.com/kdTZSsz.png');
+      background-size: cover;
+      background-position: center top;
+      background-repeat: no-repeat;
+      filter: brightness(0.55) saturate(1.2);
+      transform: scale(1.04);
+      animation: subtle-drift 20s ease-in-out infinite alternate;
+    }
+
+    @keyframes subtle-drift {
+      from { transform: scale(1.04) translateY(0px); }
+      to   { transform: scale(1.08) translateY(-12px); }
+    }
+
+    .hero-vignette {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 30%, transparent 20%, rgba(5,5,7,0.6) 70%, var(--abyss) 100%);
+    }
+
+    .hero-bottom-fade {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 50%;
+      background: linear-gradient(to bottom, transparent, var(--abyss) 90%);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      padding: 0 1rem 5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .hero-eyebrow {
+      font-family: 'Cinzel', serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.5em;
+      color: var(--gold);
+      text-transform: uppercase;
+      opacity: 0;
+      animation: fade-up 1s 0.3s forwards;
+    }
+
+    .hero-title {
+      font-family: 'Cinzel Decorative', cursive;
+      font-size: clamp(2.8rem, 8vw, 6.5rem);
+      font-weight: 900;
+      line-height: 0.95;
+      letter-spacing: -0.01em;
+      color: transparent;
+      background: linear-gradient(135deg, #fff 0%, var(--cursed-light) 40%, var(--cursed-bright) 70%, var(--gold) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      text-shadow: none;
+      filter: drop-shadow(0 0 40px rgba(147,51,234,0.6));
+      opacity: 0;
+      animation: fade-up 1s 0.5s forwards;
+    }
+
+    .hero-title span {
+      display: block;
+      font-size: 0.45em;
+      color: transparent;
+      background: linear-gradient(90deg, var(--gold-dim), var(--gold), var(--gold-dim));
+      -webkit-background-clip: text;
+      background-clip: text;
+      letter-spacing: 0.35em;
+      margin-bottom: 0.3em;
+    }
+
+    .hero-divider {
+      width: 200px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 0.5rem auto;
+      opacity: 0;
+      animation: fade-up 1s 0.7s forwards;
+    }
+
+    .hero-runes {
+      font-size: 1.1rem;
+      color: var(--cursed-bright);
+      letter-spacing: 0.4em;
+      opacity: 0;
+      animation: fade-up 1s 0.9s forwards;
+    }
+
+    .hero-tagline {
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      font-size: clamp(0.95rem, 2vw, 1.15rem);
+      color: var(--text-dim);
+      max-width: 520px;
+      line-height: 1.7;
+      opacity: 0;
+      animation: fade-up 1s 1.1s forwards;
+    }
+
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── SAGA BANNER ─── */
+    .saga-strip {
+      background: linear-gradient(90deg, var(--crimson) 0%, #4b0082 50%, var(--crimson) 100%);
+      padding: 0.8rem 2rem;
+      text-align: center;
+      font-family: 'Cinzel', serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.3em;
+      color: var(--cursed-light);
+      text-transform: uppercase;
+      position: relative;
+      overflow: hidden;
+    }
+    .saga-strip::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+      animation: shimmer 3s linear infinite;
+    }
+    @keyframes shimmer {
+      from { transform: translateX(-100%); }
+      to   { transform: translateX(100%); }
+    }
+    .saga-strip strong { color: #fff; }
+
+    /* ─── LAYOUT ─── */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* ─── SECTION HEADERS ─── */
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    .section-header .label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.5em;
+      color: var(--gold);
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 0.8rem;
+    }
+    .section-header h2 {
+      font-family: 'Cinzel Decorative', cursive;
+      font-size: clamp(1.5rem, 4vw, 2.4rem);
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: 0.03em;
+    }
+    .section-header h2 em {
+      color: var(--cursed-bright);
+      font-style: normal;
+    }
+    .section-header .rule {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    .section-header .rule::before,
+    .section-header .rule::after {
+      content: '';
+      height: 1px;
+      width: 80px;
+      background: linear-gradient(90deg, transparent, var(--border-glow));
+    }
+    .section-header .rule::after {
+      background: linear-gradient(90deg, var(--border-glow), transparent);
+    }
+    .section-header .rule span { color: var(--cursed-mid); font-size: 0.7rem; }
+
+    /* ─── ABOUT ─── */
+    .about-section {
+      padding: 5rem 0 4rem;
+      position: relative;
+    }
+
+    .about-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: 2.5rem 3rem;
+      position: relative;
+      overflow: hidden;
+      max-width: 780px;
+      margin: 0 auto;
+    }
+    .about-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--cursed-mid), transparent);
+    }
+    .about-card::after {
+      content: '呪術';
+      position: absolute;
+      right: 2rem;
+      bottom: 1rem;
+      font-size: 5rem;
+      color: rgba(147,51,234,0.04);
+      font-family: 'Cinzel Decorative', serif;
+      pointer-events: none;
+      line-height: 1;
+    }
+    .about-icon {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+    .about-card p {
+      font-size: 1.05rem;
+      line-height: 1.9;
+      color: var(--text-dim);
+    }
+    .about-card p strong { color: var(--text); }
+    .about-nav {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 1.8rem;
+      flex-wrap: wrap;
+    }
+    .about-nav a {
+      font-family: 'Cinzel', serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--cursed-bright);
+      text-decoration: none;
+      border: 1px solid var(--border);
+      padding: 0.5rem 1.2rem;
+      border-radius: 1px;
+      transition: all 0.3s;
+    }
+    .about-nav a:hover {
+      background: rgba(147,51,234,0.12);
+      border-color: var(--cursed-mid);
+      box-shadow: var(--glow-purple);
+    }
+
+    /* ─── PILLARS GRID ─── */
+    .pillars-section {
+      padding: 4rem 0 5rem;
+      background: linear-gradient(180deg, var(--abyss) 0%, var(--dark) 50%, var(--abyss) 100%);
+    }
+
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+
+    .pillar-card {
+      background: var(--panel);
+      padding: 2rem 1.8rem;
+      position: relative;
+      transition: background 0.3s;
+      overflow: hidden;
+    }
+    .pillar-card:hover {
+      background: #17142a;
+    }
+    .pillar-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 2px;
+      height: 0;
+      background: var(--cursed-mid);
+      transition: height 0.4s ease;
+    }
+    .pillar-card:hover::before { height: 100%; }
+
+    .pillar-icon {
+      font-size: 1.6rem;
+      margin-bottom: 1rem;
+      display: block;
+      filter: drop-shadow(0 0 8px rgba(147,51,234,0.4));
+    }
+    .pillar-title {
+      font-family: 'Cinzel', serif;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+    }
+    .pillar-body {
+      font-size: 0.92rem;
+      line-height: 1.8;
+      color: var(--text-dim);
+    }
+    .pillar-body strong { color: var(--cursed-bright); }
+    .pillar-glyph {
+      position: absolute;
+      bottom: -0.5rem;
+      right: 0.5rem;
+      font-size: 4.5rem;
+      color: rgba(107,33,168,0.05);
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    /* ─── CURRENT SAGA ─── */
+    .saga-section {
+      padding: 5rem 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .saga-section::before {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(127,29,29,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .saga-frame {
+      max-width: 720px;
+      margin: 0 auto;
+      text-align: center;
+      position: relative;
+    }
+    .saga-ornament {
+      font-family: 'Cinzel Decorative', cursive;
+      font-size: clamp(1.8rem, 5vw, 3rem);
+      font-weight: 900;
+      color: transparent;
+      background: linear-gradient(135deg, var(--crimson-bright), var(--gold), var(--cursed-bright));
+      -webkit-background-clip: text;
+      background-clip: text;
+      filter: drop-shadow(0 0 20px rgba(220,38,38,0.4));
+      display: block;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+    .saga-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.5em;
+      color: var(--text-faint);
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    .saga-border {
+      border: 1px solid var(--border);
+      border-top: 1px solid rgba(220,38,38,0.3);
+      padding: 2rem;
+      background: linear-gradient(135deg, rgba(127,29,29,0.05), var(--panel));
+      margin-top: 1.5rem;
+    }
+    .saga-border p {
+      font-style: italic;
+      color: var(--text-dim);
+      line-height: 1.9;
+      font-size: 1rem;
+    }
+
+    /* ─── JOIN CTA ─── */
+    .join-section {
+      padding: 4rem 0 6rem;
+    }
+
+    .join-card {
+      background: linear-gradient(135deg, rgba(107,33,168,0.08), rgba(127,29,29,0.06));
+      border: 1px solid var(--border);
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 3rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .join-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 30px,
+        rgba(147,51,234,0.01) 30px,
+        rgba(147,51,234,0.01) 31px
+      );
+      pointer-events: none;
+    }
+    .join-card::after {
+      content: '⛩️';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      font-size: 12rem;
+      opacity: 0.03;
+      pointer-events: none;
+    }
+    .join-eyebrow {
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.5em;
+      color: var(--text-faint);
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+    .join-title {
+      font-family: 'Cinzel Decorative', cursive;
+      font-size: clamp(1.4rem, 3.5vw, 2rem);
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+    .join-sub {
+      font-style: italic;
+      color: var(--text-dim);
+      font-size: 0.95rem;
+      margin-bottom: 2rem;
+    }
+
+    .join-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: 'Cinzel', serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: #fff;
+      background: linear-gradient(135deg, var(--cursed-purple), #4c1d95);
+      padding: 0.9rem 2rem;
+      border: 1px solid var(--cursed-mid);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+      transition: left 0.5s;
+    }
+    .btn-primary:hover::before { left: 100%; }
+    .btn-primary:hover {
+      box-shadow: var(--glow-purple);
+      border-color: var(--cursed-bright);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: 'Cinzel', serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--gold);
+      background: transparent;
+      padding: 0.9rem 2rem;
+      border: 1px solid var(--gold-dim);
+      transition: all 0.3s;
+    }
+    .btn-secondary:hover {
+      background: rgba(212,168,83,0.08);
+      border-color: var(--gold);
+      box-shadow: var(--glow-gold);
+    }
+
+    .join-meta {
+      margin-top: 2rem;
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .join-meta-item {
+      font-size: 0.78rem;
+      color: var(--text-faint);
+    }
+    .join-meta-item span {
+      color: var(--cursed-bright);
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+    }
+    .footer-runes {
+      font-size: 1.2rem;
+      letter-spacing: 0.5em;
+      color: var(--cursed-mid);
+      margin-bottom: 0.8rem;
+      opacity: 0.5;
+    }
+    .footer-text {
+      font-family: 'Cinzel', serif;
+      font-size: 0.62rem;
+      letter-spacing: 0.3em;
+      color: var(--text-faint);
+      text-transform: uppercase;
+    }
+    .footer-text a {
+      color: var(--cursed-bright);
+      text-decoration: none;
+    }
+
+    /* ─── FLOATING PARTICLES ─── */
+    .particles {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .particle {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: var(--cursed-bright);
+      border-radius: 50%;
+      animation: float-particle linear infinite;
+      opacity: 0;
+    }
+    @keyframes float-particle {
+      0%   { transform: translateY(100vh) translateX(0); opacity: 0; }
+      10%  { opacity: 0.6; }
+      90%  { opacity: 0.4; }
+      100% { transform: translateY(-10vh) translateX(var(--drift)); opacity: 0; }
+    }
+
+    /* ─── REVEAL ANIMATIONS ─── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── CURSED ENERGY LINE ─── */
+    .energy-line {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--cursed-mid), var(--gold), var(--cursed-mid), transparent);
+      margin: 0;
+      opacity: 0.4;
+    }
+
+    /* ─── LORE SECTION ─── */
+    .lore-section {
+      padding: 5rem 0 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .lore-section::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(circle, rgba(107,33,168,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* Timeline vertical line */
+    .lore-timeline {
+      position: relative;
+      max-width: 820px;
+      margin: 0 auto;
+    }
+    .lore-timeline::before {
+      content: '';
+      position: absolute;
+      left: 22px;
+      top: 0; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, var(--cursed-mid), var(--gold), var(--cursed-mid), transparent);
+    }
+
+    .lore-entry {
+      position: relative;
+      padding: 0 0 2.8rem 68px;
+    }
+    .lore-entry:last-child { padding-bottom: 0; }
+
+    .lore-dot {
+      position: absolute;
+      left: 12px;
+      top: 6px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 1px solid var(--cursed-mid);
+      background: var(--abyss);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.6rem;
+      color: var(--cursed-bright);
+      box-shadow: 0 0 12px rgba(147,51,234,0.35);
+    }
+    .lore-dot::after {
+      content: '✦';
+    }
+
+    .lore-year {
+      font-family: 'Cinzel', serif;
+      font-size: 0.62rem;
+      letter-spacing: 0.45em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 0.4rem;
+    }
+    .lore-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-left: 2px solid var(--cursed-purple);
+      padding: 1.6rem 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-left-color 0.3s, box-shadow 0.3s;
+    }
+    .lore-card:hover {
+      border-left-color: var(--cursed-bright);
+      box-shadow: inset 0 0 30px rgba(107,33,168,0.06), -2px 0 12px rgba(147,51,234,0.2);
+    }
+    .lore-card-title {
+      font-family: 'Cinzel', serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      color: var(--cursed-light);
+      text-transform: uppercase;
+      margin-bottom: 0.9rem;
+    }
+    .lore-card-body {
+      font-style: italic;
+      font-size: 0.97rem;
+      line-height: 1.95;
+      color: var(--text-dim);
+    }
+    .lore-card-body strong { color: var(--gold); font-style: normal; }
+    .lore-card-glyph {
+      position: absolute;
+      bottom: -0.3rem;
+      right: 1rem;
+      font-size: 5rem;
+      color: rgba(107,33,168,0.04);
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    /* Sub-lore block */
+    .sublore-block {
+      max-width: 820px;
+      margin: 3rem auto 0;
+      border: 1px solid var(--border);
+      border-top: 2px solid var(--crimson-bright);
+      background: linear-gradient(135deg, rgba(127,29,29,0.06), var(--panel));
+      padding: 2.4rem 2.4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .sublore-block::before {
+      content: '⚔';
+      position: absolute;
+      right: 1.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 8rem;
+      color: rgba(220,38,38,0.04);
+      pointer-events: none;
+      line-height: 1;
+    }
+    .sublore-title {
+      font-family: 'Cinzel Decorative', cursive;
+      font-size: clamp(1rem, 2.5vw, 1.4rem);
+      color: var(--crimson-bright);
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.06em;
+    }
+    .sublore-subtitle {
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.4em;
+      color: var(--text-faint);
+      text-transform: uppercase;
+      margin-bottom: 1.4rem;
+    }
+    .sublore-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+      margin-bottom: 1.4rem;
+    }
+    .sublore-fighter {
+      background: rgba(0,0,0,0.2);
+      border: 1px solid var(--border);
+      padding: 1rem 1.2rem;
+    }
+    .sublore-fighter-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.62rem;
+      letter-spacing: 0.35em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 0.3rem;
+    }
+    .sublore-fighter-name {
+      font-size: 0.95rem;
+      color: var(--text);
+      margin-bottom: 0.4rem;
+    }
+    .sublore-fighter-desc {
+      font-size: 0.83rem;
+      color: var(--text-dim);
+      font-style: italic;
+      line-height: 1.6;
+    }
+    .sublore-body {
+      font-size: 0.92rem;
+      line-height: 1.85;
+      color: var(--text-dim);
+      margin-bottom: 1rem;
+    }
+    .sublore-body strong { color: var(--text); }
+    .sublore-quote {
+      border-left: 2px solid var(--crimson-bright);
+      padding: 0.8rem 1.2rem;
+      margin: 1rem 0;
+      font-style: italic;
+      color: var(--text-dim);
+      font-size: 0.9rem;
+      background: rgba(127,29,29,0.06);
+    }
+    .sublore-detail-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.8rem;
+      margin-top: 1.2rem;
+    }
+    .sublore-detail {
+      text-align: center;
+      padding: 0.7rem;
+      background: rgba(0,0,0,0.15);
+      border: 1px solid var(--border);
+    }
+    .sublore-detail-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.55rem;
+      letter-spacing: 0.4em;
+      color: var(--text-faint);
+      text-transform: uppercase;
+      margin-bottom: 0.2rem;
+    }
+    .sublore-detail-value {
+      font-size: 0.85rem;
+      color: var(--cursed-bright);
+    }
+
+    /* Kamo aftermath */
+    .kamo-block {
+      max-width: 820px;
+      margin: 1.5rem auto 0;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-left: 2px solid var(--gold);
+      padding: 1.6rem 2rem;
+      font-size: 0.93rem;
+      line-height: 1.9;
+      color: var(--text-dim);
+    }
+    .kamo-block strong { color: var(--gold); }
+    .kamo-block em { color: var(--text-dim); }
+    .kamo-header {
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .kamo-header::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--gold-dim), transparent);
+    }
+
+    /* Events section */
+    .events-section {
+      padding: 4rem 0;
+      background: linear-gradient(180deg, var(--abyss) 0%, rgba(127,29,29,0.04) 50%, var(--abyss) 100%);
+      position: relative;
+    }
+    .event-card {
+      max-width: 820px;
+      margin: 0 auto;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-top: 2px solid var(--crimson-bright);
+      padding: 2.4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .event-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at top right, rgba(127,29,29,0.08), transparent 60%);
+      pointer-events: none;
+    }
+    .event-date-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: 'Cinzel', serif;
+      font-size: 0.62rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--crimson-bright);
+      border: 1px solid rgba(220,38,38,0.3);
+      padding: 0.3rem 0.9rem;
+      margin-bottom: 1.2rem;
+      background: rgba(127,29,29,0.1);
+    }
+    .event-title {
+      font-family: 'Cinzel Decorative', cursive;
+      font-size: clamp(1.1rem, 3vw, 1.7rem);
+      color: var(--text);
+      margin-bottom: 1.4rem;
+      filter: drop-shadow(0 0 8px rgba(220,38,38,0.25));
+    }
+    .event-casualties {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      margin: 1.4rem 0;
+    }
+    .event-casualty {
+      display: flex;
+      gap: 0.8rem;
+      align-items: flex-start;
+      padding: 0.8rem 1rem;
+      background: rgba(127,29,29,0.08);
+      border: 1px solid rgba(220,38,38,0.15);
+      border-left: 2px solid var(--crimson-bright);
+    }
+    .casualty-icon { font-size: 1rem; flex-shrink: 0; margin-top: 0.1rem; }
+    .casualty-text { font-size: 0.88rem; color: var(--text-dim); line-height: 1.65; }
+    .casualty-text strong { color: var(--text); }
+    .event-body {
+      font-size: 0.93rem;
+      line-height: 1.9;
+      color: var(--text-dim);
+      margin-bottom: 1rem;
+    }
+    .event-body strong { color: var(--text); }
+    .event-alert {
+      background: rgba(127,29,29,0.15);
+      border: 1px solid rgba(220,38,38,0.4);
+      padding: 1rem 1.4rem;
+      margin: 1.2rem 0;
+      font-family: 'Cinzel', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      color: var(--crimson-bright);
+      text-align: center;
+      text-transform: uppercase;
+      line-height: 1.7;
+      position: relative;
+    }
+    .event-alert::before {
+      content: '⚠';
+      display: block;
+      font-size: 1.2rem;
+      margin-bottom: 0.4rem;
+    }
+
+    /* ─── RULES SECTION ─── */
+    .rules-section {
+      padding: 5rem 0 4rem;
+      position: relative;
+    }
+    .rules-section::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 700px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(212,168,83,0.04) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .rules-columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .rules-block {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .rules-block-header {
+      background: linear-gradient(90deg, rgba(107,33,168,0.15), transparent);
+      border-bottom: 1px solid var(--border);
+      padding: 1.2rem 1.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .rules-block-header.gold-header {
+      background: linear-gradient(90deg, rgba(212,168,83,0.1), transparent);
+    }
+    .rules-block-icon { font-size: 1.1rem; }
+    .rules-block-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .rules-list {
+      padding: 1.4rem 0;
+    }
+    .rule-item {
+      display: flex;
+      gap: 1rem;
+      padding: 0.9rem 1.8rem;
+      border-bottom: 1px solid rgba(42,33,64,0.5);
+      transition: background 0.25s;
+      align-items: flex-start;
+    }
+    .rule-item:last-child { border-bottom: none; }
+    .rule-item:hover { background: rgba(107,33,168,0.05); }
+    .rule-number {
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      color: var(--cursed-mid);
+      letter-spacing: 0.2em;
+      flex-shrink: 0;
+      margin-top: 0.2rem;
+      min-width: 32px;
+    }
+    .rule-content { flex: 1; }
+    .rule-name {
+      font-family: 'Cinzel', serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      color: var(--text);
+      text-transform: uppercase;
+      margin-bottom: 0.25rem;
+    }
+    .rule-desc {
+      font-size: 0.88rem;
+      color: var(--text-dim);
+      line-height: 1.65;
+    }
+    .rule-badge {
+      font-size: 0.75rem;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+
+    .rules-footer {
+      text-align: center;
+      margin-top: 2.5rem;
+      padding: 1.2rem;
+      border: 1px solid var(--border);
+      background: linear-gradient(90deg, rgba(107,33,168,0.05), rgba(212,168,83,0.03), rgba(107,33,168,0.05));
+      max-width: 1000px;
+      margin: 2.5rem auto 0;
+      font-family: 'Cinzel', serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+    }
+    .rules-footer span { color: var(--cursed-bright); }
+
+    /* Lore sub-tabs */
+    .lore-tabs {
+      display: flex;
+      gap: 0;
+      margin-bottom: 2.5rem;
+      border: 1px solid var(--border);
+      max-width: 820px;
+      margin: 0 auto 2.5rem;
+    }
+    .lore-tab {
+      flex: 1;
+      padding: 0.7rem 1rem;
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      text-align: center;
+      cursor: pointer;
+      color: var(--text-faint);
+      border-right: 1px solid var(--border);
+      background: transparent;
+      border-top: none; border-bottom: none; border-left: none;
+      transition: all 0.3s;
+    }
+    .lore-tab:last-child { border-right: none; }
+    .lore-tab.active {
+      color: var(--gold);
+      background: rgba(212,168,83,0.06);
+    }
+    .lore-tab:hover:not(.active) {
+      color: var(--text-dim);
+      background: rgba(107,33,168,0.05);
+    }
+    .lore-panel { display: none; }
+    .lore-panel.active { display: block; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 700px) {
+      .about-card { padding: 1.8rem 1.4rem; }
+      .join-card { padding: 2rem 1.4rem; }
+      .pillars-grid { grid-template-columns: 1fr; }
+      .rules-columns { grid-template-columns: 1fr; }
+      .sublore-row { grid-template-columns: 1fr; }
+      .sublore-detail-grid { grid-template-columns: 1fr 1fr; }
+      .lore-timeline::before { left: 14px; }
+      .lore-entry { padding-left: 50px; }
+      .lore-dot { left: 4px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- PARTICLES -->
+<div class="particles" id="particles"></div>
+
+<!-- ═══════════════════════════════ HERO ═══════════════════════════════ -->
+<section class="hero">
+  <div class="hero-banner"></div>
+  <div class="hero-vignette"></div>
+  <div class="hero-bottom-fade"></div>
+
+  <div class="hero-content">
+    <p class="hero-eyebrow">𓏲 ࣪ 🕯️ ﹒ 🪽 ﹒ ⛓️ ﹒ 🕯️ ࣪ 𓏲</p>
+    <h1 class="hero-title">
+      <span>Cursed Era</span>
+      II
+    </h1>
+    <div class="hero-divider"></div>
+    <p class="hero-runes">⛩️ &nbsp; ✦ &nbsp; ⛩️</p>
+    <p class="hero-tagline">
+      Donde la energía maldita es ley y tu destino se forja con cada rol.<br>
+      La era de las sombras ha comenzado.
+    </p>
+  </div>
+</section>
+
+<!-- SAGA STRIP -->
+<div class="saga-strip">
+  ⚔️ &nbsp; Saga Actual &nbsp;—&nbsp; <strong>Los Culling Games</strong> &nbsp; ⚔️
+</div>
+
+<div class="energy-line"></div>
+
+<!-- ═══════════════════════════════ ABOUT ═══════════════════════════════ -->
+<section class="about-section">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="label">✦ &nbsp; El Servidor &nbsp; ✦</span>
+      <h2>¿Quiénes <em>Somos</em>?</h2>
+      <div class="rule"><span>𓆩 ✦ 𓆪</span></div>
+    </div>
+
+    <div class="about-card reveal">
+      <span class="about-icon">🎐</span>
+      <p>
+        Somos una comunidad diseñada para los amantes de la <strong>estrategia y la narrativa profunda</strong>. Aquí, la toxicidad no tiene lugar: valoramos tu originalidad y respetamos tus gustos. Nos enfocamos en ofrecer un ambiente donde cada usuario pueda <strong>forjar su propio camino</strong> dentro de un sistema lógico y equilibrado, inspirado en el universo de Jujutsu Kaisen.
+      </p>
+      <div class="about-nav">
+        <a href="#lore">📜 Lore</a>
+        <a href="#reglas">⚖️ Reglas</a>
+        <a href="https://discord.gg/tf29Y4zN9W" target="_blank">⛩️ Unirse</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="energy-line"></div>
+
+<!-- ═══════════════════════════════ PILLARS ═══════════════════════════════ -->
+<section class="pillars-section">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="label">𓆩 Pilares del Servidor 𓆪</span>
+      <h2>El Sistema <em>Maldito</em></h2>
+      <div class="rule"><span>✦</span></div>
+    </div>
+
+    <div class="pillars-grid">
+
+      <div class="pillar-card reveal">
+        <span class="pillar-icon">📿</span>
+        <div class="pillar-title">Gestión Automatizada — Nyx System</div>
+        <p class="pillar-body">
+          Olvídate de las hojas de personaje manuales. Contamos con un <strong>bot exclusivo</strong> desarrollado internamente que procesa tus estadísticas, niveles y XP de forma automática. Tú solo preocúpate por rolear.
+        </p>
+        <div class="pillar-glyph">⚙</div>
+      </div>
+
+      <div class="pillar-card reveal">
+        <span class="pillar-icon">☯️</span>
+        <div class="pillar-title">Maestría Progresiva (0–200%)</div>
+        <p class="pillar-body">
+          Implementamos un sistema de crecimiento escalonado basado en el canon. Tu personaje no será estático: mediante la constancia, podrás desbloquear el <strong>200% de tu potencial</strong> con evolución orgánica.
+        </p>
+        <div class="pillar-glyph">∞</div>
+      </div>
+
+      <div class="pillar-card reveal">
+        <span class="pillar-icon">🪷</span>
+        <div class="pillar-title">Rituales Canónicos y Customs</div>
+        <p class="pillar-body">
+          Disponemos de un catálogo de <strong>más de 30 técnicas malditas</strong>. Las habilidades originales del anime y las creaciones únicas de la comunidad brillan por igual en combate.
+        </p>
+        <div class="pillar-glyph">呪</div>
+      </div>
+
+      <div class="pillar-card reveal">
+        <span class="pillar-icon">🔗</span>
+        <div class="pillar-title">Ataduras Celestiales y Especiales</div>
+        <p class="pillar-body">
+          ¿Sin energía maldita pero con fuerza sobrehumana? ¿Un pacto que limite tu poder a cambio de una recompensa masiva? Las <strong>Restricciones</strong> permiten builds de personaje verdaderamente únicas.
+        </p>
+        <div class="pillar-glyph">⛓</div>
+      </div>
+
+      <div class="pillar-card reveal">
+        <span class="pillar-icon">🪙</span>
+        <div class="pillar-title">Economía y Objetos Malditos</div>
+        <p class="pillar-body">
+          Participa en misiones y eventos para ganar divisas. En la <strong>Shop</strong> encontrarás herramientas de grado especial, ítems únicos y mucho más para potenciar tu rol.
+        </p>
+        <div class="pillar-glyph">◈</div>
+      </div>
+
+      <div class="pillar-card reveal">
+        <span class="pillar-icon">🌀</span>
+        <div class="pillar-title">Eventos Globales y Reworks</div>
+        <p class="pillar-body">
+          El mundo está vivo. Realizamos <strong>arcos narrativos constantes</strong> donde tus decisiones afectan el futuro del servidor. Balance dinámico garantizado en cada encuentro.
+        </p>
+        <div class="pillar-glyph">⊕</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="energy-line"></div>
+
+<!-- ═══════════════════════════════ CURRENT SAGA ═══════════════════════════════ -->
+<section class="saga-section">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="label">🎞️ Arco Narrativo Activo 🎞️</span>
+      <h2>Saga <em>Actual</em></h2>
+      <div class="rule"><span>⚔️</span></div>
+    </div>
+
+    <div class="saga-frame reveal">
+      <p class="saga-label">— En curso —</p>
+      <span class="saga-ornament">Los Culling Games</span>
+
+      <div class="saga-border">
+        <p>
+          El Juego de la Purga ha comenzado. Las colonias están activas, los hechiceros y las maldiciones compiten por puntos en un tablero donde la muerte es la única moneda que vale. 
+          ¿Eres lo suficientemente fuerte para sobrevivir, o simplemente serás otra pieza sacrificada? 
+          Tu destino en los Culling Games dependerá de cada decisión, cada alianza y cada técnica maldita que domines.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="energy-line"></div>
+
+<!-- ═══════════════════════════════ LORE ═══════════════════════════════ -->
+<section class="lore-section" id="lore">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="label">۩❦۩ &nbsp; Historia del Mundo &nbsp; ۩❦۩</span>
+      <h2>El <em>Lore</em> Maldito</h2>
+      <div class="rule"><span>𓆩 ✦ 𓆪</span></div>
+    </div>
+
+    <!-- Tab buttons -->
+    <div class="lore-tabs reveal">
+      <button class="lore-tab active" onclick="switchTab('lore-principal', this)">📜 Lore Principal</button>
+      <button class="lore-tab" onclick="switchTab('lore-sub', this)">⚔️ Sub Lore</button>
+      <button class="lore-tab" onclick="switchTab('lore-eventos', this)">🔥 Progresión & Eventos</button>
+    </div>
+
+    <!-- ─── PANEL: LORE PRINCIPAL ─── -->
+    <div class="lore-panel active" id="lore-principal">
+      <div class="lore-timeline">
+
+        <div class="lore-entry reveal">
+          <div class="lore-dot"></div>
+          <p class="lore-year">⟿ &nbsp; 1990 — 1997</p>
+          <div class="lore-card">
+            <div class="lore-card-title">El Ascenso del Apóstata</div>
+            <p class="lore-card-body">
+              Todo rastro de orden se extinguió en <strong>1990</strong>. Durante una misión de alto riesgo sentenciada al fracaso por la negligencia de los Altos Mandos, un joven hechicero llamado <strong>Félix</strong> alcanzó el umbral de la muerte. En su último aliento, forzó el acceso a la <strong>Técnica Inversa</strong>, reconstruyendo no solo su cuerpo, sino su percepción de la realidad. Aquel milagro fracturó su mente; desarrolló un trastorno mental profundo, una mezcla de mesianismo y desprecio por la debilidad, que lo llevó a traicionar a la sociedad de Jujutsu para convertirse en el brujo más poderoso de su tiempo.
+            </p>
+            <div class="lore-card-glyph">呪</div>
+          </div>
+        </div>
+
+        <div class="lore-entry reveal">
+          <div class="lore-dot"></div>
+          <p class="lore-year">⟿ &nbsp; 1998</p>
+          <div class="lore-card">
+            <div class="lore-card-title">Llama Eterna y la Paradoja del Príncipe</div>
+            <p class="lore-card-body">
+              Félix fundó la organización <strong>Llama Eterna</strong> con un propósito sombrío: vigilar que el Jujutsu no volviera a cometer negligencias, actuando como jueces y verdugos de la jerarquía antigua. En <strong>1998</strong>, la tensión estalló en una guerra total que culminó en un duelo contra su mejor amigo, <strong>Yuto</strong>. Félix, sumido en su inestabilidad psicológica, se suicidó a medio combate. Sin embargo, una chica de su antiguo grupo lo había maldecido, impidiendo su descanso y obligándolo a renacer como una <strong>Maldición superior al Grado Especial</strong>. Al conservar el uso de la energía inversa siendo un espíritu, alcanzó un estado superior; había creado su propia versión maldita de la RCT para invertir su ritual, siendo apodado desde entonces como el <strong>"Príncipe de las Maldiciones"</strong>.
+            </p>
+            <div class="lore-card-glyph">☽</div>
+          </div>
+        </div>
+
+        <div class="lore-entry reveal">
+          <div class="lore-dot"></div>
+          <p class="lore-year">⟿ &nbsp; 1999 — 2004</p>
+          <div class="lore-card">
+            <div class="lore-card-title">La Dictadura y la Noche de la Advertencia</div>
+            <p class="lore-card-body">
+              Tras la desaparición de Félix, los Altos Mandos instauraron un <strong>régimen de terror paranoico</strong>. Durante cinco años, cualquier hechicero con potencial inusual era ejecutado por miedo a una nueva traición. Esta dictadura asfixió el progreso de la hechicería hasta <strong>2004</strong>, cuando el Príncipe regresó. Félix se infiltró en la escuela de hechicería y el escondite de los líderes, desatando una masacre selectiva, sometiéndolos a torturas sistemáticas. No los mató; los dejó con vida como una advertencia: si su miedo volvía a frenar el flujo del poder, no quedaría nadie para dar órdenes. <strong>El régimen se desmoronó por puro pánico.</strong>
+            </p>
+            <div class="lore-card-glyph">⛓</div>
+          </div>
+        </div>
+
+        <div class="lore-entry reveal">
+          <div class="lore-dot"></div>
+          <p class="lore-year">⟿ &nbsp; 2009 — Presente</p>
+          <div class="lore-card">
+            <div class="lore-card-title">La Supuesta Tranquilidad</div>
+            <p class="lore-card-body">
+              El presente es una <strong>mentira cómoda</strong>. En 2009, el mundo del Jujutsu respira bajo una calma artificial. Los hechiceros actuales desarrollan técnicas complejas con libertad, pero solo porque los Altos Mandos tienen demasiado miedo para intervenir. Las escuelas funcionan y los clanes prosperan, pero todos saben que la autoridad es una fachada. <strong>Félix permanece en silencio</strong>, moviendo los hilos desde las sombras de un mundo desbalanceado, esperando a que los nuevos "errores" del sistema florezcan en su tablero personal.
+            </p>
+            <div class="lore-card-glyph">∞</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ─── PANEL: SUB LORE ─── -->
+    <div class="lore-panel" id="lore-sub">
+      <div class="sublore-block reveal">
+        <p class="sublore-subtitle">⌣ ‿ ‿ El Choque de las Eras ‿ ‿ ⌣</p>
+        <h3 class="sublore-title">⚔️ El Destino de Shibuya: 24 de Diciembre</h3>
+        <p class="sublore-body">
+          El calendario ha marcado la fecha final. Lo que por años fue un susurro entre las sombras de la hechicería se materializa en el corazón de Tokio. <strong>Shibuya</strong> no será solo un escenario, será el epicentro del conflicto definitivo donde el pasado y el presente colisionarán para decidir quién ostenta el derecho absoluto sobre la realidad.
+        </p>
+
+        <div class="sublore-row">
+          <div class="sublore-fighter">
+            <p class="sublore-fighter-label">⚔️ Pasado &nbsp;—&nbsp; El más fuerte de la Historia</p>
+            <p class="sublore-fighter-name">Akeni Sugawara</p>
+            <p class="sublore-fighter-desc">Aquel que detuvo el trazo final de Ryu, el hombre que ha navegado por los trastornos de la energía maldita y ha editado la existencia misma con su Anamorfosis. Representa la culminación técnica y el legado de una era de caos.</p>
+          </div>
+          <div class="sublore-fighter">
+            <p class="sublore-fighter-label">🛡️ Presente &nbsp;—&nbsp; El más fuerte de la Actualidad</p>
+            <p class="sublore-fighter-name">Daisuke</p>
+            <p class="sublore-fighter-desc">La respuesta de la era moderna ante el desbalance. Se alza como el muro infranqueable de 2009, el hechicero que porta el título del más fuerte en una actualidad que lucha por no ser consumida.</p>
+          </div>
+        </div>
+
+        <div class="sublore-detail-grid">
+          <div class="sublore-detail">
+            <p class="sublore-detail-label">📍 Ubicación</p>
+            <p class="sublore-detail-value">Shibuya, Tokio</p>
+          </div>
+          <div class="sublore-detail">
+            <p class="sublore-detail-label">📅 Fecha</p>
+            <p class="sublore-detail-value">24 de Diciembre</p>
+          </div>
+          <div class="sublore-detail">
+            <p class="sublore-detail-label">⚡ Impacto</p>
+            <p class="sublore-detail-value">Liberación sin precedentes</p>
+          </div>
+        </div>
+
+        <div class="sublore-quote">
+          "En la noche donde el mundo celebra la luz, solo uno quedará en pie para reclamar la oscuridad."
+        </div>
+
+        <p class="sublore-body">
+          La batalla que significó un antes y un después para la hechicería moderna llegó a su fin tras la <strong>victoria de los más fuertes</strong> en el último intercambio entre Akeni y Daisuke. Fue abiertamente unilateral hasta el final; mientras que Daisuke quedó como lo más cercano a un narco video, Akeni salió prácticamente ileso. El poder disperso en aquel combate trajo una <strong>sobre generación de energía maldita</strong>, causando una evolución natural: las maldiciones subirán un grado automáticamente debido a la nula contención del velo.
+        </p>
+      </div>
+
+      <div class="kamo-block reveal">
+        <div class="kamo-header">🏯 &nbsp; Secuela — Clan Kamo</div>
+        <p>Tras el <strong>wipeo a Noritoshi Kamo</strong>, su cadáver desapareció del templo. La estructura del clan quedó débil y sin líder. Una miembro del clan se presentó ante el mismo: <strong>Kromer</strong>, quien, debido a su estatus neutral, hazañas de curación y el respaldo del líder del clan Zenin, asumió el liderazgo llevando el peso del clan sobre sus hombros. Los úteros malditos y usuarios miembros del clan seguirían con vida.</p>
+        <br>
+        <p>Como el deceso de Noritoshi ocurrió de forma repentina, el equipo de defensa quedó libre de cargo, manteniendo sus puestos. La joven líder cuenta con un guardaespaldas personal proveniente del <strong>clan Ashiya</strong>, conocido como <strong>Yugen</strong>, con acceso a todo lugar donde ella se encuentre.</p>
+        <br>
+        <p>Mientras los días pasen, <em>los Kamo estarán indispuestos de forma conjunta para asistir a eventos de grandes proporciones</em>. Solo estará permitida la asistencia individual de sus miembros.</p>
+      </div>
+    </div>
+
+    <!-- ─── PANEL: PROGRESIÓN Y EVENTOS ─── -->
+    <div class="lore-panel" id="lore-eventos">
+      <div class="event-card reveal">
+        <span class="event-date-badge">🗓️ &nbsp; 10 de Marzo de 2010</span>
+        <h3 class="event-title">Masacre en Shinjuku</h3>
+
+        <p class="event-body">
+          Este <strong>10 de Marzo de 2010</strong>, hubo una catástrofe. En Shinjuku se soltaron Usuarios Malditos traídos a la vida nuevamente causando destrucción a su paso. Usuarios Malditos de esta era también participaron en esto. Se enviaron hechiceros para intentar detenerlos, pero nadie salió bien parado.
+        </p>
+
+        <p class="event-body"><strong>Bajas confirmadas:</strong></p>
+        <div class="event-casualties">
+          <div class="event-casualty">
+            <span class="casualty-icon">💀</span>
+            <p class="casualty-text"><strong>Rika Orimoto</strong> — Maldición de Grado Especial, la Reina de las Maldiciones. Pertenecía al hechicero <strong>Ishi</strong>. Fue erradicada en batalla contra el brujo Fénix; Ishi fue derrotado aunque no murió. <em>Se emite orden de ejecución contra Fénix.</em></p>
+          </div>
+          <div class="event-casualty">
+            <span class="casualty-icon">💀</span>
+            <p class="casualty-text"><strong>El brujo Gabriel</strong> — Asesinado por Vincent tras usar un corte especial.</p>
+          </div>
+          <div class="event-casualty">
+            <span class="casualty-icon">💀</span>
+            <p class="casualty-text"><strong>El brujo Aisuke</strong> — Hermano del anterior. Asesinado de forma similar; intentó matar a los hechiceros en un acto de cobardía utilizando una técnica similar a un agujero negro. Múltiples hechiceros quedaron gravemente heridos.</p>
+          </div>
+        </div>
+
+        <p class="event-body">
+          Los hechiceros presentes no han fallecido pero están recibiendo asistencia médica. Múltiples edificios y superficies han sido severados. La población fue evacuada y está intentando reconstruir su vida.
+        </p>
+        <p class="event-body">
+          Mientras esto sucedía, uno de los hechiceros más poderosos, <strong>Akeni</strong>, ha sido sellado en la herramienta de Grado Especial: <strong>Gokumonkyo</strong>. Su liberación es primera prioridad para la escuela de hechicería. A su vez, varias barreras han aparecido por todo territorio Nipón; las ventanas están investigando su origen.
+        </p>
+
+        <div class="event-alert">
+          Todo hechicero vinculado a la escuela de hechicería que entre será considerado un Usuario Maldito.<br>
+          Se niega la entrada a hechiceros hasta que se confirmen las condiciones de las barreras.<br><br>
+          Los Usuarios Malditos que no fueron asesinados estarán dentro de dichas barreras.<br>
+          La asistencia de la escuela no llegará a sus interiores — quien entre, lo hará bajo sus propias decisiones.
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="energy-line"></div>
+
+<!-- ═══════════════════════════════ RULES ═══════════════════════════════ -->
+<section class="rules-section" id="reglas">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="label">✎ ( ˶ᵔᴗᵔ˶ ) ✧ &nbsp; Normativa &nbsp; ✧ ( ˶ᵔᴗᵔ˶ ) ✎</span>
+      <h2>Las <em>Reglas</em></h2>
+      <div class="rule"><span>♡ ⋆｡˚</span></div>
+    </div>
+
+    <div class="rules-columns">
+
+      <!-- Reglas Generales -->
+      <div class="rules-block reveal">
+        <div class="rules-block-header">
+          <span class="rules-block-icon">🌸</span>
+          <span class="rules-block-label">Reglas Generales</span>
+        </div>
+        <div class="rules-list">
+
+          <div class="rule-item">
+            <span class="rule-number">001</span>
+            <div class="rule-content">
+              <p class="rule-name">Respeto</p>
+              <p class="rule-desc">Por favor mantengan el respeto entre <strong>todos</strong> los usuarios sin excepción.</p>
+            </div>
+            <span class="rule-badge">★☆</span>
+          </div>
+
+          <div class="rule-item">
+            <span class="rule-number">002</span>
+            <div class="rule-content">
+              <p class="rule-name">Uso adecuado de canales</p>
+              <p class="rule-desc">Respeta el uso de los canales. El único comando permitido en General es el AFK.</p>
+            </div>
+            <span class="rule-badge">☆★</span>
+          </div>
+
+          <div class="rule-item">
+            <span class="rule-number">003</span>
+            <div class="rule-content">
+              <p class="rule-name">No Contenido Inapropiado</p>
+              <p class="rule-desc">Está prohibido enviar imágenes explícitas o contenido de naturaleza inapropiada.</p>
+            </div>
+            <span class="rule-badge">💭</span>
+          </div>
+
+          <div class="rule-item">
+            <span class="rule-number">004</span>
+            <div class="rule-content">
+              <p class="rule-name">No Spam</p>
+              <p class="rule-desc">Da igual si es tu amigo — <strong>no spamees por favor.</strong></p>
+            </div>
+            <span class="rule-badge">☆★</span>
+          </div>
+
+          <div class="rule-item">
+            <span class="rule-number">005</span>
+            <div class="rule-content">
+              <p class="rule-name">Menciones Innecesarias</p>
+              <p class="rule-desc">Evita mencionar de forma innecesaria a alguna persona o al STAFF.</p>
+            </div>
+            <span class="rule-badge">🌸</span>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Reglas RP -->
+      <div class="rules-block reveal">
+        <div class="rules-block-header gold-header">
+          <span class="rules-block-icon">⚔️</span>
+          <span class="rules-block-label">Reglas de Rol</span>
+        </div>
+        <div class="rules-list">
+
+          <div class="rule-item">
+            <span class="rule-number">001</span>
+            <div class="rule-content">
+              <p class="rule-name">No Black/White Hand</p>
+              <p class="rule-desc">Está terminantemente prohibido. En todo caso, te llevarás un warn.</p>
+            </div>
+            <span class="rule-badge">🌸</span>
+          </div>
+
+          <div class="rule-item">
+            <span class="rule-number">002</span>
+            <div class="rule-content">
+              <p class="rule-name">No interrumpir rol ajeno</p>
+              <p class="rule-desc">No interrumpas el roleplay de otras personas si no te lo permiten explícitamente.</p>
+            </div>
+            <span class="rule-badge">☆★</span>
+          </div>
+
+          <div class="rule-item">
+            <span class="rule-number">003</span>
+            <div class="rule-content">
+              <p class="rule-name">Sex Role</p>
+              <p class="rule-desc">Permitido únicamente en hilos privados que luego se eliminen.</p>
+            </div>
+            <span class="rule-badge">💭</span>
+          </div>
+
+          <div class="rule-item">
+            <span class="rule-number">004</span>
+            <div class="rule-content">
+              <p class="rule-name">No Instakill</p>
+              <p class="rule-desc">Si el PVP no lleva más de 5 turnos, evita el instakill directo.</p>
+            </div>
+            <span class="rule-badge">★☆</span>
+          </div>
+
+          <div class="rule-item">
+            <span class="rule-number">005</span>
+            <div class="rule-content">
+              <p class="rule-name">No God Role</p>
+              <p class="rule-desc">Evita comportamientos omnipotentes o injustificados — evita llevarte un warneo.</p>
+            </div>
+            <span class="rule-badge">🌸</span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="rules-footer reveal">
+      ๑‧˚₊꒷︶ &nbsp; <span>Respeta las reglas</span> &nbsp; ︶꒷꒦⊹ &nbsp; ♡₊˚ &nbsp; ⋆｡˚ &nbsp; Incumplir conlleva sanciones &nbsp; ˚⊹ &nbsp; ꒦꒷︶ &nbsp; <span>Respeta las reglas</span> &nbsp; ︶꒷˚₊‧๑
+    </div>
+  </div>
+</section>
+
+
+<section class="join-section">
+  <div class="container">
+    <div class="join-card reveal">
+      <p class="join-eyebrow">𓏲 ⛩️ 𓏲</p>
+      <h2 class="join-title">Une tu Destino</h2>
+      <p class="join-sub">El sello de la era maldita aguarda tu nombre.</p>
+
+      <div class="join-buttons">
+        <a href="https://discord.gg/tf29Y4zN9W" target="_blank" class="btn-primary">
+          ⛩️ &nbsp; Unirse al Servidor
+        </a>
+        <a href="https://open.spotify.com/track/65X2koe1LhDgQmRkNdJFv9" target="_blank" class="btn-secondary">
+          🎵 &nbsp; Soundtrack Oficial
+        </a>
+      </div>
+
+      <div class="join-meta">
+        <div class="join-meta-item">Técnicas malditas <span>30+</span></div>
+        <div class="join-meta-item">Maestría <span>0 → 200%</span></div>
+        <div class="join-meta-item">Bot exclusivo <span>Nyx System</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ FOOTER ═══════════════════════════════ -->
+<footer>
+  <div class="footer-runes">◌ 🍥 ◌ 🍥 ◌ 🍥 ◌</div>
+  <p class="footer-text">
+    Cursed Era II &nbsp;—&nbsp; Comunidad de Rol JJK &nbsp;·&nbsp;
+    <a href="https://discord.gg/tf29Y4zN9W" target="_blank">Discord</a>
+  </p>
+</footer>
+
+<!-- ═══════════════════════════════ SCRIPTS ═══════════════════════════════ -->
+<script>
+  // Particles
+  (function () {
+    const container = document.getElementById('particles');
+    for (let i = 0; i < 28; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      const size = Math.random() * 2 + 1;
+      p.style.cssText = `
+        left: ${Math.random() * 100}%;
+        width: ${size}px;
+        height: ${size}px;
+        --drift: ${(Math.random() - 0.5) * 120}px;
+        animation-duration: ${8 + Math.random() * 14}s;
+        animation-delay: ${Math.random() * 10}s;
+        opacity: ${0.3 + Math.random() * 0.5};
+        background: ${Math.random() > 0.5 ? 'var(--cursed-bright)' : 'var(--gold)'};
+      `;
+      container.appendChild(p);
+    }
+  })();
+
+  // Lore tabs
+  function switchTab(panelId, btn) {
+    document.querySelectorAll('.lore-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.lore-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(panelId).classList.add('active');
+    btn.classList.add('active');
+    // Re-trigger reveals inside newly active panel
+    const newEls = document.querySelectorAll('#' + panelId + ' .reveal:not(.visible)');
+    newEls.forEach((el, i) => setTimeout(() => el.classList.add('visible'), i * 80));
+  }
+
+  (function () {
+    const els = document.querySelectorAll('.reveal');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('visible'), i * 80);
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    els.forEach(el => obs.observe(el));
+  })();
+</script>
+</body>
+</html>
