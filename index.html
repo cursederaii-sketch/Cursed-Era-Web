@@ -4,7 +4,26 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cursed Era II ⛩️ — Comunidad JJK</title>
+<link rel="icon" type="image/png" href="https://i.imgur.com/464sxVf.png">
+<link rel="apple-touch-icon" href="https://i.imgur.com/464sxVf.png">
+
+<!-- SEO -->
+<meta name="description" content="Cursed Era II — Comunidad de rol JJK. Energía maldita, lore profundo, sistema Nyx y más de 30 técnicas. Une tu destino." />
+<meta name="keywords" content="Jujutsu Kaisen, rol, discord, JJK, cursed era, roleplay, anime, hechiceros" />
+<meta name="author" content="Cursed Era II" />
+<meta name="theme-color" content="#6b21a8" />
+
+<!-- Open Graph -->
+<meta property="og:type"        content="website" />
+<meta property="og:url"         content="https://cursederaii-sketch.github.io/Cursed-Era-Web/" />
+<meta property="og:title"       content="⛩️ Cursed Era II — Comunidad JJK" />
+<meta property="og:description" content="Donde la energía maldita es ley y tu destino se forja con cada rol. La era de las sombras ha comenzado." />
+<meta property="og:image"       content="https://i.imgur.com/kdTZSsz.png" />
+<meta property="og:image:width"  content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:locale"      content="es_ES" />
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;900&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Noto+Serif+JP:wght@300;400;700&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <style>
     :root {
       --void: #000000;
@@ -2150,6 +2169,53 @@
       box-shadow: 0 0 15px rgba(147, 51, 234, 0.5);
     }
 
+   /* ── MODO CLARO ── */
+    body.light-mode {
+      --abyss: #f0ede8;
+      --dark: #e8e4dd;
+      --surface: #ddd8ce;
+      --panel: #ede9e2;
+      --panel2: #e5e0d8;
+      --border: #c8bfaa;
+      --border-glow: #a8966e;
+      --text: #1a1510;
+      --text-dim: #4a4035;
+      --text-faint: #8a7a60;
+      --cursed-purple: #5b11a0;
+      --cursed-mid: #7b22d4;
+      --cursed-bright: #9333ea;
+      --gold: #b8862a;
+      --gold-dim: #7a5a1a;
+      --crimson: #8b1a1a;
+      --crimson-bright: #cc2222;
+      background-color: var(--abyss);
+    }
+    body.light-mode .hero-bg { filter: brightness(0.75) saturate(1.1); }
+    body.light-mode .particles { opacity: 0.4; }
+    body.light-mode body::before { opacity: 0.1; }
+
+    /* ── THEME FAB ── */
+    .theme-fab {
+      position: fixed;
+      bottom: 8.5rem;
+      right: 2rem;
+      width: 44px; height: 44px;
+      background: var(--panel2);
+      border: 1px solid var(--border-glow);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      z-index: 8000;
+      font-size: 1.1rem;
+      transition: all 0.3s;
+      color: var(--gold);
+    }
+    .theme-fab:hover {
+      background: rgba(212,168,83,0.15);
+      box-shadow: var(--glow-gold);
+      border-color: var(--gold);
+      transform: scale(1.1) rotate(20deg);
+    }
+
     /* Anulación para Simular Celular en PC */
     body.force-mobile {
       display: flex;
@@ -2171,6 +2237,10 @@
       transform: translateX(-50%);
       bottom: 10px;
     }
+    /* Fix cursor en modo mobile */
+    body.force-mobile { cursor: auto !important; }
+    body.force-mobile .cursor-orb,
+    body.force-mobile .cursor-trail { display: none !important; }
   </style>
 </head>
 <body>
@@ -2188,6 +2258,197 @@
 <div class="particles" id="particles"></div>
 
 <button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">▲</button>
+
+<!-- ARCADE FLOTANTE -->
+<button class="arcade-fab" id="arcadeFab" onclick="toggleArcade()" title="Arcade Maldito">🕹️</button>
+
+<!-- MODAL ARCADE -->
+<div class="arcade-overlay" id="arcadeOverlay" onclick="closeArcadeOutside(event)">
+  <div class="arcade-modal" id="arcadeModal">
+    <div class="arcade-corner tl">✦</div>
+    <div class="arcade-corner tr">✦</div>
+    <div class="arcade-corner bl">✦</div>
+    <div class="arcade-corner br">✦</div>
+    <div class="arcade-top-line"></div>
+    <div class="arcade-bottom-line"></div>
+
+    <div class="arcade-header">
+      <div>
+        <div class="arcade-title">🕹️ Arcade Maldito</div>
+        <div class="arcade-sub">Elige tu juego — <span id="arcadeScoreLabel">Score: 0</span></div>
+      </div>
+      <button class="arcade-close" onclick="toggleArcade()">✕</button>
+    </div>
+
+    <!-- Selector de juegos -->
+    <div class="arcade-menu">
+      <button class="agame-btn active" onclick="selectGame('snake',this)">🐍 Snake</button>
+      <button class="agame-btn" onclick="selectGame('breakout',this)">🧱 Breakout</button>
+      <button class="agame-btn" onclick="selectGame('runner',this)">⚔️ Runner</button>
+      <button class="agame-btn" onclick="selectGame('whack',this)">🎯 Whack</button>
+      <button class="agame-btn" onclick="selectGame('memory',this)">🃏 Memory</button>
+      <button class="agame-btn" onclick="selectGame('dodge',this)">🛡️ Dominio</button>
+      <button class="agame-btn" onclick="selectGame('slash',this)">⚔️ Cortes</button>
+      <button class="agame-btn" onclick="selectGame('blackflash',this)">⚡ Destello</button>
+      <button class="agame-btn" onclick="selectGame('mash',this)">🌀 Expansión</button>
+      <button class="agame-btn" onclick="selectGame('catch',this)">🤞 Dedos</button>
+  <button class="agame-btn" style="background: linear-gradient(to right, #6b21a8, #c084fc);" onclick="window.open('juego.html','_blank')">🌌 EXORCISMO 3D</button>
+    </div>
+    <div style="text-align:center; margin-top:10px;">
+      <button onclick="toggleArcadeFS()" class="join-btn" style="padding: 5px 15px; font-size: 12px;">🖥️ Pantalla Completa</button>
+    </div>
+
+    <!-- Canvas del juego -->
+<div class="arcade-canvas-wrap" id="arcadeCanvasWrap">
+      <canvas id="arcadeCanvas" width="480" height="340"></canvas>
+      
+      <div id="jjk3d-container" style="display:none; position:absolute; top:0; left:0; width:100%; height:100%; background:#000;">
+        <div id="jjk3d-game" style="width:100%; height:100%; position:absolute; top:0; left:0;"></div>
+        <div id="jjk3d-damage-overlay" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:5;background:radial-gradient(ellipse at center,transparent 40%,rgba(200,0,0,0.6) 100%);opacity:0;transition:opacity 0.1s;"></div>
+        <div id="jjk3d-domain-vignette" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:6;background:radial-gradient(ellipse at center,transparent 30%,rgba(60,0,100,0.8) 100%);opacity:0;transition:opacity 0.4s;"></div>
+        <div id="jjk3d-combo-vfx" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:4;mix-blend-mode:screen;opacity:0;background:radial-gradient(circle at 50% 50%,rgba(180,0,255,0.3) 0%,transparent 70%);transition:opacity 0.5s;"></div>
+        <div id="jjk3d-slow-mo" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;z-index:9;font-size:1.5rem;color:#fff;text-shadow:0 0 20px #b840ff;opacity:0;transition:opacity 0.3s;white-space:nowrap;font-family:'Cinzel Decorative', cursive;">⏳</div>
+        <div id="jjk3d-crosshair" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;z-index:10;"><div style="width:14px;height:14px;border:2px solid rgba(200,180,220,0.7);border-radius:50%;box-shadow:0 0 6px #b840ff;"></div><div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:2px;height:2px;background:#fff;border-radius:50%;"></div></div>
+        <div id="jjk3d-bars" style="position:absolute;top:10px;left:10px;pointer-events:none;z-index:10;">
+            <div style="display:flex;align-items:center;gap:4px;margin-bottom:4px;"><div style="width:12px;height:12px;background:radial-gradient(circle,#ff4444,#8b0000);border-radius:50%;"></div><div style="width:100px;height:8px;background:rgba(0,0,0,0.7);border:1px solid #333;border-radius:4px;overflow:hidden;"><div id="jjk3d-health-fill" style="width:100%;height:100%;background:linear-gradient(90deg,#4a0000,#e03030);"></div></div></div>
+            <div style="display:flex;align-items:center;gap:4px;"><div style="width:12px;height:12px;background:radial-gradient(circle,#b840ff,#3a0066);border-radius:50%;"></div><div style="width:100px;height:8px;background:rgba(0,0,0,0.7);border:1px solid #333;border-radius:4px;overflow:hidden;"><div id="jjk3d-energy-fill" style="width:100%;height:100%;background:linear-gradient(90deg,#1a0040,#8b30ff);"></div></div></div>
+        </div>
+        <div id="jjk3d-hud" style="position:absolute;bottom:10px;left:50%;transform:translateX(-50%);pointer-events:none;z-index:10;display:flex;gap:10px;align-items:flex-end;">
+            <div style="background:rgba(8,4,20,0.85);border:1px solid #482a70;border-radius:6px;padding:6px;text-align:center;box-shadow:0 0 8px rgba(150,50,255,0.5);"><div style="font-size:0.5rem;color:#b8a3cc;">PUNTOS</div><div id="jjk3d-score" style="font-size:1rem;font-weight:bold;color:#e2bc8b;">0</div></div>
+            <div style="background:rgba(8,4,20,0.85);border:1px solid #482a70;border-radius:6px;padding:6px;text-align:center;"><div style="font-size:0.5rem;color:#b8a3cc;">RANGO</div><div id="jjk3d-grade" style="font-size:0.8rem;color:#e0c3ff;">Grado 4</div></div>
+            <div style="background:rgba(8,4,20,0.85);border:1px solid #482a70;border-radius:6px;padding:6px;text-align:center;"><div style="font-size:0.5rem;color:#b8a3cc;">DOMINIO [Q]</div><div id="jjk3d-domain-cd" style="font-size:0.8rem;color:#b840ff;">LISTO</div></div>
+        </div>
+        <div id="jjk3d-skills" style="position:absolute;top:10px;right:10px;pointer-events:none;z-index:10;display:flex;gap:4px;font-size:0.5rem;">
+            <div id="jjk3d-skill-r" style="background:rgba(80,20,120,0.5);padding:2px 4px;border-radius:3px;color:#d4b0ff;border:1px solid #482a70;display:none;">[R] Rojo</div>
+            <div id="jjk3d-skill-t" style="background:rgba(80,20,120,0.5);padding:2px 4px;border-radius:3px;color:#d4b0ff;border:1px solid #482a70;display:none;">[T] Teleport</div>
+        </div>
+        
+        <div id="jjk3d-blocker" style="position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;color:#fff;">
+            <h2 style="font-family:'Cinzel Decorative';color:#b840ff;margin:0;font-size:1.5rem;">EXORCISMO 3D</h2>
+            <p style="font-size:0.7rem;text-align:center;max-width:80%;margin:10px 0;">Usa WASD para moverte, Click Izq/Der para atacar, Espacio saltar, Shift dash. Q, R, T habilidades.</p>
+            <div style="font-size:0.8rem;animation:pulse 1.5s infinite;">Click para Iniciar</div>
+        </div>
+      </div>
+
+      <div class="arcade-gameover" id="arcadeGameover">
+        <div class="ago-title" id="agoTitle">GAME OVER</div>
+        <div class="ago-score" id="agoScore">Score: 0</div>
+        <button class="ago-btn" onclick="restartGame()">↩ Reiniciar</button>
+      </div>
+      <div class="memory-grid" id="memoryGrid"></div>
+      
+      <div id="jjk3d-mobile-actions" style="display:none; position:absolute; bottom:10px; right:10px; z-index:20; flex-direction:column; gap:8px;">
+         <div style="display:flex; gap:8px; justify-content:flex-end;">
+           <button onmousedown="jjk3dMobileAction('Q')" ontouchstart="jjk3dMobileAction('Q')" style="width:38px;height:38px;border-radius:50%;background:rgba(184,64,255,0.5);border:1px solid #b840ff;color:#fff;font-size:0.7rem;cursor:pointer;">Q</button>
+           <button onmousedown="jjk3dMobileAction('R')" ontouchstart="jjk3dMobileAction('R')" style="width:38px;height:38px;border-radius:50%;background:rgba(226,188,139,0.5);border:1px solid #e2bc8b;color:#fff;font-size:0.7rem;cursor:pointer;">R</button>
+           <button onmousedown="jjk3dMobileAction('T')" ontouchstart="jjk3dMobileAction('T')" style="width:38px;height:38px;border-radius:50%;background:rgba(85,238,255,0.5);border:1px solid #55eeff;color:#fff;font-size:0.7rem;cursor:pointer;">T</button>
+         </div>
+         <div style="display:flex; gap:8px; justify-content:flex-end;">
+           <button onmousedown="jjk3dMobileAction('Jump')" ontouchstart="jjk3dMobileAction('Jump')" style="width:48px;height:48px;border-radius:50%;background:rgba(50,50,50,0.7);border:1px solid #aaa;color:#fff;font-size:0.7rem;cursor:pointer;">Jump</button>
+           <button onmousedown="jjk3dMobileAction('LClick')" ontouchstart="jjk3dMobileAction('LClick')" style="width:48px;height:48px;border-radius:50%;background:rgba(100,100,100,0.7);border:1px solid #fff;color:#fff;font-size:0.7rem;cursor:pointer;">Atk 1</button>
+           <button onmousedown="jjk3dMobileAction('RClick')" ontouchstart="jjk3dMobileAction('RClick')" style="width:48px;height:48px;border-radius:50%;background:rgba(150,50,255,0.7);border:1px solid #b840ff;color:#fff;font-size:0.7rem;cursor:pointer;">Atk 2</button>
+         </div>
+      </div>
+    </div>
+
+    <div class="arcade-dpad" id="arcadeDpad">
+      <button class="dpad-btn dpad-up"    ontouchstart="dpadPress('up',true)" ontouchend="dpadPress('up',false)" onmousedown="dpadPress('up',true)" onmouseup="dpadPress('up',false)" onmouseleave="dpadPress('up',false)">▲</button>
+      <button class="dpad-btn dpad-left"  ontouchstart="dpadPress('left',true)" ontouchend="dpadPress('left',false)" onmousedown="dpadPress('left',true)" onmouseup="dpadPress('left',false)" onmouseleave="dpadPress('left',false)">◀</button>
+      <button class="dpad-btn dpad-mid"   ontouchstart="dpadPress('mid',true)" ontouchend="dpadPress('mid',false)" onmousedown="dpadPress('mid',true)" onmouseup="dpadPress('mid',false)" onmouseleave="dpadPress('mid',false)">●</button>
+      <button class="dpad-btn dpad-right" ontouchstart="dpadPress('right',true)" ontouchend="dpadPress('right',false)" onmousedown="dpadPress('right',true)" onmouseup="dpadPress('right',false)" onmouseleave="dpadPress('right',false)">▶</button>
+      <button class="dpad-btn dpad-down"  ontouchstart="dpadPress('down',true)" ontouchend="dpadPress('down',false)" onmousedown="dpadPress('down',true)" onmouseup="dpadPress('down',false)" onmouseleave="dpadPress('down',false)">▼</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- THEME TOGGLE -->
+<button class="theme-fab" id="themeFab" onclick="toggleTheme()" title="Cambiar tema">🌙</button>
+
+<!-- PAINT FLOTANTE -->
+<button class="paint-fab" id="paintFab" onclick="togglePaint()" title="Mural Maldito">🎨</button>
+
+<!-- MODAL PAINT -->
+<div class="paint-overlay" id="paintOverlay" onclick="closePaintOutside(event)">
+  <div class="paint-modal" id="paintModal">
+
+    <!-- Marco decorativo -->
+    <div class="paint-corner tl">✦</div>
+    <div class="paint-corner tr">✦</div>
+    <div class="paint-corner bl">✦</div>
+    <div class="paint-corner br">✦</div>
+    <div class="paint-top-line"></div>
+    <div class="paint-bottom-line"></div>
+
+    <!-- Header -->
+    <div class="paint-header">
+      <div class="paint-header-left">
+        <span class="paint-title">⛩ Mural Maldito</span>
+        <span class="paint-sub">Deja tu marca en la Era</span>
+      </div>
+      <button class="paint-close" onclick="togglePaint()">✕</button>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="paint-toolbar">
+      <!-- Pinceles -->
+      <div class="paint-tool-group">
+        <span class="paint-tool-label">Pincel</span>
+        <div class="paint-brushes">
+          <button class="pbtn active" id="brushPen"     onclick="setTool('pen')"    title="Pluma">✒</button>
+          <button class="pbtn"        id="brushRound"   onclick="setTool('round')"  title="Redondo">●</button>
+          <button class="pbtn"        id="brushSquare"  onclick="setTool('square')" title="Cuadrado">■</button>
+          <button class="pbtn"        id="brushEraser"  onclick="setTool('eraser')" title="Borrador">⬜</button>
+        </div>
+      </div>
+
+      <!-- Tamaño -->
+      <div class="paint-tool-group">
+        <span class="paint-tool-label">Tamaño <span id="sizeVal">6</span>px</span>
+        <input type="range" min="1" max="60" value="6" class="paint-slider" id="sizeSlider" oninput="setSize(this.value)">
+      </div>
+
+      <!-- Opacidad -->
+      <div class="paint-tool-group">
+        <span class="paint-tool-label">Opacidad <span id="opacVal">100</span>%</span>
+        <input type="range" min="5" max="100" value="100" class="paint-slider" id="opacSlider" oninput="setOpacity(this.value)">
+      </div>
+
+      <!-- Colores preset -->
+      <div class="paint-tool-group">
+        <span class="paint-tool-label">Color</span>
+        <div class="paint-colors">
+          <button class="pcolor active" style="background:#c084fc" onclick="setColor('#c084fc')"></button>
+          <button class="pcolor" style="background:#d4a853" onclick="setColor('#d4a853')"></button>
+          <button class="pcolor" style="background:#ef4444" onclick="setColor('#ef4444')"></button>
+          <button class="pcolor" style="background:#ffffff" onclick="setColor('#ffffff')"></button>
+          <button class="pcolor" style="background:#0d9488" onclick="setColor('#0d9488')"></button>
+          <button class="pcolor" style="background:#3b82f6" onclick="setColor('#3b82f6')"></button>
+          <button class="pcolor" style="background:#f97316" onclick="setColor('#f97316')"></button>
+          <button class="pcolor" style="background:#000000;border:1px solid #444" onclick="setColor('#000000')"></button>
+          <input type="color" id="colorPicker" value="#c084fc" oninput="setColor(this.value)" title="Color personalizado" class="pcolor-custom">
+        </div>
+      </div>
+
+      <!-- Acciones -->
+      <div class="paint-tool-group">
+        <span class="paint-tool-label">Acciones</span>
+        <div class="paint-actions">
+          <button class="pact" onclick="undoPaint()" title="Deshacer">↩</button>
+          <button class="pact" onclick="clearPaint()" title="Limpiar">🗑</button>
+          <button class="pact" onclick="fillBackground()" title="Fondo negro">⬛</button>
+          <button class="pact pact-save" onclick="savePaint()" title="Guardar imagen">💾 Guardar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Canvas -->
+    <div class="paint-canvas-wrap">
+      <canvas id="paintCanvas"></canvas>
+    </div>
+
+  </div>
+</div>
 
 <nav class="nav" id="nav">
   <a href="#" class="nav-logo">⛩ Cursed Era II</a>
@@ -2260,7 +2521,7 @@
 </section>
 
 <div class="saga-strip">
-  ⚔️   Saga Actual  —  <strong>Los Culling Games</strong>   ⚔️  ·  ⚔️   Saga Actual  —  <strong>Los Culling Games</strong>   ⚔️
+  ⚔️   Saga Actual  —  <strong>Los Culling Games</strong>   ⚔️  · 
 </div>
 <div class="energy-line"></div>
 
@@ -3284,10 +3545,12 @@
       body.classList.add('force-mobile');
       btnMobile.classList.add('active');
       btnPc.classList.remove('active');
+      if (typeof currentGame !== 'undefined' && currentGame === 'jjk3d') document.getElementById('jjk3d-mobile-actions').style.display = 'flex';
     } else {
       body.classList.remove('force-mobile');
       btnPc.classList.add('active');
       btnMobile.classList.remove('active');
+      if (typeof currentGame !== 'undefined' && currentGame === 'jjk3d') document.getElementById('jjk3d-mobile-actions').style.display = 'none';
     }
   }
 </script>
@@ -3482,6 +3745,1206 @@ const YT_SRC  = 'https://www.youtube.com/embed/ErBpk4A8lo4?autoplay=1&loop=1&pla
     // YouTube iframe API no permite control de volumen externo sin SDK completo.
     // El slider queda como UX visual.
   }
+
+  // ── THEME TOGGLE ──
+  (function() {
+    if (localStorage.getItem('ce2-theme') === 'light') {
+      document.body.classList.add('light-mode');
+      document.getElementById('themeFab').textContent = '☀️';
+    }
+  })();
+  function toggleTheme() {
+    const isLight = document.body.classList.toggle('light-mode');
+    document.getElementById('themeFab').textContent = isLight ? '☀️' : '🌙';
+    localStorage.setItem('ce2-theme', isLight ? 'light' : 'dark');
+  }
+</script>
+
+<style>
+/* ── PAINT FAB ── */
+.paint-fab {
+  position: fixed;
+  bottom: 5.5rem;
+  right: 2rem;
+  width: 44px; height: 44px;
+  background: var(--panel2);
+  border: 1px solid var(--border-glow);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  z-index: 8000;
+  font-size: 1.2rem;
+  transition: all 0.3s;
+  color: var(--cursed-bright);
+}
+.paint-fab:hover {
+  background: rgba(147,51,234,0.25);
+  box-shadow: var(--glow-purple);
+  border-color: var(--cursed-mid);
+  transform: scale(1.1);
+}
+
+/* ── OVERLAY ── */
+.paint-overlay {
+  position: fixed; inset: 0;
+  background: rgba(4,3,10,0.85);
+  backdrop-filter: blur(8px);
+  z-index: 99000;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; visibility: hidden;
+  transition: opacity 0.35s, visibility 0.35s;
+}
+.paint-overlay.open { opacity: 1; visibility: visible; }
+
+/* ── MODAL ── */
+.paint-modal {
+  position: relative;
+  background: var(--panel);
+  border: 1px solid var(--border-glow);
+  width: min(96vw, 900px);
+  max-height: 92vh;
+  display: flex; flex-direction: column;
+  overflow: hidden;
+  transform: translateY(30px) scale(0.97);
+  transition: transform 0.35s;
+}
+.paint-overlay.open .paint-modal { transform: translateY(0) scale(1); }
+
+/* Esquinas decorativas */
+.paint-corner {
+  position: absolute; font-size: 0.75rem;
+  color: var(--gold); opacity: 0.7;
+  filter: drop-shadow(0 0 5px rgba(212,168,83,0.6));
+  z-index: 2; line-height: 1;
+}
+.paint-corner.tl { top: 0.4rem; left: 0.7rem; }
+.paint-corner.tr { top: 0.4rem; right: 0.7rem; }
+.paint-corner.bl { bottom: 0.4rem; left: 0.7rem; }
+.paint-corner.br { bottom: 0.4rem; right: 0.7rem; }
+.paint-top-line {
+  position: absolute; top: 0; left: 8%; right: 8%; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--cursed-mid), var(--gold), var(--cursed-mid), transparent);
+  z-index: 2;
+}
+.paint-bottom-line {
+  position: absolute; bottom: 0; left: 8%; right: 8%; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--cursed-mid), var(--gold), var(--cursed-mid), transparent);
+  z-index: 2;
+}
+
+/* ── HEADER ── */
+.paint-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(90deg, rgba(107,33,168,0.15), transparent);
+  flex-shrink: 0;
+}
+.paint-header-left { display: flex; flex-direction: column; gap: 0.1rem; }
+.paint-title {
+  font-family: 'Cinzel Decorative', cursive;
+  font-size: 0.9rem; color: var(--text);
+  filter: drop-shadow(0 0 8px rgba(147,51,234,0.5));
+}
+.paint-sub {
+  font-family: 'EB Garamond', serif;
+  font-style: italic; font-size: 0.8rem; color: var(--text-faint);
+}
+.paint-close {
+  background: transparent; border: 1px solid var(--border);
+  color: var(--text-dim); width: 30px; height: 30px;
+  cursor: pointer; font-size: 0.8rem; transition: all 0.2s;
+  display: flex; align-items: center; justify-content: center;
+}
+.paint-close:hover { border-color: var(--crimson-bright); color: var(--crimson-bright); }
+
+/* ── TOOLBAR ── */
+.paint-toolbar {
+  display: flex; flex-wrap: wrap; gap: 1rem;
+  padding: 0.9rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--panel2);
+  flex-shrink: 0;
+}
+.paint-tool-group { display: flex; flex-direction: column; gap: 0.4rem; }
+.paint-tool-label {
+  font-family: 'Cinzel', serif; font-size: 0.55rem;
+  letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--text-faint);
+}
+.paint-brushes, .paint-colors, .paint-actions { display: flex; gap: 4px; align-items: center; }
+
+.pbtn {
+  width: 30px; height: 30px;
+  background: var(--panel); border: 1px solid var(--border);
+  color: var(--text-dim); cursor: pointer; font-size: 0.85rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+.pbtn:hover, .pbtn.active {
+  border-color: var(--cursed-mid); color: var(--cursed-bright);
+  background: rgba(147,51,234,0.15);
+  box-shadow: 0 0 8px rgba(147,51,234,0.4);
+}
+
+.paint-slider {
+  -webkit-appearance: none; width: 100px; height: 2px;
+  background: var(--border); outline: none; border-radius: 2px; cursor: pointer;
+}
+.paint-slider::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 12px; height: 12px;
+  border-radius: 50%; background: var(--cursed-bright); cursor: pointer;
+  box-shadow: 0 0 6px rgba(192,132,252,0.7);
+}
+
+.pcolor {
+  width: 22px; height: 22px; border-radius: 50%;
+  border: 2px solid transparent; cursor: pointer;
+  transition: all 0.2s; flex-shrink: 0;
+}
+.pcolor:hover, .pcolor.active { border-color: #fff; transform: scale(1.2); }
+.pcolor-custom {
+  width: 22px; height: 22px; border-radius: 50%;
+  border: 2px solid var(--border); cursor: pointer;
+  padding: 0; overflow: hidden; background: none;
+}
+
+.pact {
+  height: 30px; padding: 0 0.7rem;
+  background: var(--panel); border: 1px solid var(--border);
+  color: var(--text-dim); cursor: pointer; font-size: 0.8rem;
+  transition: all 0.2s; white-space: nowrap;
+}
+.pact:hover { border-color: var(--border-glow); color: var(--text); }
+.pact-save {
+  border-color: var(--gold-dim); color: var(--gold);
+  font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.1em;
+}
+.pact-save:hover { background: rgba(212,168,83,0.12); box-shadow: var(--glow-gold); }
+
+/* ── CANVAS ── */
+.paint-canvas-wrap {
+  flex: 1; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  background: #0a0812;
+  cursor: crosshair;
+  min-height: 300px;
+}
+#paintCanvas {
+  display: block;
+  touch-action: none;
+  image-rendering: pixelated;
+}
+</style>
+
+<script>
+// ── PAINT MODAL ──
+const paintOverlay = document.getElementById('paintOverlay');
+function togglePaint() {
+  paintOverlay.classList.toggle('open');
+  if (paintOverlay.classList.contains('open')) initCanvas();
+}
+function closePaintOutside(e) {
+  if (e.target === paintOverlay) togglePaint();
+}
+
+// ── CANVAS ENGINE ──
+let canvas, ctx, painting = false;
+let tool = 'pen', brushColor = '#c084fc', brushSize = 6, brushOpacity = 1;
+let history = [], maxHistory = 30;
+
+function initCanvas() {
+  if (canvas) return;
+  canvas = document.getElementById('paintCanvas');
+  const wrap = canvas.parentElement;
+  canvas.width  = wrap.clientWidth  || 800;
+  canvas.height = wrap.clientHeight || 420;
+  ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#0a0812';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  saveHistory();
+
+  // Mouse
+  canvas.addEventListener('mousedown',  startDraw);
+  canvas.addEventListener('mousemove',  draw);
+  canvas.addEventListener('mouseup',    stopDraw);
+  canvas.addEventListener('mouseleave', stopDraw);
+
+  // Touch
+  canvas.addEventListener('touchstart',  e => { e.preventDefault(); startDraw(e.touches[0]); }, { passive: false });
+  canvas.addEventListener('touchmove',   e => { e.preventDefault(); draw(e.touches[0]); },      { passive: false });
+  canvas.addEventListener('touchend',    stopDraw);
+}
+
+function getPos(e) {
+  const r = canvas.getBoundingClientRect();
+  return { x: e.clientX - r.left, y: e.clientY - r.top };
+}
+
+function startDraw(e) {
+  painting = true;
+  const { x, y } = getPos(e);
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  // punto al hacer click
+  applyStyle();
+  if (tool === 'square') {
+    ctx.fillRect(x - brushSize/2, y - brushSize/2, brushSize, brushSize);
+  } else {
+    ctx.arc(x, y, brushSize/2, 0, Math.PI*2);
+    ctx.fill();
+  }
+}
+
+function draw(e) {
+  if (!painting) return;
+  const { x, y } = getPos(e);
+  applyStyle();
+  ctx.beginPath();
+  if (tool === 'square') {
+    ctx.fillRect(x - brushSize/2, y - brushSize/2, brushSize, brushSize);
+  } else {
+    ctx.arc(x, y, brushSize/2, 0, Math.PI*2);
+    ctx.fill();
+  }
+}
+
+function stopDraw() {
+  if (painting) { painting = false; saveHistory(); }
+}
+
+function applyStyle() {
+  ctx.globalAlpha = tool === 'eraser' ? 1 : brushOpacity;
+  if (tool === 'eraser') {
+    ctx.fillStyle = '#0a0812';
+  } else {
+    ctx.fillStyle = brushColor;
+    if (tool === 'pen') {
+      // efecto glow sutil
+      ctx.shadowColor = brushColor;
+      ctx.shadowBlur  = brushSize * 0.8;
+    } else {
+      ctx.shadowBlur = 0;
+    }
+  }
+}
+
+function setTool(t) {
+  tool = t;
+  document.querySelectorAll('.pbtn').forEach(b => b.classList.remove('active'));
+  const map = { pen:'brushPen', round:'brushRound', square:'brushSquare', eraser:'brushEraser' };
+  document.getElementById(map[t]).classList.add('active');
+  ctx && (ctx.shadowBlur = 0);
+}
+function setColor(c) {
+  brushColor = c;
+  document.querySelectorAll('.pcolor').forEach(b => b.classList.remove('active'));
+  document.getElementById('colorPicker').value = c;
+}
+function setSize(v) {
+  brushSize = +v;
+  document.getElementById('sizeVal').textContent = v;
+}
+function setOpacity(v) {
+  brushOpacity = v / 100;
+  document.getElementById('opacVal').textContent = v;
+}
+function saveHistory() {
+  if (!ctx) return;
+  if (history.length >= maxHistory) history.shift();
+  history.push(canvas.toDataURL());
+}
+function undoPaint() {
+  if (history.length <= 1) return;
+  history.pop();
+  const img = new Image();
+  img.src = history[history.length - 1];
+  img.onload = () => ctx.drawImage(img, 0, 0);
+}
+function clearPaint() {
+  ctx.globalAlpha = 1; ctx.shadowBlur = 0;
+  ctx.fillStyle = '#0a0812';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  saveHistory();
+}
+function fillBackground() { clearPaint(); }
+function savePaint() {
+  const link = document.createElement('a');
+  link.download = 'mural-maldito.png';
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
+</script>
+
+<style>
+/* ── ARCADE FAB ── */
+.arcade-fab {
+  position: fixed; bottom: 11.5rem; right: 2rem;
+  width: 44px; height: 44px;
+  background: var(--panel2); border: 1px solid var(--border-glow);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; z-index: 8000; font-size: 1.2rem;
+  transition: all 0.3s;
+}
+.arcade-fab:hover {
+  background: rgba(147,51,234,0.25); box-shadow: var(--glow-purple);
+  border-color: var(--cursed-mid); transform: scale(1.1);
+}
+
+/* ── OVERLAY ── */
+.arcade-overlay {
+  position: fixed; inset: 0;
+  background: rgba(4,3,10,0.9); backdrop-filter: blur(10px);
+  z-index: 99100; display: flex; align-items: center; justify-content: center;
+  opacity: 0; visibility: hidden; transition: opacity 0.35s, visibility 0.35s;
+}
+.arcade-overlay.open { opacity: 1; visibility: visible; }
+
+/* ── MODAL ── */
+.arcade-modal {
+  position: relative; background: var(--panel);
+  border: 1px solid var(--border-glow);
+  width: min(98vw, 560px); max-height: 95vh;
+  display: flex; flex-direction: column; overflow: hidden;
+  transform: translateY(30px) scale(0.97); transition: transform 0.35s;
+}
+.arcade-overlay.open .arcade-modal { transform: translateY(0) scale(1); }
+
+/* Esquinas */
+.arcade-corner {
+  position: absolute; font-size: 0.75rem; color: var(--gold);
+  opacity: 0.7; filter: drop-shadow(0 0 5px rgba(212,168,83,0.6));
+  z-index: 2; line-height: 1;
+}
+.arcade-corner.tl { top: 0.4rem; left: 0.7rem; }
+.arcade-corner.tr { top: 0.4rem; right: 0.7rem; }
+.arcade-corner.bl { bottom: 0.4rem; left: 0.7rem; }
+.arcade-corner.br { bottom: 0.4rem; right: 0.7rem; }
+.arcade-top-line {
+  position: absolute; top: 0; left: 8%; right: 8%; height: 1px; z-index: 2;
+  background: linear-gradient(90deg, transparent, var(--cursed-mid), var(--gold), var(--cursed-mid), transparent);
+}
+.arcade-bottom-line {
+  position: absolute; bottom: 0; left: 8%; right: 8%; height: 1px; z-index: 2;
+  background: linear-gradient(90deg, transparent, var(--cursed-mid), var(--gold), var(--cursed-mid), transparent);
+}
+
+/* Header */
+.arcade-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.9rem 1.4rem; border-bottom: 1px solid var(--border);
+  background: linear-gradient(90deg, rgba(107,33,168,0.18), transparent);
+  flex-shrink: 0;
+}
+.arcade-title {
+  font-family: 'Cinzel Decorative', cursive; font-size: 0.9rem;
+  color: var(--text); filter: drop-shadow(0 0 8px rgba(147,51,234,0.5));
+}
+.arcade-sub {
+  font-family: 'EB Garamond', serif; font-style: italic;
+  font-size: 0.8rem; color: var(--text-faint); margin-top: 0.1rem;
+}
+.arcade-sub span { color: var(--gold); font-style: normal; }
+.arcade-close {
+  background: transparent; border: 1px solid var(--border);
+  color: var(--text-dim); width: 30px; height: 30px;
+  cursor: pointer; font-size: 0.8rem; transition: all 0.2s;
+  display: flex; align-items: center; justify-content: center;
+}
+.arcade-close:hover { border-color: var(--crimson-bright); color: var(--crimson-bright); }
+
+/* Menu juegos */
+.arcade-menu {
+  display: flex; gap: 2px; padding: 0.6rem 1rem;
+  border-bottom: 1px solid var(--border); background: var(--panel2);
+  flex-shrink: 0; flex-wrap: wrap;
+}
+.agame-btn {
+  flex: 1; min-width: 80px; padding: 0.45rem 0.5rem;
+  background: transparent; border: 1px solid var(--border);
+  color: var(--text-dim); cursor: pointer; font-size: 0.65rem;
+  font-family: 'Cinzel', serif; letter-spacing: 0.1em;
+  text-transform: uppercase; transition: all 0.2s;
+}
+.agame-btn:hover, .agame-btn.active {
+  border-color: var(--cursed-mid); color: var(--cursed-bright);
+  background: rgba(147,51,234,0.12); box-shadow: 0 0 8px rgba(147,51,234,0.3);
+}
+
+/* Canvas wrap */
+.arcade-canvas-wrap {
+  position: relative; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: #04030a; overflow: hidden;
+}
+#arcadeCanvas { display: block; max-width: 100%; }
+
+/* Game Over overlay */
+.arcade-gameover {
+  position: absolute; inset: 0;
+  background: rgba(4,3,10,0.88);
+  display: none; flex-direction: column;
+  align-items: center; justify-content: center; gap: 0.8rem;
+}
+.arcade-gameover.show { display: flex; }
+.ago-title {
+  font-family: 'Cinzel Decorative', cursive; font-size: 1.6rem;
+  color: var(--crimson-bright);
+  filter: drop-shadow(0 0 20px rgba(239,68,68,0.7));
+  animation: pulse-glow 1s ease-in-out infinite;
+}
+.ago-score {
+  font-family: 'Cinzel', serif; font-size: 1rem;
+  color: var(--gold); letter-spacing: 0.3em;
+}
+.ago-btn {
+  margin-top: 0.5rem; padding: 0.6rem 1.5rem;
+  background: rgba(147,51,234,0.2); border: 1px solid var(--cursed-mid);
+  color: var(--cursed-bright); cursor: pointer; font-family: 'Cinzel', serif;
+  font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+  transition: all 0.3s;
+}
+.ago-btn:hover { background: rgba(147,51,234,0.4); box-shadow: var(--glow-purple); }
+
+/* Memory grid */
+.memory-grid {
+  display: none; grid-template-columns: repeat(4, 1fr);
+  gap: 8px; padding: 1rem; background: #04030a;
+  width: 100%;
+}
+.memory-grid.show { display: grid; }
+.mem-card {
+  aspect-ratio: 1; background: var(--panel2);
+  border: 1px solid var(--border); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.6rem; border-radius: 2px;
+  transition: all 0.3s; user-select: none;
+}
+.mem-card:hover { border-color: var(--cursed-mid); background: rgba(147,51,234,0.1); }
+.mem-card.flipped { background: rgba(147,51,234,0.15); border-color: var(--cursed-bright); }
+.mem-card.matched { background: rgba(13,148,136,0.2); border-color: var(--teal); cursor: default; }
+
+/* D-Pad móvil */
+.arcade-dpad {
+  display: none; position: relative;
+  width: 130px; height: 130px; margin: 0.8rem auto;
+  flex-shrink: 0;
+}
+@media (pointer: coarse) { .arcade-dpad { display: block; } }
+.dpad-btn {
+  position: absolute; width: 40px; height: 40px;
+  background: var(--panel2); border: 1px solid var(--border-glow);
+  color: var(--cursed-bright); cursor: pointer; font-size: 0.9rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s; user-select: none; -webkit-user-select: none;
+  border-radius: 2px;
+}
+.dpad-btn:active { background: rgba(147,51,234,0.35); }
+.dpad-up    { top: 0;    left: 50%; transform: translateX(-50%); }
+.dpad-down  { bottom: 0; left: 50%; transform: translateX(-50%); }
+.dpad-left  { left: 0;   top: 50%;  transform: translateY(-50%); }
+.dpad-right { right: 0;  top: 50%;  transform: translateY(-50%); }
+.dpad-mid   { top: 50%;  left: 50%; transform: translate(-50%,-50%); font-size: 0.6rem; }
+</style>
+
+<script>
+// ══════════════════════════════════════
+//  ARCADE MALDITO — ENGINE COMPLETO
+// ══════════════════════════════════════
+let arcadeOpen = false;
+let currentGame = 'snake';
+let arcadeScore = 0;
+let arcadeLoop = null;
+
+const aCanvas = () => document.getElementById('arcadeCanvas');
+const aC = () => aCanvas().getContext('2d');
+
+function toggleArcade() {
+  arcadeOpen = !arcadeOpen;
+  document.getElementById('arcadeOverlay').classList.toggle('open', arcadeOpen);
+  if (arcadeOpen) { setTimeout(() => selectGame(currentGame, document.querySelector('.agame-btn.active')), 100); }
+  else { stopArcade(); }
+}
+function closeArcadeOutside(e) { if (e.target.id === 'arcadeOverlay') toggleArcade(); }
+
+function toggleArcadeFS() {
+  const wrap = document.getElementById('arcadeCanvasWrap');
+  if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+    if (wrap.requestFullscreen) wrap.requestFullscreen();
+    else if (wrap.webkitRequestFullscreen) wrap.webkitRequestFullscreen();
+  } else {
+    if (document.exitFullscreen) document.exitFullscreen();
+    else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+  }
+}
+
+function selectGame(name, btn) {
+  cancelAnimationFrame(arcadeLoop);
+  if (typeof stopJJK3D === 'function') stopJJK3D();
+  currentGame = name;
+  document.querySelectorAll('.agame-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('memoryGrid').classList.remove('show');
+  document.getElementById('arcadeCanvas').style.display = (name === 'jjk3d' || name === 'memory') ? 'none' : 'block';
+  document.getElementById('jjk3d-container').style.display = (name === 'jjk3d') ? 'block' : 'none';
+  document.getElementById('arcadeDpad').style.display = (name === 'memory') ? 'none' : 'flex';
+  
+  const isMobile = document.body.classList.contains('force-mobile');
+  document.getElementById('jjk3d-mobile-actions').style.display = (name === 'jjk3d' && isMobile) ? 'flex' : 'none';
+  updateScore(0);
+
+  if (name === 'snake')    initSnake();
+  if (name === 'breakout') initBreakout();
+  if (name === 'runner')   initRunner();
+  if (name === 'whack')    initWhack();
+  if (name === 'memory')   initMemory();
+  if (name === 'dodge')    initDodge();
+  if (name === 'slash')    initSlash();
+  if (name === 'blackflash') initBlackFlash();
+  if (name === 'mash')     initMash();
+  if (name === 'catch')    initCatch();
+  if (name === 'jjk3d')    initJJK3D();
+}
+
+function jjk3dMobileAction(action) {
+  if (currentGame !== 'jjk3d' || !jjk3dPlayer) return;
+  if (action === 'LClick') jjk3dHandleCombat(0);
+  if (action === 'RClick') jjk3dHandleCombat(1);
+  if (action === 'Q') jjk3dHandleDomainExpansion();
+  if (action === 'R') jjk3dHandleReversal();
+  if (action === 'T') jjk3dHandleTeleport();
+  if (action === 'Jump' && jjk3dPlayer.canJump) { jjk3dPlayer.velocity.y = jjk3dConfig.playerJump; jjk3dPlayer.canJump = false; }
+  if (action === 'Dash') jjk3dHandleDash();
+}
+
+function dpadPress(dir, isDown = true) {
+  if (currentGame === 'snake' && isDown) {
+    const map = { up:[0,-1], down:[0,1], left:[-1,0], right:[1,0] };
+    if (map[dir]) snakeSetDir(...map[dir]);
+  }
+  if (['breakout', 'runner', 'catch', 'dodge'].includes(currentGame)) {
+    if (dir === 'left')  { bkKeys['ArrowLeft'] = isDown; bkKeys['a'] = isDown; }
+    if (dir === 'right') { bkKeys['ArrowRight'] = isDown; bkKeys['d'] = isDown; }
+    if (dir === 'up')    { bkKeys['ArrowUp'] = isDown; bkKeys['w'] = isDown; }
+    if (dir === 'down')  { bkKeys['ArrowDown'] = isDown; bkKeys['s'] = isDown; }
+    if (dir === 'mid' && isDown) { bkKeys = {}; if(currentGame === 'runner') runnerJump(); }
+  }
+  if (currentGame === 'jjk3d') {
+    if (dir === 'left')  jjk3dControls.left = isDown;
+    if (dir === 'right') jjk3dControls.right = isDown;
+    if (dir === 'up')    jjk3dControls.forward = isDown;
+    if (dir === 'down')  jjk3dControls.backward = isDown;
+    if (dir === 'mid' && isDown) jjk3dMobileAction('LClick');
+  }
+  if (dir === 'mid' && isDown) {
+    if(currentGame === 'blackflash') bfHit();
+    if(currentGame === 'mash') mashHit();
+  }
+}
+
+function stopArcade() {
+  if (arcadeLoop) { clearInterval(arcadeLoop); cancelAnimationFrame(arcadeLoop); arcadeLoop = null; }
+  if (whackTimers) { whackTimers.forEach(t => clearTimeout(t)); whackTimers = []; }
+  if (typeof stopJJK3D === 'function') stopJJK3D();
+}
+
+function updateScore(s) {
+  arcadeScore = s;
+  document.getElementById('arcadeScoreLabel').textContent = 'Score: ' + s;
+}
+
+function gameOver(title) {
+  stopArcade();
+  const go = document.getElementById('arcadeGameover');
+  document.getElementById('agoTitle').textContent = title || 'GAME OVER';
+  document.getElementById('agoScore').textContent = 'Score: ' + arcadeScore;
+  go.classList.add('show');
+}
+
+function restartGame() {
+  document.getElementById('arcadeGameover').classList.remove('show');
+  selectGame(currentGame, document.querySelector('.agame-btn.active'));
+}
+
+// ── CONTROLES GLOBALES MEJORADOS ──
+function actionTap() {
+  if (currentGame === 'runner') runnerJump();
+  if (currentGame === 'blackflash') bfHit();
+  if (currentGame === 'mash') mashHit();
+}
+
+function dpadPress(dir) {
+  if (currentGame === 'snake') {
+    const map = { up:[0,-1], down:[0,1], left:[-1,0], right:[1,0] };
+    if (map[dir]) snakeSetDir(...map[dir]);
+  }
+  if (['breakout', 'runner', 'catch', 'dodge'].includes(currentGame)) {
+    if (dir === 'left')  { bkKeys['ArrowLeft'] = true; bkKeys['a'] = true; }
+    if (dir === 'right') { bkKeys['ArrowRight'] = true; bkKeys['d'] = true; }
+    if (dir === 'up')    { bkKeys['ArrowUp'] = true; bkKeys['w'] = true; }
+    if (dir === 'down')  { bkKeys['ArrowDown'] = true; bkKeys['s'] = true; }
+    if (dir === 'mid')   { bkKeys = {}; actionTap(); }
+    if (dir === 'up' && currentGame === 'runner') runnerJump();
+  }
+  if (dir === 'mid') actionTap();
+}
+
+document.addEventListener('keydown', e => {
+  if (!arcadeOpen) return;
+  bkKeys[e.key] = true;
+  if (currentGame === 'snake') {
+    const map = { ArrowUp:[0,-1], ArrowDown:[0,1], ArrowLeft:[-1,0], ArrowRight:[1,0], w:[0,-1], s:[0,1], a:[-1,0], d:[1,0] };
+    if (map[e.key]) { e.preventDefault(); snakeSetDir(...map[e.key]); }
+  }
+  if (['ArrowUp', ' ', 'Enter'].includes(e.key)) {
+    e.preventDefault(); actionTap();
+  }
+});
+document.addEventListener('keyup', e => { bkKeys[e.key] = false; });
+
+// ══════════════════════════════════════
+//  🐍 SNAKE
+// ══════════════════════════════════════
+let snake, snakeDir, snakeNext, snakeFood, snakePaused;
+const SZ = 20;
+
+function initSnake() {
+  const cv = aCanvas(); cv.width = 480; cv.height = 340;
+  snake = [{x:12,y:8},{x:11,y:8},{x:10,y:8}];
+  snakeDir = {x:1,y:0}; snakeNext = {x:1,y:0};
+  snakePaused = false;
+  placeSnakeFood();
+  arcadeLoop = setInterval(tickSnake, 120);
+}
+
+function snakeSetDir(x, y) {
+  if (x === -snakeDir.x && y === -snakeDir.y) return;
+  snakeNext = {x, y};
+}
+
+function placeSnakeFood() {
+  const cols = Math.floor(aCanvas().width / SZ);
+  const rows = Math.floor(aCanvas().height / SZ);
+  let pos;
+  do { pos = {x: Math.floor(Math.random()*cols), y: Math.floor(Math.random()*rows)}; }
+  while (snake.some(s => s.x === pos.x && s.y === pos.y));
+  snakeFood = pos;
+}
+
+function tickSnake() {
+  const cv = aCanvas(); const ctx = aC();
+  snakeDir = snakeNext;
+  const head = { x: snake[0].x + snakeDir.x, y: snake[0].y + snakeDir.y };
+  const cols = Math.floor(cv.width / SZ);
+  const rows = Math.floor(cv.height / SZ);
+
+  if (head.x < 0 || head.x >= cols || head.y < 0 || head.y >= rows ||
+      snake.some(s => s.x === head.x && s.y === head.y)) {
+    return gameOver('CURSED 🐍');
+  }
+
+  snake.unshift(head);
+  if (head.x === snakeFood.x && head.y === snakeFood.y) {
+    updateScore(arcadeScore + 10);
+    placeSnakeFood();
+  } else { snake.pop(); }
+
+  // Draw
+  ctx.fillStyle = '#04030a';
+  ctx.fillRect(0, 0, cv.width, cv.height);
+
+  // Grid sutil
+  ctx.strokeStyle = 'rgba(37,29,58,0.4)';
+  ctx.lineWidth = 0.5;
+  for (let x = 0; x < cv.width; x += SZ) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,cv.height); ctx.stroke(); }
+  for (let y = 0; y < cv.height; y += SZ) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(cv.width,y); ctx.stroke(); }
+
+  // Food
+  ctx.fillStyle = '#d4a853';
+  ctx.shadowColor = '#d4a853'; ctx.shadowBlur = 10;
+  ctx.font = `${SZ-2}px serif`;
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText('呪', snakeFood.x*SZ + SZ/2, snakeFood.y*SZ + SZ/2);
+  ctx.shadowBlur = 0;
+
+  // Snake
+  snake.forEach((s, i) => {
+    const alpha = 1 - (i / snake.length) * 0.5;
+    ctx.fillStyle = i === 0 ? '#c084fc' : `rgba(147,51,234,${alpha})`;
+    ctx.shadowColor = '#c084fc'; ctx.shadowBlur = i === 0 ? 12 : 4;
+    ctx.fillRect(s.x*SZ+1, s.y*SZ+1, SZ-2, SZ-2);
+  });
+  ctx.shadowBlur = 0;
+}
+
+// ══════════════════════════════════════
+//  🧱 BREAKOUT
+// ══════════════════════════════════════
+let bkPaddle, bkBall, bkBricks, bkKeys = {};
+
+function initBreakout() {
+  const cv = aCanvas(); cv.width = 480; cv.height = 340;
+  bkKeys = {};
+  bkPaddle = { x: 190, y: 310, w: 100, h: 10, speed: 7 };
+  bkBall   = { x: 240, y: 290, dx: 3.5, dy: -3.5, r: 7 };
+  bkBricks = [];
+  const colors = ['#c084fc','#d4a853','#ef4444','#0d9488','#3b82f6'];
+  for (let r = 0; r < 5; r++)
+    for (let c = 0; c < 10; c++)
+      bkBricks.push({ x: 8+c*47, y: 30+r*28, w: 42, h: 18, hp: 1,
+        color: colors[r % colors.length], alive: true });
+
+  function loopBK() {
+    if (!arcadeOpen || currentGame !== 'breakout') return;
+    tickBreakout();
+    arcadeLoop = requestAnimationFrame(loopBK);
+  }
+  arcadeLoop = requestAnimationFrame(loopBK);
+}
+
+function tickBreakout() {
+  const cv = aCanvas(); const ctx = aC();
+  if (bkKeys['ArrowLeft'])  bkPaddle.x = Math.max(0, bkPaddle.x - bkPaddle.speed);
+  if (bkKeys['ArrowRight']) bkPaddle.x = Math.min(cv.width - bkPaddle.w, bkPaddle.x + bkPaddle.speed);
+
+  bkBall.x += bkBall.dx; bkBall.y += bkBall.dy;
+  if (bkBall.x < bkBall.r || bkBall.x > cv.width - bkBall.r)  bkBall.dx *= -1;
+  if (bkBall.y < bkBall.r) bkBall.dy *= -1;
+  if (bkBall.y > cv.height) return gameOver('BARRERA ROTA 🧱');
+
+  if (bkBall.y + bkBall.r >= bkPaddle.y && bkBall.x >= bkPaddle.x && bkBall.x <= bkPaddle.x + bkPaddle.w) {
+    bkBall.dy = -Math.abs(bkBall.dy);
+    const hit = (bkBall.x - (bkPaddle.x + bkPaddle.w/2)) / (bkPaddle.w/2);
+    bkBall.dx = hit * 5;
+  }
+
+  bkBricks.forEach(b => {
+    if (!b.alive) return;
+    if (bkBall.x > b.x && bkBall.x < b.x+b.w && bkBall.y > b.y && bkBall.y < b.y+b.h) {
+      b.alive = false; bkBall.dy *= -1; updateScore(arcadeScore + 5);
+    }
+  });
+
+  if (bkBricks.every(b => !b.alive)) return gameOver('¡VICTORIA! ⛩️');
+
+  // Draw
+  ctx.fillStyle = '#04030a'; ctx.fillRect(0,0,cv.width,cv.height);
+  bkBricks.forEach(b => {
+    if (!b.alive) return;
+    ctx.fillStyle = b.color; ctx.shadowColor = b.color; ctx.shadowBlur = 6;
+    ctx.fillRect(b.x, b.y, b.w, b.h);
+  });
+  ctx.shadowBlur = 0;
+
+  // Paddle
+  const pg = ctx.createLinearGradient(bkPaddle.x, 0, bkPaddle.x+bkPaddle.w, 0);
+  pg.addColorStop(0,'#6b21a8'); pg.addColorStop(0.5,'#c084fc'); pg.addColorStop(1,'#6b21a8');
+  ctx.fillStyle = pg; ctx.shadowColor = '#c084fc'; ctx.shadowBlur = 15;
+  ctx.fillRect(bkPaddle.x, bkPaddle.y, bkPaddle.w, bkPaddle.h);
+
+  // Ball
+  ctx.beginPath(); ctx.arc(bkBall.x, bkBall.y, bkBall.r, 0, Math.PI*2);
+  ctx.fillStyle = '#d4a853'; ctx.shadowColor = '#d4a853'; ctx.shadowBlur = 18;
+  ctx.fill(); ctx.shadowBlur = 0;
+}
+
+// ══════════════════════════════════════
+//  ⚔️ ENDLESS RUNNER
+// ══════════════════════════════════════
+let runner, runnerObs, runnerGround, runnerFrame, runnerSpeed;
+
+function initRunner() {
+  const cv = aCanvas(); cv.width = 480; cv.height = 340;
+  runner = { x: 60, y: 260, vy: 0, onGround: true, w: 30, h: 40 };
+  runnerObs = []; runnerSpeed = 4; runnerFrame = 0;
+  runnerGround = cv.height - 60;
+
+  function loopR() {
+    if (!arcadeOpen || currentGame !== 'runner') return;
+    tickRunner();
+    arcadeLoop = requestAnimationFrame(loopR);
+  }
+  arcadeLoop = requestAnimationFrame(loopR);
+}
+
+function runnerJump() {
+  if (runner && runner.onGround) { runner.vy = -13; runner.onGround = false; }
+}
+
+function tickRunner() {
+  const cv = aCanvas(); const ctx = aC();
+  runnerFrame++;
+  if (runnerFrame % 60 === 0) runnerSpeed = Math.min(runnerSpeed + 0.3, 12);
+  if (runnerFrame % 80 === 0) updateScore(arcadeScore + 1);
+
+  // Spawn obstacle
+  if (runnerFrame % Math.floor(90 / (runnerSpeed/4)) === 0)
+    runnerObs.push({ x: cv.width, y: runnerGround - 30, w: 20, h: 30 });
+
+  // Physics
+  runner.vy += 0.6;
+  runner.y += runner.vy;
+  if (runner.y >= runnerGround) { runner.y = runnerGround; runner.vy = 0; runner.onGround = true; }
+
+  // Move obs
+  runnerObs = runnerObs.filter(o => o.x + o.w > 0);
+  runnerObs.forEach(o => o.x -= runnerSpeed);
+
+  // Collision
+  for (const o of runnerObs) {
+    if (runner.x < o.x+o.w && runner.x+runner.w > o.x &&
+        runner.y < o.y+o.h && runner.y+runner.h > o.y)
+      return gameOver('MALDICIÓN ⚔️');
+  }
+
+  // Draw
+  ctx.fillStyle = '#04030a'; ctx.fillRect(0,0,cv.width,cv.height);
+
+  // Ground
+  ctx.strokeStyle = 'rgba(147,51,234,0.4)'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(0, runnerGround+runner.h); ctx.lineTo(cv.width, runnerGround+runner.h); ctx.stroke();
+
+  // Runner (kanji ⛩)
+  ctx.font = '32px serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+  ctx.shadowColor = '#c084fc'; ctx.shadowBlur = 15;
+  ctx.fillText('⛩', runner.x + runner.w/2, runner.y + runner.h);
+  ctx.shadowBlur = 0;
+
+  // Obstacles (maldiciones)
+  runnerObs.forEach(o => {
+    ctx.font = '28px serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+    ctx.shadowColor = '#ef4444'; ctx.shadowBlur = 12;
+    ctx.fillText('👹', o.x + o.w/2, o.y + o.h);
+    ctx.shadowBlur = 0;
+  });
+
+  // Score
+  ctx.fillStyle = 'rgba(212,168,83,0.6)';
+  ctx.font = '12px Cinzel, serif'; ctx.textAlign = 'left';
+  ctx.fillText('Score: ' + arcadeScore, 10, 20);
+}
+
+// ══════════════════════════════════════
+//  🎯 WHACK-A-MOLE
+// ══════════════════════════════════════
+let whackMoles, whackActive, whackTimers = [];
+
+function initWhack() {
+  const cv = aCanvas(); cv.width = 480; cv.height = 340;
+  whackMoles = Array(9).fill(false);
+  whackActive = true;
+  whackTimers = [];
+  drawWhack();
+  scheduleWhack();
+  // Timer 30s
+  const endT = setTimeout(() => { whackActive = false; gameOver('¡TIEMPO! 🎯'); }, 30000);
+  whackTimers.push(endT);
+}
+
+function scheduleWhack() {
+  if (!whackActive) return;
+  const idx = Math.floor(Math.random() * 9);
+  whackMoles[idx] = true;
+  drawWhack();
+  const hideT = setTimeout(() => {
+    whackMoles[idx] = false;
+    drawWhack();
+    const nextT = setTimeout(scheduleWhack, 300 + Math.random() * 400);
+    whackTimers.push(nextT);
+  }, 700 + Math.random() * 400);
+  whackTimers.push(hideT);
+}
+
+function drawWhack() {
+  const cv = aCanvas(); const ctx = aC();
+  ctx.fillStyle = '#04030a'; ctx.fillRect(0,0,cv.width,cv.height);
+  const cols = 3, rows = 3;
+  const cw = cv.width/cols, ch = (cv.height-40)/rows;
+  whackMoles.forEach((up, i) => {
+    const col = i % cols, row = Math.floor(i / cols);
+    const cx = col*cw + cw/2, cy = 40 + row*ch + ch/2;
+    // Hole
+    ctx.beginPath(); ctx.ellipse(cx, cy+10, 35, 15, 0, 0, Math.PI*2);
+    ctx.fillStyle = 'rgba(37,29,58,0.9)'; ctx.fill();
+    ctx.strokeStyle = 'rgba(74,58,106,0.6)'; ctx.lineWidth = 1; ctx.stroke();
+    if (up) {
+      ctx.font = '36px serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.shadowColor = '#ef4444'; ctx.shadowBlur = 18;
+      ctx.fillText('👹', cx, cy - 5);
+      ctx.shadowBlur = 0;
+    }
+  });
+  // Score display
+  ctx.fillStyle = 'rgba(212,168,83,0.7)';
+  ctx.font = '13px Cinzel, serif'; ctx.textAlign = 'center';
+  ctx.fillText('Golpea las maldiciones — Score: ' + arcadeScore, cv.width/2, 22);
+}
+
+// Click/touch global para juegos de precisión
+aCanvas().addEventListener('click', e => {
+  if (!arcadeOpen) return;
+  const cv = aCanvas(); const rect = cv.getBoundingClientRect();
+  const mx = (e.clientX - rect.left) * (cv.width / rect.width);
+  const my = (e.clientY - rect.top)  * (cv.height / rect.height);
+  
+  if (currentGame === 'whack' && whackActive) {
+    const cols = 3, rows = 3; const cw = cv.width/cols, ch = (cv.height-40)/rows;
+    whackMoles.forEach((up, i) => {
+      if (!up) return;
+      const col = i % cols, row = Math.floor(i / cols);
+      const cx = col*cw + cw/2, cy = 40 + row*ch + ch/2;
+      if (Math.hypot(mx-cx, my-(cy-5)) < 35) {
+        whackMoles[i] = false; updateScore(arcadeScore + 10); drawWhack();
+      }
+    });
+  }
+  if (currentGame === 'slash') {
+    slashCurses.forEach(c => {
+      if (c.active && Math.hypot(mx - c.x, my - c.y) < c.r + 20) {
+        c.active = false; updateScore(arcadeScore + 10);
+      }
+    });
+  }
+});
+
+// ══════════════════════════════════════
+//  🛡️ DOMINIO SIMPLE (Dodge)
+// ══════════════════════════════════════
+let dodgePlayer, dodgeProj, dodgeFrame;
+function initDodge() {
+  const cv = aCanvas(); cv.width = 480; cv.height = 340;
+  dodgePlayer = {x: 240, y: 170, r: 10, speed: 4}; dodgeProj = []; dodgeFrame = 0;
+  arcadeLoop = requestAnimationFrame(loopDodge);
+}
+function loopDodge() {
+  if (!arcadeOpen || currentGame !== 'dodge') return;
+  const cv = aCanvas(); const ctx = aC();
+  dodgeFrame++; if(dodgeFrame % 60 === 0) updateScore(arcadeScore + 10);
+
+  if(bkKeys['ArrowLeft'] || bkKeys['a']) dodgePlayer.x -= dodgePlayer.speed;
+  if(bkKeys['ArrowRight'] || bkKeys['d']) dodgePlayer.x += dodgePlayer.speed;
+  if(bkKeys['ArrowUp'] || bkKeys['w']) dodgePlayer.y -= dodgePlayer.speed;
+  if(bkKeys['ArrowDown'] || bkKeys['s']) dodgePlayer.y += dodgePlayer.speed;
+
+  dodgePlayer.x = Math.max(10, Math.min(cv.width-10, dodgePlayer.x));
+  dodgePlayer.y = Math.max(10, Math.min(cv.height-10, dodgePlayer.y));
+
+  let spawnRate = Math.max(10, 40 - Math.floor(dodgeFrame/100));
+  if(dodgeFrame % spawnRate === 0) {
+    let side = Math.floor(Math.random()*4);
+    let px, py, vx, vy, speed = 2 + Math.random()*3 + dodgeFrame/500;
+    if(side===0) { px=Math.random()*cv.width; py=-10; vx=(dodgePlayer.x-px)/100; vy=speed; }
+    if(side===1) { px=Math.random()*cv.width; py=cv.height+10; vx=(dodgePlayer.x-px)/100; vy=-speed; }
+    if(side===2) { px=-10; py=Math.random()*cv.height; vx=speed; vy=(dodgePlayer.y-py)/100; }
+    if(side===3) { px=cv.width+10; py=Math.random()*cv.height; vx=-speed; vy=(dodgePlayer.y-py)/100; }
+    dodgeProj.push({x:px, y:py, vx:vx, vy:vy, r:6});
+  }
+
+  ctx.fillStyle = '#04030a'; ctx.fillRect(0,0,cv.width,cv.height);
+  ctx.beginPath(); ctx.arc(dodgePlayer.x, dodgePlayer.y, dodgePlayer.r, 0, Math.PI*2);
+  ctx.fillStyle = '#c084fc'; ctx.shadowColor = '#c084fc'; ctx.shadowBlur = 10; ctx.fill(); ctx.shadowBlur = 0;
+
+  for(let i = dodgeProj.length-1; i>=0; i--) {
+    let p = dodgeProj[i]; p.x += p.vx; p.y += p.vy;
+    ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+    ctx.fillStyle = '#ef4444'; ctx.fill();
+    if(Math.hypot(dodgePlayer.x - p.x, dodgePlayer.y - p.y) < dodgePlayer.r + p.r) return gameOver('DOMINIO ROTO ☠️');
+    if(p.x < -50 || p.x > cv.width+50 || p.y < -50 || p.y > cv.height+50) dodgeProj.splice(i, 1);
+  }
+  arcadeLoop = requestAnimationFrame(loopDodge);
+}
+
+// ══════════════════════════════════════
+//  ⚔️ CORTES (Slash)
+// ══════════════════════════════════════
+let slashCurses, slashLives, slashFrame;
+function initSlash() {
+  const cv = aCanvas(); cv.width = 480; cv.height = 340;
+  slashCurses = []; slashLives = 3; slashFrame = 0;
+  arcadeLoop = requestAnimationFrame(loopSlash);
+}
+function loopSlash() {
+  if (!arcadeOpen || currentGame !== 'slash') return;
+  const cv = aCanvas(); const ctx = aC();
+  slashFrame++;
+
+  if(slashFrame % 50 === 0) {
+    slashCurses.push({ x: 50 + Math.random()*(cv.width-100), y: cv.height+20, vx: (Math.random()-0.5)*4, vy: -10 - Math.random()*5, r: 20, active: true });
+  }
+
+  ctx.fillStyle = '#04030a'; ctx.fillRect(0,0,cv.width,cv.height);
+
+  for(let i=slashCurses.length-1; i>=0; i--) {
+    let c = slashCurses[i]; c.x += c.vx; c.y += c.vy; c.vy += 0.3; // gravedad
+    if(c.active) { ctx.font = '30px serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('👹', c.x, c.y); }
+    if(c.y > cv.height+30) {
+      if(c.active) { slashLives--; if(slashLives<=0) return gameOver('DESMEMBRADO ⚔️'); }
+      slashCurses.splice(i, 1);
+    }
+  }
+  ctx.fillStyle = '#ef4444'; ctx.font = '16px sans-serif'; ctx.textAlign = 'left';
+  ctx.fillText('Vidas: ' + '❤️'.repeat(slashLives), 10, 20);
+  arcadeLoop = requestAnimationFrame(loopSlash);
+}
+
+// ══════════════════════════════════════
+//  ⚡ DESTELLO OSCURO (Black Flash)
+// ══════════════════════════════════════
+let bfCursor, bfDir, bfSpeed, bfZone;
+function initBlackFlash() {
+  const cv = aCanvas(); cv.width = 480; cv.height = 340;
+  bfCursor = 0; bfDir = 1; bfSpeed = 4; bfZone = {x: 220, w: 40};
+  arcadeLoop = requestAnimationFrame(loopBF);
+}
+function loopBF() {
+  if (!arcadeOpen || currentGame !== 'blackflash') return;
+  const cv = aCanvas(); const ctx = aC();
+  
+  bfCursor += bfSpeed * bfDir;
+  if(bfCursor < 0 || bfCursor > cv.width) bfDir *= -1;
+
+  ctx.fillStyle = '#04030a'; ctx.fillRect(0,0,cv.width,cv.height);
+  ctx.fillStyle = 'rgba(239,68,68,0.4)'; ctx.fillRect(bfZone.x, cv.height/2 - 20, bfZone.w, 40);
+  ctx.fillStyle = '#fff'; ctx.fillRect(bfCursor - 2, cv.height/2 - 30, 4, 60);
+
+  ctx.fillStyle = '#d4a853'; ctx.font = '16px Cinzel'; ctx.textAlign = 'center';
+  ctx.fillText('Score: ' + arcadeScore, cv.width/2, 40);
+  ctx.fillText('Tap/Espacio cuando pase por la zona roja', cv.width/2, cv.height - 40);
+  arcadeLoop = requestAnimationFrame(loopBF);
+}
+function bfHit() {
+  if(bfCursor >= bfZone.x && bfCursor <= bfZone.x + bfZone.w) {
+    updateScore(arcadeScore + 1); bfSpeed += 1;
+    bfZone.w = Math.max(10, bfZone.w - 2);
+    bfZone.x = 50 + Math.random()*(aCanvas().width - 100 - bfZone.w);
+  } else gameOver('DESTELLO FALLIDO ⚡');
+}
+
+// ══════════════════════════════════════
+//  🌀 EXPANSIÓN (Mash)
+// ══════════════════════════════════════
+let mashPower, mashDecay;
+function initMash() {
+  const cv = aCanvas(); cv.width = 480; cv.height = 340;
+  mashPower = 50; mashDecay = 0.2;
+  arcadeLoop = requestAnimationFrame(loopMash);
+}
+function loopMash() {
+  if (!arcadeOpen || currentGame !== 'mash') return;
+  const cv = aCanvas(); const ctx = aC();
+  
+  mashDecay += 0.001; mashPower -= mashDecay;
+
+  if(mashPower <= 0) return gameOver('DOMINIO APLASTADO 🌀');
+  if(mashPower >= 100) { updateScore(arcadeScore + 1); mashPower = 50; mashDecay += 0.2; }
+
+  ctx.fillStyle = '#04030a'; ctx.fillRect(0,0,cv.width,cv.height);
+  ctx.fillStyle = 'rgba(239,68,68,0.3)'; ctx.fillRect(40, cv.height/2 - 20, cv.width - 80, 40);
+  ctx.fillStyle = '#c084fc'; ctx.fillRect(40, cv.height/2 - 20, (cv.width - 80) * (mashPower/100), 40);
+
+  ctx.fillStyle = '#fff'; ctx.font = '16px Cinzel'; ctx.textAlign = 'center';
+  ctx.fillText('Nivel: ' + arcadeScore, cv.width/2, 40);
+  ctx.fillText('¡MASH/TAP PARA SOBREPONER TU DOMINIO!', cv.width/2, cv.height - 40);
+  arcadeLoop = requestAnimationFrame(loopMash);
+}
+function mashHit() { mashPower += 4; }
+
+// ══════════════════════════════════════
+//  🤞 DEDOS (Catch)
+// ══════════════════════════════════════
+let catchBasket, catchItems, catchFrame;
+function initCatch() {
+  const cv = aCanvas(); cv.width = 480; cv.height = 340;
+  catchBasket = {x: 200, y: 300, w: 80, h: 20, speed: 6}; catchItems = []; catchFrame = 0;
+  arcadeLoop = requestAnimationFrame(loopCatch);
+}
+function loopCatch() {
+  if (!arcadeOpen || currentGame !== 'catch') return;
+  const cv = aCanvas(); const ctx = aC();
+  catchFrame++;
+
+  if(bkKeys['ArrowLeft'] || bkKeys['a']) catchBasket.x -= catchBasket.speed;
+  if(bkKeys['ArrowRight'] || bkKeys['d']) catchBasket.x += catchBasket.speed;
+  catchBasket.x = Math.max(0, Math.min(cv.width - catchBasket.w, catchBasket.x));
+
+  if(catchFrame % 40 === 0) {
+    let isBomb = Math.random() < 0.3;
+    catchItems.push({ x: Math.random()*(cv.width-20), y: -20, dy: 2 + Math.random()*3 + catchFrame/1000, type: isBomb ? 'bomb' : 'finger' });
+  }
+
+  ctx.fillStyle = '#04030a'; ctx.fillRect(0,0,cv.width,cv.height);
+
+  for(let i=catchItems.length-1; i>=0; i--) {
+    let it = catchItems[i]; it.y += it.dy;
+    ctx.font = '24px serif'; ctx.textAlign = 'center'; ctx.fillText(it.type === 'bomb' ? '👹' : '🤞', it.x, it.y);
+
+    if(it.y + 10 > catchBasket.y && it.x > catchBasket.x && it.x < catchBasket.x + catchBasket.w) {
+      if(it.type === 'bomb') return gameOver('ENFERMO 🤢');
+      else { updateScore(arcadeScore + 1); catchItems.splice(i,1); continue; }
+    }
+    if(it.y > cv.height) {
+      if(it.type === 'finger') return gameOver('DEDO PERDIDO 🤞');
+      catchItems.splice(i,1);
+    }
+  }
+
+  ctx.fillStyle = '#d4a853'; ctx.shadowColor = '#d4a853'; ctx.shadowBlur = 10;
+  ctx.fillRect(catchBasket.x, catchBasket.y, catchBasket.w, catchBasket.h); ctx.shadowBlur = 0;
+  arcadeLoop = requestAnimationFrame(loopCatch);
+}
+
+// ══════════════════════════════════════
+//  🃏 MEMORY
+// ══════════════════════════════════════
+const memSymbols = ['⛩️','🕯️','⛓️','🪽','📿','🌀','🔗','🪷'];
+let memCards, memFlipped, memMatched, memLocked;
+
+function initMemory() {
+  aCanvas().style.display = 'none';
+  const grid = document.getElementById('memoryGrid');
+  grid.classList.add('show');
+  document.getElementById('arcadeDpad').style.display = 'none';
+
+  const pairs = [...memSymbols, ...memSymbols].sort(() => Math.random()-0.5);
+  memFlipped = []; memMatched = 0; memLocked = false;
+  memCards = pairs;
+  updateScore(0);
+
+  grid.innerHTML = '';
+  pairs.forEach((sym, i) => {
+    const card = document.createElement('div');
+    card.className = 'mem-card';
+    card.dataset.idx = i;
+    card.dataset.sym = sym;
+    card.textContent = '呪';
+    card.addEventListener('click', () => flipMemCard(card, i));
+    grid.appendChild(card);
+  });
+}
+
+function flipMemCard(card, idx) {
+  if (memLocked || card.classList.contains('flipped') || card.classList.contains('matched')) return;
+  card.classList.add('flipped');
+  card.textContent = memCards[idx];
+  memFlipped.push({ card, idx });
+
+  if (memFlipped.length === 2) {
+    memLocked = true;
+    const [a, b] = memFlipped;
+    if (memCards[a.idx] === memCards[b.idx]) {
+      a.card.classList.add('matched'); b.card.classList.add('matched');
+      memMatched++;
+      updateScore(arcadeScore + 20);
+      memFlipped = []; memLocked = false;
+      if (memMatched === memSymbols.length) gameOver('¡VICTORIA! 🃏');
+    } else {
+      setTimeout(() => {
+        a.card.classList.remove('flipped'); b.card.classList.remove('flipped');
+        a.card.textContent = '呪'; b.card.textContent = '呪';
+        memFlipped = []; memLocked = false;
+      }, 900);
+    }
+  }
+}
 </script>
 
 </body>
