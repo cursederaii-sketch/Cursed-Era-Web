@@ -1067,11 +1067,11 @@
     .rank-card.top-3 { border-left: 3px solid var(--teal); }
     .rank-card.top-3 .rank-number { color: var(--teal); }
 
-    .rank-card.top-4 { border-left: 3px solid #6b7280; } /* Silver/Grey for Castorice */
-    .rank-card.top-5 { border-left: 3px solid var(--crimson-mid); }
-;
-      background: var(--panel2);
-    }
+.rank-card.top-4 { border-left: 3px solid #6b7280; } /* Silver/Grey for Castorice */
+.rank-card.top-5 {
+  border-left: 3px solid var(--crimson-mid);
+  background: var(--panel2);
+}
     .rank-card::after {
       content: '';
       position: absolute;
@@ -2058,6 +2058,119 @@
     @media (max-width: 480px) {
       .hero-title { font-size: clamp(2.6rem, 11vw, 4rem); }
     }
+
+    /* ─── MEJORA BRUTAL DE DECORACIÓN GENERAL Y LÍNEA DE TIEMPO ─── */
+    .rank-card {
+      border: 1px solid var(--border-glow);
+      box-shadow: 0 0 15px rgba(147, 51, 234, 0.1);
+    }
+    .rank-card:hover {
+      box-shadow: 0 0 30px rgba(147, 51, 234, 0.3), inset 0 0 20px rgba(0,0,0,0.8);
+      border-color: var(--cursed-bright);
+    }
+    .event-card {
+      box-shadow: 0 0 20px rgba(220, 38, 38, 0.1);
+      border: 1px solid rgba(220, 38, 38, 0.3);
+    }
+    .event-card:hover {
+      box-shadow: 0 0 40px rgba(220, 38, 38, 0.3);
+    }
+    .pillar-card { border: 1px solid transparent; }
+    .pillar-card:hover {
+      border-color: var(--gold-dim);
+      box-shadow: inset 0 0 30px rgba(212, 168, 83, 0.1);
+    }
+
+    /* Línea de tiempo animada brutal */
+    .lore-timeline::before {
+      width: 3px;
+      background: linear-gradient(to bottom, transparent, var(--cursed-bright), var(--gold-bright), var(--crimson-bright), transparent);
+      box-shadow: 0 0 15px var(--cursed-bright);
+    }
+    .lore-dot {
+      width: 28px; height: 28px;
+      left: 9px; top: 4px;
+      background: radial-gradient(circle, var(--panel), var(--void));
+      border: 2px solid var(--cursed-bright);
+      box-shadow: 0 0 20px var(--cursed-purple), inset 0 0 10px var(--cursed-mid);
+      animation: pulse-dot 3s infinite alternate;
+    }
+    .lore-dot::after { content: '⛩'; font-size: 0.8rem; color: var(--gold); text-shadow: 0 0 5px var(--gold-bright); }
+    @keyframes pulse-dot {
+      0% { box-shadow: 0 0 10px var(--cursed-purple), inset 0 0 5px var(--cursed-mid); transform: scale(1); }
+      100% { box-shadow: 0 0 25px var(--cursed-bright), inset 0 0 15px var(--cursed-bright); transform: scale(1.15); border-color: var(--gold); }
+    }
+    .lore-card {
+      border-left: 3px solid var(--cursed-bright);
+      background: linear-gradient(135deg, rgba(147, 51, 234, 0.05), var(--panel));
+    }
+    .lore-card:hover {
+      border-left: 3px solid var(--gold-bright);
+      box-shadow: inset 0 0 50px rgba(212, 168, 83, 0.1), -5px 0 20px rgba(212, 168, 83, 0.3);
+    }
+
+    /* ─── SELECTOR DE PLATAFORMA (PC/CELULAR) ─── */
+    .platform-selector {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background: rgba(8, 6, 18, 0.95);
+      border: 1px solid var(--cursed-mid);
+      padding: 12px;
+      z-index: 100000;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      border-radius: 4px;
+      box-shadow: 0 0 20px rgba(147, 51, 234, 0.4);
+      backdrop-filter: blur(10px);
+    }
+    .platform-selector span {
+      font-family: 'Cinzel', serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      color: var(--gold);
+      text-transform: uppercase;
+    }
+    .platform-btn {
+      background: transparent;
+      border: 1px solid var(--text-faint);
+      color: var(--text-dim);
+      padding: 6px 12px;
+      cursor: pointer;
+      font-family: 'Cinzel', serif;
+      font-size: 0.7rem;
+      transition: all 0.3s;
+      letter-spacing: 0.1em;
+    }
+    .platform-btn:hover, .platform-btn.active {
+      border-color: var(--cursed-bright);
+      color: var(--cursed-light);
+      background: rgba(147, 51, 234, 0.15);
+      box-shadow: 0 0 15px rgba(147, 51, 234, 0.5);
+    }
+
+    /* Anulación para Simular Celular en PC */
+    body.force-mobile {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: #000;
+    }
+    body.force-mobile::before { display: none; }
+    body.force-mobile > * {
+      max-width: 430px !important;
+      width: 100% !important;
+    }
+    body.force-mobile .nav {
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    body.force-mobile .platform-selector {
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 10px;
+    }
   </style>
 </head>
 <body>
@@ -2352,24 +2465,40 @@
         <div class="rank-header">
           <div class="rank-number">05</div>
           <div class="rank-info">
-            <div class="rank-name">🩸 Gabimaru</div>
-            <div class="rank-tag">El Asesino Letal — Santuario Moderno</div>
+            <div class="rank-name">🩸 Gabimaru "The Hollow"</div>
+            <div class="rank-tag">World Top: 5 — Iwagakure Shinobi</div>
           </div>
         </div>
         <details class="rank-details">
           <summary class="rank-summary">≡ Leer Registros</summary>
           <div class="rank-content">
-            <blockquote>
-              "Silencioso. Eficiente. Inevitable. Gabimaru no ve la hechicería como un medio de grandeza ni como una vocación heroica, sino estrictamente como una herramienta de ejecución."
+            <h4>✦ REGISTRO OFICIAL DEL INDIVIDUO ✦</h4>
+            <p><strong>Nombre:</strong> Gabimaru, de Iwagakure.</p>
+            <p><strong>Fecha de nacimiento:</strong> No se sabe su fecha exacta, pero posee entre 17 y 19 años.</p>
+            <p><strong>Perfil Físico:</strong> Es uno de los apartados en los que más engaña este hechicero, pues a pesar de no alcanzar ni siquiera los 155 centímetros de altura, Gabimaru posee una velocidad, fuerza y resistencia física demencial. Físicamente es un joven de 152 cm, complexión delgada, cabello albino y desordenado, piel blanca y ojos dorados con una preocupante ausencia de brillo. Destaca una cantidad inhumana de cicatrices en todo su cuerpo.</p>
+            <p><strong>Origen:</strong> Debido a que sus padres fueron asesinados por el líder de su aldea, terminó como ninja de Iwagakure. Reprimió por completo las emociones, volviéndose prácticamente un arma humana al servicio secreto de la aldea, siendo el ninja más fuerte de Iwagakure.</p>
+
+            <h4>✦ RITUAL MALDITO ✦</h4>
+            <p>Funciona mediante unos cortes extraños que genera sin necesidad de armas, pero no se sabe cómo funciona realmente debido a la velocidad a la que ejecuta sus movimientos (combinando ritual y golpes puros).</p>
+
+            <h4>✦ HAZAÑAS ✦</h4>
+            <p>Ultimamente es cuando más se ha logrado ver la superioridad del chico. Destaca el asesinato de Noritoshi Kamo, quien no logró ni siquiera tocar una sola vez al ninja, siendo asesinado brutalmente en menos de 100 segundos. Otro ejemplo es contra el antiguo top 9, Kurogane Mamoru, quien fue descuartizado sin poder defenderse, destruyendo incluso la maldición de primer grado que intentó utilizar antes de ser invocada.</p>
+
+            <h4>✦ ARSENAL Y TÉCNICAS ✦</h4>
+            <p>Su estilo de combate es salvaje: no le importa usar puños, piernas o dientes. Tiene una capacidad mental acelerada para copiar y adaptar técnicas al instante.</p>
+            <ul>
+              <li><strong>Reverse Cursed Technique (RCT):</strong> De la mayor capacidad. Capaz de inyectarla en técnicas como "Dominio Simple" para invertirlo.</li>
+              <li><strong>New Shadow Style - Simple Domain:</strong> Lo utiliza sin restricción de movilidad, luchando libremente mientras se protege.</li>
+              <li><strong>Emoción de los Pétalos Caídos:</strong> Enseñado por Kromer (nueva líder Kamo) como recompensa por su hazaña.</li>
+              <li><strong>Expansión de Dominio:</strong> Tiene constancia de poseerla, pero nadie que la haya presenciado ha vivido para contarlo.</li>
+            </ul>
+
+            <blockquote style="border-left-color: var(--crimson-bright); background: rgba(220,38,38,0.05); color: var(--crimson-bright); text-align: center; font-weight: bold; letter-spacing: 0.05em; font-size: 1.1rem; margin-top: 2rem;">
+              "If you are weak, you can't protect anything."
             </blockquote>
-            <p>Forjado en la dureza de la sangre y el entrenamiento más estricto, Gabimaru es un asesino que no titubea, no alardea y rara vez falla. A diferencia de los hechiceros que disfrutan del combate o buscan probar su valía, él entra al campo de batalla con un solo objetivo: eliminar la variable objetivo de la manera más rápida posible. Su honor no radica en peleas justas, sino en la impecable profesionalidad de su oficio.</p>
-            
-            <h4>✦ TÉCNICA MALDITA: SANTUARIO MODERNO ✦</h4>
-            <p>Su técnica, el <strong>Santuario Moderno (Modern Shrine)</strong>, es una adaptación letal de cortes invisibles que desmantelan el espacio mismo. A diferencia de las expansiones caóticas, Gabimaru utiliza su ritual con una precisión quirúrgica escalofriante, seccionando la materia física y la energía maldita de sus oponentes a nivel molecular. La mayoría de sus objetivos mueren antes de que su sistema nervioso registre siquiera que han sido cortados.</p>
           </div>
         </details>
       </div>
-
     </div>
   </div>
 
@@ -3145,6 +3274,215 @@
     document.getElementById('q1').classList.add('active');
   }
 
+  // ─── CONTROLADOR DE PLATAFORMA ───
+  function setPlatform(platform) {
+    const body = document.body;
+    const btnPc = document.getElementById('btnPc');
+    const btnMobile = document.getElementById('btnMobile');
+
+    if (platform === 'mobile') {
+      body.classList.add('force-mobile');
+      btnMobile.classList.add('active');
+      btnPc.classList.remove('active');
+    } else {
+      body.classList.remove('force-mobile');
+      btnPc.classList.add('active');
+      btnMobile.classList.remove('active');
+    }
+  }
 </script>
+
+<div class="platform-selector" id="platformSelector">
+  <span>Visión:</span>
+  <button class="platform-btn active" id="btnPc" onclick="setPlatform('pc')">💻 PC</button>
+  <button class="platform-btn" id="btnMobile" onclick="setPlatform('mobile')">📱 Celular</button>
+</div>
+
+<!-- ══════════════ MUSIC PLAYER ══════════════ -->
+<div class="music-player" id="musicPlayer">
+  <div class="mp-glow"></div>
+  <button class="mp-toggle" id="mpToggle" onclick="toggleMusic()" title="Reproducir / Pausar">
+    <span class="mp-icon" id="mpIcon">▶</span>
+  </button>
+  <div class="mp-info">
+    <span class="mp-title">Cursed Era II — Ambient</span>
+    <span class="mp-sub" id="mpSub">Haz clic para activar</span>
+  </div>
+  <div class="mp-bars" id="mpBars">
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+  <div class="mp-vol">
+    <span class="mp-vol-icon">🔊</span>
+    <input type="range" min="0" max="100" value="35" class="mp-slider" id="mpVol" oninput="setVolume(this.value)">
+  </div>
+</div>
+
+<iframe id="ytFrame"
+  src=""
+  width="1" height="1" frameborder="0"
+  allow="autoplay; encrypted-media; gyroscope; picture-in-picture"
+  allowfullscreen
+  style="position:fixed;bottom:-9999px;left:-9999px;width:200px;height:200px;visibility:hidden;pointer-events:none;">
+</iframe>
+
+<style>
+.music-player {
+  position: fixed;
+  bottom: 1.8rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 8000;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: rgba(4,3,10,0.88);
+  border: 1px solid var(--border);
+  border-top-color: var(--cursed-mid);
+  padding: 0.7rem 1.4rem;
+  backdrop-filter: blur(16px);
+  min-width: 320px;
+  max-width: 480px;
+  transition: box-shadow 0.4s;
+  overflow: hidden;
+}
+.music-player.playing {
+  border-top-color: var(--gold);
+  box-shadow: 0 0 30px rgba(147,51,234,0.25), 0 0 60px rgba(4,3,10,0.8);
+}
+.mp-glow {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(107,33,168,0.06), rgba(127,29,29,0.04));
+  pointer-events: none;
+}
+.mp-toggle {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border-glow);
+  background: rgba(147,51,234,0.15);
+  color: var(--cursed-bright);
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.3s;
+}
+.mp-toggle:hover {
+  background: rgba(147,51,234,0.3);
+  box-shadow: var(--glow-purple);
+  border-color: var(--cursed-mid);
+}
+.mp-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  flex: 1;
+  min-width: 0;
+}
+.mp-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mp-sub {
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: 0.78rem;
+  color: var(--text-faint);
+  transition: color 0.3s;
+}
+.music-player.playing .mp-sub { color: var(--cursed-bright); }
+/* Barras animadas */
+.mp-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 18px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.music-player.playing .mp-bars { opacity: 1; }
+.mp-bars span {
+  display: block;
+  width: 3px;
+  background: var(--cursed-mid);
+  border-radius: 2px;
+  animation: bar-bounce 0s ease-in-out infinite alternate;
+}
+.music-player.playing .mp-bars span:nth-child(1) { animation-duration: 0.4s; animation-delay: 0s; }
+.music-player.playing .mp-bars span:nth-child(2) { animation-duration: 0.6s; animation-delay: 0.1s; }
+.music-player.playing .mp-bars span:nth-child(3) { animation-duration: 0.5s; animation-delay: 0.05s; }
+.music-player.playing .mp-bars span:nth-child(4) { animation-duration: 0.7s; animation-delay: 0.15s; }
+.music-player.playing .mp-bars span:nth-child(5) { animation-duration: 0.45s; animation-delay: 0.08s; }
+@keyframes bar-bounce {
+  from { height: 3px; background: var(--cursed-mid); }
+  to   { height: 16px; background: var(--gold); }
+}
+/* Volumen */
+.mp-vol {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+.mp-vol-icon { font-size: 0.75rem; opacity: 0.5; }
+.mp-slider {
+  -webkit-appearance: none;
+  width: 60px; height: 2px;
+  background: var(--border);
+  outline: none;
+  border-radius: 2px;
+  cursor: pointer;
+}
+.mp-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--cursed-bright);
+  cursor: pointer;
+  box-shadow: 0 0 6px rgba(192,132,252,0.6);
+}
+@media(max-width:480px){
+  .music-player { min-width: calc(100vw - 2rem); bottom: 1rem; }
+  .mp-vol { display: none; }
+}
+</style>
+
+<script>
+  let isPlaying = false;
+  const ytFrame = document.getElementById('ytFrame');
+const YT_SRC  = 'https://www.youtube.com/embed/ErBpk4A8lo4?autoplay=1&loop=1&playlist=ErBpk4A8lo4&controls=0&mute=0&enablejsapi=1&origin=' + location.origin;
+
+  function toggleMusic() {
+    isPlaying = !isPlaying;
+    const player = document.getElementById('musicPlayer');
+    const icon   = document.getElementById('mpIcon');
+    const sub    = document.getElementById('mpSub');
+
+    if (isPlaying) {
+      ytFrame.src = YT_SRC;
+      player.classList.add('playing');
+      icon.textContent = '⏸';
+      sub.textContent  = 'Reproduciendo...';
+    } else {
+      ytFrame.src = '';
+      player.classList.remove('playing');
+      icon.textContent = '▶';
+      sub.textContent  = 'Pausado';
+    }
+  }
+
+  function setVolume(val) {
+    // YouTube iframe API no permite control de volumen externo sin SDK completo.
+    // El slider queda como UX visual.
+  }
+</script>
+
 </body>
 </html>
