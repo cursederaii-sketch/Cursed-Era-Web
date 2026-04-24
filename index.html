@@ -3,42 +3,47 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cursed Era II ⛩️</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;900&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <title>Cursed Era II ⛩️ — Comunidad JJK</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;900&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Noto+Serif+JP:wght@300;400;700&display=swap" rel="stylesheet" />
   <style>
     :root {
       --void: #000000;
-      --abyss: #050507;
-      --dark: #0a090f;
-      --surface: #100e18;
-      --panel: #14111f;
-      --border: #2a2140;
+      --abyss: #04030a;
+      --dark: #080612;
+      --surface: #0e0b1a;
+      --panel: #120f1e;
+      --panel2: #16132a;
+      --border: #251d3a;
       --border-glow: #4a3a6a;
       --cursed-purple: #6b21a8;
       --cursed-mid: #9333ea;
       --cursed-bright: #c084fc;
-      --cursed-light: #e9d5ff;
+      --cursed-light: #ede9fe;
       --gold: #d4a853;
-      --gold-dim: #8a6a2a;
+      --gold-bright: #f0c060;
+      --gold-dim: #7a5a1a;
       --crimson: #7f1d1d;
-      --crimson-bright: #dc2626;
-      --text: #e2ddf0;
+      --crimson-bright: #ef4444;
+      --crimson-mid: #b91c1c;
+      --teal: #0d9488;
+      --text: #ede8f8;
       --text-dim: #9490aa;
-      --text-faint: #4a4560;
-      --glow-purple: 0 0 20px rgba(147, 51, 234, 0.5);
-      --glow-gold: 0 0 20px rgba(212, 168, 83, 0.4);
+      --text-faint: #3e3858;
+      --glow-purple: 0 0 30px rgba(147,51,234,0.55);
+      --glow-gold: 0 0 30px rgba(212,168,83,0.5);
+      --glow-red: 0 0 30px rgba(239,68,68,0.4);
+      --nav-h: 64px;
     }
 
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; scroll-padding-top: var(--nav-h); }
 
     body {
       background-color: var(--abyss);
       color: var(--text);
       font-family: 'EB Garamond', Georgia, serif;
       overflow-x: hidden;
-      cursor: default;
+      cursor: none;
     }
 
     /* ─── NOISE OVERLAY ─── */
@@ -48,14 +53,233 @@
       inset: 0;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
       pointer-events: none;
-      z-index: 1000;
-      opacity: 0.4;
+      z-index: 9990;
+      opacity: 0.35;
+    }
+
+    /* ─── CUSTOM CURSOR ─── */
+    .cursor-orb {
+      position: fixed;
+      width: 18px; height: 18px;
+      background: radial-gradient(circle, rgba(192,132,252,0.9) 0%, rgba(147,51,234,0.5) 50%, transparent 100%);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 99999;
+      transform: translate(-50%,-50%);
+      transition: width 0.2s, height 0.2s, opacity 0.2s;
+      mix-blend-mode: screen;
+      box-shadow: 0 0 12px rgba(192,132,252,0.8), 0 0 30px rgba(147,51,234,0.3);
+    }
+    .cursor-trail {
+      position: fixed;
+      width: 6px; height: 6px;
+      background: rgba(192,132,252,0.4);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 99998;
+      transform: translate(-50%,-50%);
+      transition: left 0.12s ease, top 0.12s ease;
+      mix-blend-mode: screen;
+    }
+    body:has(a:hover) .cursor-orb,
+    body:has(button:hover) .cursor-orb { width: 30px; height: 30px; }
+
+    /* ─── SCROLL PROGRESS ─── */
+    .scroll-progress {
+      position: fixed;
+      top: 0; left: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--cursed-mid), var(--gold), var(--crimson-bright));
+      z-index: 9999;
+      width: 0%;
+      transition: width 0.1s linear;
+      box-shadow: 0 0 10px rgba(147,51,234,0.8);
     }
 
     /* ─── SCROLLBAR ─── */
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: var(--abyss); }
-    ::-webkit-scrollbar-thumb { background: var(--cursed-purple); border-radius: 2px; }
+    ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--cursed-purple), var(--crimson)); border-radius: 2px; }
+
+    /* ─── LOADING SCREEN ─── */
+    .loader {
+      position: fixed;
+      inset: 0;
+      background: var(--void);
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+    }
+    .loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+    .loader-ring {
+      width: 80px; height: 80px;
+      border: 1px solid rgba(147,51,234,0.2);
+      border-top-color: var(--cursed-mid);
+      border-radius: 50%;
+      animation: spin 1.2s linear infinite;
+      position: relative;
+    }
+    .loader-ring::before {
+      content: '呪';
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      color: var(--cursed-bright);
+      animation: pulse-glow 1.2s ease-in-out infinite;
+    }
+    .loader-ring::after {
+      content: '';
+      position: absolute;
+      inset: -12px;
+      border: 1px solid rgba(212,168,83,0.15);
+      border-bottom-color: var(--gold-dim);
+      border-radius: 50%;
+      animation: spin 2s linear infinite reverse;
+    }
+    .loader-text {
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.6em;
+      color: var(--text-faint);
+      text-transform: uppercase;
+      animation: pulse-glow 1.5s ease-in-out infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes pulse-glow {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 1; }
+    }
+
+    /* ─── NAVIGATION ─── */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      z-index: 9000;
+      display: flex;
+      align-items: center;
+      padding: 0 2rem;
+      background: rgba(4,3,10,0);
+      border-bottom: 1px solid transparent;
+      transition: background 0.4s, border-color 0.4s, backdrop-filter 0.4s;
+    }
+    .nav.scrolled {
+      background: rgba(4,3,10,0.92);
+      border-bottom-color: var(--border);
+      backdrop-filter: blur(12px);
+    }
+    .nav-logo {
+      font-family: 'Cinzel Decorative', cursive;
+      font-size: 0.85rem;
+      font-weight: 900;
+      color: transparent;
+      background: linear-gradient(90deg, var(--gold), var(--cursed-bright));
+      -webkit-background-clip: text;
+      background-clip: text;
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      flex-shrink: 0;
+      filter: drop-shadow(0 0 8px rgba(147,51,234,0.5));
+    }
+    .nav-links {
+      display: flex;
+      gap: 0;
+      margin-left: auto;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: 'Cinzel', serif;
+      font-size: 0.58rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--text-dim);
+      padding: 0.5rem 0.9rem;
+      border: 1px solid transparent;
+      transition: all 0.25s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 50%; right: 50%;
+      height: 1px;
+      background: var(--gold);
+      transition: left 0.3s, right 0.3s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-links a:hover::after { left: 15%; right: 15%; }
+    .nav-discord {
+      margin-left: 1.5rem;
+      font-family: 'Cinzel', serif;
+      font-size: 0.58rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: #fff;
+      background: linear-gradient(135deg, var(--cursed-purple), #4c1d95);
+      padding: 0.5rem 1.2rem;
+      border: 1px solid var(--cursed-mid);
+      transition: all 0.3s;
+      flex-shrink: 0;
+    }
+    .nav-discord:hover {
+      box-shadow: var(--glow-purple);
+      border-color: var(--cursed-bright);
+    }
+    /* Hamburger */
+    .nav-ham {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      margin-left: auto;
+      padding: 8px;
+    }
+    .nav-ham span {
+      display: block;
+      width: 22px; height: 1px;
+      background: var(--text-dim);
+      transition: all 0.3s;
+    }
+    .nav-ham.open span:nth-child(1) { transform: rotate(45deg) translate(4px,4px); }
+    .nav-ham.open span:nth-child(2) { opacity: 0; }
+    .nav-ham.open span:nth-child(3) { transform: rotate(-45deg) translate(4px,-4px); }
+    .nav-mobile {
+      position: fixed;
+      top: var(--nav-h); left: 0; right: 0;
+      background: rgba(8,6,18,0.97);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+      padding: 1.5rem 2rem;
+      display: none;
+      flex-direction: column;
+      gap: 0.5rem;
+      z-index: 8999;
+      transform: translateY(-10px);
+      opacity: 0;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+    .nav-mobile.open { display: flex; transform: translateY(0); opacity: 1; }
+    .nav-mobile a {
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--text-dim);
+      padding: 0.7rem 0;
+      border-bottom: 1px solid var(--border);
+      transition: color 0.2s;
+    }
+    .nav-mobile a:hover { color: var(--gold); }
 
     /* ─── HERO ─── */
     .hero {
@@ -65,57 +289,67 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-end;
+      justify-content: center;
       overflow: hidden;
+      padding-top: var(--nav-h);
     }
 
-    .hero-banner {
+    /* Atmospheric hero background */
+    .hero-bg {
       position: absolute;
       inset: 0;
-      background-image: url('https://i.imgur.com/kdTZSsz.png');
-      background-size: cover;
-      background-position: center top;
-      background-repeat: no-repeat;
-      filter: brightness(0.55) saturate(1.2);
-      transform: scale(1.04);
-      animation: subtle-drift 20s ease-in-out infinite alternate;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(107,33,168,0.25) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 40% at 20% 80%, rgba(127,29,29,0.15) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 80% 80%, rgba(107,33,168,0.1) 0%, transparent 60%),
+        var(--abyss);
     }
-
-    @keyframes subtle-drift {
-      from { transform: scale(1.04) translateY(0px); }
-      to   { transform: scale(1.08) translateY(-12px); }
-    }
-
-    .hero-vignette {
+    .hero-bg-grid {
       position: absolute;
       inset: 0;
-      background: radial-gradient(ellipse at 50% 30%, transparent 20%, rgba(5,5,7,0.6) 70%, var(--abyss) 100%);
+      background-image:
+        linear-gradient(rgba(42,33,64,0.15) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(42,33,64,0.15) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse at 50% 50%, black 30%, transparent 80%);
     }
-
-    .hero-bottom-fade {
+    .hero-orb {
       position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 50%;
-      background: linear-gradient(to bottom, transparent, var(--abyss) 90%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .hero-orb-1 {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(107,33,168,0.18) 0%, transparent 70%);
+      top: -100px; left: -100px;
+      animation: orb-drift 15s ease-in-out infinite alternate;
+    }
+    .hero-orb-2 {
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(127,29,29,0.12) 0%, transparent 70%);
+      bottom: 0; right: -80px;
+      animation: orb-drift 18s ease-in-out infinite alternate-reverse;
+    }
+    @keyframes orb-drift {
+      from { transform: translate(0,0) scale(1); }
+      to { transform: translate(40px, 30px) scale(1.1); }
     }
 
     .hero-content {
       position: relative;
       z-index: 10;
       text-align: center;
-      padding: 0 1rem 5rem;
+      padding: 2rem 1.5rem 3rem;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 1rem;
+      gap: 1.2rem;
     }
 
     .hero-eyebrow {
       font-family: 'Cinzel', serif;
-      font-size: 0.7rem;
-      letter-spacing: 0.5em;
+      font-size: 0.68rem;
+      letter-spacing: 0.6em;
       color: var(--gold);
       text-transform: uppercase;
       opacity: 0;
@@ -124,89 +358,192 @@
 
     .hero-title {
       font-family: 'Cinzel Decorative', cursive;
-      font-size: clamp(2.8rem, 8vw, 6.5rem);
+      font-size: clamp(3.2rem, 9vw, 7.5rem);
       font-weight: 900;
-      line-height: 0.95;
+      line-height: 0.9;
       letter-spacing: -0.01em;
       color: transparent;
-      background: linear-gradient(135deg, #fff 0%, var(--cursed-light) 40%, var(--cursed-bright) 70%, var(--gold) 100%);
+      background: linear-gradient(135deg, #fff 0%, var(--cursed-light) 30%, var(--cursed-bright) 60%, var(--gold) 100%);
       -webkit-background-clip: text;
       background-clip: text;
-      text-shadow: none;
-      filter: drop-shadow(0 0 40px rgba(147,51,234,0.6));
+      filter: drop-shadow(0 0 50px rgba(147,51,234,0.7));
       opacity: 0;
       animation: fade-up 1s 0.5s forwards;
     }
 
-    .hero-title span {
+    .hero-title-sub {
       display: block;
-      font-size: 0.45em;
+      font-family: 'Cinzel Decorative', cursive;
+      font-size: 0.38em;
       color: transparent;
       background: linear-gradient(90deg, var(--gold-dim), var(--gold), var(--gold-dim));
       -webkit-background-clip: text;
       background-clip: text;
-      letter-spacing: 0.35em;
-      margin-bottom: 0.3em;
+      letter-spacing: 0.45em;
+      margin-bottom: 0.4em;
     }
 
     .hero-divider {
-      width: 200px;
+      width: 280px;
       height: 1px;
-      background: linear-gradient(90deg, transparent, var(--gold), transparent);
-      margin: 0.5rem auto;
+      background: linear-gradient(90deg, transparent, var(--gold), var(--cursed-bright), var(--gold), transparent);
       opacity: 0;
       animation: fade-up 1s 0.7s forwards;
+      position: relative;
     }
+    .hero-divider::before, .hero-divider::after {
+      content: '✦';
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gold);
+      font-size: 0.6rem;
+    }
+    .hero-divider::before { left: -1rem; }
+    .hero-divider::after { right: -1rem; }
+
+    /* ─── IMGUR BANNER (below title) ─── */
+    .hero-banner-wrap {
+      position: relative;
+      opacity: 0;
+      animation: fade-up 1.2s 0.9s forwards;
+      width: min(820px, 92vw);
+    }
+    .hero-banner-frame {
+      position: relative;
+      border: 1px solid var(--border-glow);
+      box-shadow:
+        0 0 0 1px rgba(147,51,234,0.15),
+        0 0 40px rgba(107,33,168,0.25),
+        inset 0 0 30px rgba(0,0,0,0.5);
+      overflow: hidden;
+    }
+    .hero-banner-frame::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(4,3,10,0.3) 0%, transparent 30%, transparent 70%, rgba(4,3,10,0.6) 100%);
+      z-index: 1;
+      pointer-events: none;
+    }
+    .hero-banner-frame img {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-height: 340px;
+      object-fit: cover;
+      object-position: center top;
+      filter: saturate(1.15) brightness(0.9);
+      transition: filter 0.5s, transform 0.8s;
+    }
+    .hero-banner-frame:hover img {
+      filter: saturate(1.3) brightness(1);
+      transform: scale(1.02);
+    }
+    /* Corner ornaments */
+    .hero-banner-frame .corner {
+      position: absolute;
+      width: 18px; height: 18px;
+      border-color: var(--gold);
+      border-style: solid;
+      z-index: 2;
+    }
+    .hero-banner-frame .corner.tl { top: 8px; left: 8px; border-width: 1px 0 0 1px; }
+    .hero-banner-frame .corner.tr { top: 8px; right: 8px; border-width: 1px 1px 0 0; }
+    .hero-banner-frame .corner.bl { bottom: 8px; left: 8px; border-width: 0 0 1px 1px; }
+    .hero-banner-frame .corner.br { bottom: 8px; right: 8px; border-width: 0 1px 1px 0; }
 
     .hero-runes {
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       color: var(--cursed-bright);
-      letter-spacing: 0.4em;
+      letter-spacing: 0.5em;
       opacity: 0;
-      animation: fade-up 1s 0.9s forwards;
+      animation: fade-up 1s 1.1s forwards;
     }
 
     .hero-tagline {
       font-family: 'EB Garamond', serif;
       font-style: italic;
-      font-size: clamp(0.95rem, 2vw, 1.15rem);
+      font-size: clamp(1rem, 2.2vw, 1.2rem);
       color: var(--text-dim);
-      max-width: 520px;
-      line-height: 1.7;
+      max-width: 560px;
+      line-height: 1.8;
       opacity: 0;
-      animation: fade-up 1s 1.1s forwards;
+      animation: fade-up 1s 1.3s forwards;
+    }
+
+    .hero-cta-row {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fade-up 1s 1.5s forwards;
+    }
+
+    .hero-scroll-hint {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      z-index: 10;
+      opacity: 0;
+      animation: fade-up 1s 2s forwards;
+    }
+    .hero-scroll-hint span {
+      font-family: 'Cinzel', serif;
+      font-size: 0.52rem;
+      letter-spacing: 0.4em;
+      color: var(--text-faint);
+      text-transform: uppercase;
+    }
+    .hero-scroll-arrow {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(180deg, var(--gold-dim), transparent);
+      animation: scroll-pulse 2s ease-in-out infinite;
+    }
+    @keyframes scroll-pulse {
+      0%, 100% { transform: scaleY(1); opacity: 0.5; }
+      50% { transform: scaleY(1.3); opacity: 1; }
     }
 
     @keyframes fade-up {
-      from { opacity: 0; transform: translateY(24px); }
+      from { opacity: 0; transform: translateY(28px); }
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* ─── SAGA BANNER ─── */
+    /* ─── SAGA STRIP ─── */
     .saga-strip {
-      background: linear-gradient(90deg, var(--crimson) 0%, #4b0082 50%, var(--crimson) 100%);
-      padding: 0.8rem 2rem;
+      background: linear-gradient(90deg, rgba(127,29,29,0.8) 0%, rgba(75,0,130,0.9) 50%, rgba(127,29,29,0.8) 100%);
+      padding: 0.9rem 2rem;
       text-align: center;
       font-family: 'Cinzel', serif;
-      font-size: 0.78rem;
-      letter-spacing: 0.3em;
+      font-size: 0.75rem;
+      letter-spacing: 0.35em;
       color: var(--cursed-light);
       text-transform: uppercase;
       position: relative;
       overflow: hidden;
+      border-top: 1px solid rgba(147,51,234,0.3);
+      border-bottom: 1px solid rgba(147,51,234,0.3);
     }
     .saga-strip::before {
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+      background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.06) 50%, transparent 100%);
       animation: shimmer 3s linear infinite;
     }
     @keyframes shimmer {
       from { transform: translateX(-100%); }
       to   { transform: translateX(100%); }
     }
-    .saga-strip strong { color: #fff; }
+    .saga-strip strong { color: #fff; font-weight: 900; letter-spacing: 0.05em; }
 
     /* ─── LAYOUT ─── */
     .container {
@@ -218,20 +555,20 @@
     /* ─── SECTION HEADERS ─── */
     .section-header {
       text-align: center;
-      margin-bottom: 3rem;
+      margin-bottom: 3.5rem;
     }
     .section-header .label {
       font-family: 'Cinzel', serif;
-      font-size: 0.65rem;
-      letter-spacing: 0.5em;
+      font-size: 0.62rem;
+      letter-spacing: 0.55em;
       color: var(--gold);
       text-transform: uppercase;
       display: block;
-      margin-bottom: 0.8rem;
+      margin-bottom: 1rem;
     }
     .section-header h2 {
       font-family: 'Cinzel Decorative', cursive;
-      font-size: clamp(1.5rem, 4vw, 2.4rem);
+      font-size: clamp(1.6rem, 4.5vw, 2.6rem);
       font-weight: 700;
       color: var(--text);
       letter-spacing: 0.03em;
@@ -240,411 +577,25 @@
       color: var(--cursed-bright);
       font-style: normal;
     }
-    .section-header .rule {
+    .section-divider {
       display: flex;
       align-items: center;
       gap: 1rem;
       justify-content: center;
-      margin-top: 1rem;
+      margin-top: 1.2rem;
     }
-    .section-header .rule::before,
-    .section-header .rule::after {
+    .section-divider::before, .section-divider::after {
       content: '';
       height: 1px;
-      width: 80px;
+      width: 100px;
       background: linear-gradient(90deg, transparent, var(--border-glow));
     }
-    .section-header .rule::after {
+    .section-divider::after {
       background: linear-gradient(90deg, var(--border-glow), transparent);
     }
-    .section-header .rule span { color: var(--cursed-mid); font-size: 0.7rem; }
+    .section-divider span { color: var(--cursed-mid); font-size: 0.85rem; }
 
-    /* ─── ABOUT ─── */
-    .about-section {
-      padding: 5rem 0 4rem;
-      position: relative;
-    }
-
-    .about-card {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 2px;
-      padding: 2.5rem 3rem;
-      position: relative;
-      overflow: hidden;
-      max-width: 780px;
-      margin: 0 auto;
-    }
-    .about-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--cursed-mid), transparent);
-    }
-    .about-card::after {
-      content: '呪術';
-      position: absolute;
-      right: 2rem;
-      bottom: 1rem;
-      font-size: 5rem;
-      color: rgba(147,51,234,0.04);
-      font-family: 'Cinzel Decorative', serif;
-      pointer-events: none;
-      line-height: 1;
-    }
-    .about-icon {
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
-      display: block;
-    }
-    .about-card p {
-      font-size: 1.05rem;
-      line-height: 1.9;
-      color: var(--text-dim);
-    }
-    .about-card p strong { color: var(--text); }
-    .about-nav {
-      display: flex;
-      gap: 1.5rem;
-      margin-top: 1.8rem;
-      flex-wrap: wrap;
-    }
-    .about-nav a {
-      font-family: 'Cinzel', serif;
-      font-size: 0.72rem;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--cursed-bright);
-      text-decoration: none;
-      border: 1px solid var(--border);
-      padding: 0.5rem 1.2rem;
-      border-radius: 1px;
-      transition: all 0.3s;
-    }
-    .about-nav a:hover {
-      background: rgba(147,51,234,0.12);
-      border-color: var(--cursed-mid);
-      box-shadow: var(--glow-purple);
-    }
-
-    /* ─── PILLARS GRID ─── */
-    .pillars-section {
-      padding: 4rem 0 5rem;
-      background: linear-gradient(180deg, var(--abyss) 0%, var(--dark) 50%, var(--abyss) 100%);
-    }
-
-    .pillars-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 1.5px;
-      background: var(--border);
-      border: 1px solid var(--border);
-    }
-
-    .pillar-card {
-      background: var(--panel);
-      padding: 2rem 1.8rem;
-      position: relative;
-      transition: background 0.3s;
-      overflow: hidden;
-    }
-    .pillar-card:hover {
-      background: #17142a;
-    }
-    .pillar-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0;
-      width: 2px;
-      height: 0;
-      background: var(--cursed-mid);
-      transition: height 0.4s ease;
-    }
-    .pillar-card:hover::before { height: 100%; }
-
-    .pillar-icon {
-      font-size: 1.6rem;
-      margin-bottom: 1rem;
-      display: block;
-      filter: drop-shadow(0 0 8px rgba(147,51,234,0.4));
-    }
-    .pillar-title {
-      font-family: 'Cinzel', serif;
-      font-size: 0.82rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      color: var(--gold);
-      text-transform: uppercase;
-      margin-bottom: 0.8rem;
-    }
-    .pillar-body {
-      font-size: 0.92rem;
-      line-height: 1.8;
-      color: var(--text-dim);
-    }
-    .pillar-body strong { color: var(--cursed-bright); }
-    .pillar-glyph {
-      position: absolute;
-      bottom: -0.5rem;
-      right: 0.5rem;
-      font-size: 4.5rem;
-      color: rgba(107,33,168,0.05);
-      line-height: 1;
-      pointer-events: none;
-    }
-
-    /* ─── CURRENT SAGA ─── */
-    .saga-section {
-      padding: 5rem 0;
-      position: relative;
-      overflow: hidden;
-    }
-    .saga-section::before {
-      content: '';
-      position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, rgba(127,29,29,0.12) 0%, transparent 70%);
-      pointer-events: none;
-    }
-
-    .saga-frame {
-      max-width: 720px;
-      margin: 0 auto;
-      text-align: center;
-      position: relative;
-    }
-    .saga-ornament {
-      font-family: 'Cinzel Decorative', cursive;
-      font-size: clamp(1.8rem, 5vw, 3rem);
-      font-weight: 900;
-      color: transparent;
-      background: linear-gradient(135deg, var(--crimson-bright), var(--gold), var(--cursed-bright));
-      -webkit-background-clip: text;
-      background-clip: text;
-      filter: drop-shadow(0 0 20px rgba(220,38,38,0.4));
-      display: block;
-      margin-bottom: 1rem;
-      line-height: 1.2;
-    }
-    .saga-label {
-      font-family: 'Cinzel', serif;
-      font-size: 0.7rem;
-      letter-spacing: 0.5em;
-      color: var(--text-faint);
-      text-transform: uppercase;
-      margin-bottom: 0.5rem;
-    }
-    .saga-border {
-      border: 1px solid var(--border);
-      border-top: 1px solid rgba(220,38,38,0.3);
-      padding: 2rem;
-      background: linear-gradient(135deg, rgba(127,29,29,0.05), var(--panel));
-      margin-top: 1.5rem;
-    }
-    .saga-border p {
-      font-style: italic;
-      color: var(--text-dim);
-      line-height: 1.9;
-      font-size: 1rem;
-    }
-
-    /* ─── JOIN CTA ─── */
-    .join-section {
-      padding: 4rem 0 6rem;
-    }
-
-    .join-card {
-      background: linear-gradient(135deg, rgba(107,33,168,0.08), rgba(127,29,29,0.06));
-      border: 1px solid var(--border);
-      max-width: 680px;
-      margin: 0 auto;
-      padding: 3rem;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-    .join-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: repeating-linear-gradient(
-        -45deg,
-        transparent,
-        transparent 30px,
-        rgba(147,51,234,0.01) 30px,
-        rgba(147,51,234,0.01) 31px
-      );
-      pointer-events: none;
-    }
-    .join-card::after {
-      content: '⛩️';
-      position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%,-50%);
-      font-size: 12rem;
-      opacity: 0.03;
-      pointer-events: none;
-    }
-    .join-eyebrow {
-      font-family: 'Cinzel', serif;
-      font-size: 0.65rem;
-      letter-spacing: 0.5em;
-      color: var(--text-faint);
-      text-transform: uppercase;
-      margin-bottom: 1rem;
-    }
-    .join-title {
-      font-family: 'Cinzel Decorative', cursive;
-      font-size: clamp(1.4rem, 3.5vw, 2rem);
-      color: var(--text);
-      margin-bottom: 0.5rem;
-    }
-    .join-sub {
-      font-style: italic;
-      color: var(--text-dim);
-      font-size: 0.95rem;
-      margin-bottom: 2rem;
-    }
-
-    .join-buttons {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-    .btn-primary {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.6rem;
-      font-family: 'Cinzel', serif;
-      font-size: 0.78rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      text-decoration: none;
-      color: #fff;
-      background: linear-gradient(135deg, var(--cursed-purple), #4c1d95);
-      padding: 0.9rem 2rem;
-      border: 1px solid var(--cursed-mid);
-      position: relative;
-      overflow: hidden;
-      transition: all 0.3s;
-    }
-    .btn-primary::before {
-      content: '';
-      position: absolute;
-      top: 0; left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
-      transition: left 0.5s;
-    }
-    .btn-primary:hover::before { left: 100%; }
-    .btn-primary:hover {
-      box-shadow: var(--glow-purple);
-      border-color: var(--cursed-bright);
-    }
-
-    .btn-secondary {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.6rem;
-      font-family: 'Cinzel', serif;
-      font-size: 0.78rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      text-decoration: none;
-      color: var(--gold);
-      background: transparent;
-      padding: 0.9rem 2rem;
-      border: 1px solid var(--gold-dim);
-      transition: all 0.3s;
-    }
-    .btn-secondary:hover {
-      background: rgba(212,168,83,0.08);
-      border-color: var(--gold);
-      box-shadow: var(--glow-gold);
-    }
-
-    .join-meta {
-      margin-top: 2rem;
-      display: flex;
-      gap: 2rem;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-    .join-meta-item {
-      font-size: 0.78rem;
-      color: var(--text-faint);
-    }
-    .join-meta-item span {
-      color: var(--cursed-bright);
-    }
-
-    /* ─── FOOTER ─── */
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 2.5rem 1.5rem;
-      text-align: center;
-    }
-    .footer-runes {
-      font-size: 1.2rem;
-      letter-spacing: 0.5em;
-      color: var(--cursed-mid);
-      margin-bottom: 0.8rem;
-      opacity: 0.5;
-    }
-    .footer-text {
-      font-family: 'Cinzel', serif;
-      font-size: 0.62rem;
-      letter-spacing: 0.3em;
-      color: var(--text-faint);
-      text-transform: uppercase;
-    }
-    .footer-text a {
-      color: var(--cursed-bright);
-      text-decoration: none;
-    }
-
-    /* ─── FLOATING PARTICLES ─── */
-    .particles {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 0;
-      overflow: hidden;
-    }
-    .particle {
-      position: absolute;
-      width: 2px;
-      height: 2px;
-      background: var(--cursed-bright);
-      border-radius: 50%;
-      animation: float-particle linear infinite;
-      opacity: 0;
-    }
-    @keyframes float-particle {
-      0%   { transform: translateY(100vh) translateX(0); opacity: 0; }
-      10%  { opacity: 0.6; }
-      90%  { opacity: 0.4; }
-      100% { transform: translateY(-10vh) translateX(var(--drift)); opacity: 0; }
-    }
-
-    /* ─── REVEAL ANIMATIONS ─── */
-    .reveal {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.8s ease, transform 0.8s ease;
-    }
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* ─── CURSED ENERGY LINE ─── */
+    /* ─── ENERGY LINE ─── */
     .energy-line {
       height: 1px;
       background: linear-gradient(90deg, transparent, var(--cursed-mid), var(--gold), var(--cursed-mid), transparent);
@@ -652,9 +603,542 @@
       opacity: 0.4;
     }
 
+    /* ─── FLOATING PARTICLES ─── */
+    .particles {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      overflow: hidden;
+    }
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      animation: float-particle linear infinite;
+      opacity: 0;
+    }
+    @keyframes float-particle {
+      0%   { transform: translateY(110vh) translateX(0) rotate(0deg); opacity: 0; }
+      8%  { opacity: 0.7; }
+      92%  { opacity: 0.4; }
+      100% { transform: translateY(-10vh) translateX(var(--drift)) rotate(360deg); opacity: 0; }
+    }
+
+    /* ─── REVEAL ANIMATIONS ─── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.9s ease, transform 0.9s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-left { opacity: 0; transform: translateX(-32px); transition: opacity 0.9s ease, transform 0.9s ease; }
+    .reveal-left.visible { opacity: 1; transform: translateX(0); }
+    .reveal-right { opacity: 0; transform: translateX(32px); transition: opacity 0.9s ease, transform 0.9s ease; }
+    .reveal-right.visible { opacity: 1; transform: translateX(0); }
+
+    /* ─── ABOUT ─── */
+    .about-section {
+      padding: 5.5rem 0 4.5rem;
+      position: relative;
+    }
+    .about-card {
+      background: linear-gradient(135deg, var(--panel), rgba(14,11,26,0.8));
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: 3rem 3.5rem;
+      position: relative;
+      overflow: hidden;
+      max-width: 820px;
+      margin: 0 auto;
+    }
+    .about-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--cursed-mid), var(--gold), var(--cursed-mid), transparent);
+    }
+    .about-card::after {
+      content: '呪術';
+      position: absolute;
+      right: 2rem;
+      bottom: 0.5rem;
+      font-size: 6rem;
+      color: rgba(147,51,234,0.035);
+      line-height: 1;
+      pointer-events: none;
+    }
+    .about-icon {
+      font-size: 1.8rem;
+      margin-bottom: 1.2rem;
+      display: block;
+      filter: drop-shadow(0 0 10px rgba(147,51,234,0.5));
+    }
+    .about-card p {
+      font-size: 1.08rem;
+      line-height: 2;
+      color: var(--text-dim);
+    }
+    .about-card p strong { color: var(--text); }
+    .about-nav {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+    .about-nav a {
+      font-family: 'Cinzel', serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--cursed-bright);
+      text-decoration: none;
+      border: 1px solid var(--border);
+      padding: 0.6rem 1.3rem;
+      border-radius: 1px;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .about-nav a::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(147,51,234,0);
+      transition: background 0.3s;
+    }
+    .about-nav a:hover {
+      background: rgba(147,51,234,0.12);
+      border-color: var(--cursed-mid);
+      box-shadow: var(--glow-purple);
+      color: var(--cursed-light);
+    }
+
+    /* ─── STATS COUNTER ─── */
+    .stats-section {
+      padding: 3.5rem 0;
+      background: linear-gradient(90deg, rgba(107,33,168,0.06), rgba(127,29,29,0.04), rgba(107,33,168,0.06));
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+    }
+    .stat-item {
+      text-align: center;
+      padding: 2rem 1rem;
+      border-right: 1px solid var(--border);
+      position: relative;
+      transition: background 0.3s;
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-item:hover { background: rgba(147,51,234,0.04); }
+    .stat-number {
+      font-family: 'Cinzel Decorative', cursive;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 900;
+      color: transparent;
+      background: linear-gradient(135deg, var(--cursed-bright), var(--gold));
+      -webkit-background-clip: text;
+      background-clip: text;
+      filter: drop-shadow(0 0 15px rgba(147,51,234,0.4));
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+    .stat-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.58rem;
+      letter-spacing: 0.4em;
+      color: var(--text-faint);
+      text-transform: uppercase;
+    }
+    .stat-icon { font-size: 1.1rem; margin-bottom: 0.5rem; display: block; }
+
+    /* ─── PILLARS GRID ─── */
+    .pillars-section {
+      padding: 5rem 0 5.5rem;
+      background: linear-gradient(180deg, var(--abyss) 0%, var(--dark) 50%, var(--abyss) 100%);
+    }
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+    .pillar-card {
+      background: var(--panel);
+      padding: 2.2rem 2rem;
+      position: relative;
+      transition: background 0.35s, transform 0.3s;
+      overflow: hidden;
+    }
+    .pillar-card:hover { background: #17142a; }
+    .pillar-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 2px; height: 0;
+      background: linear-gradient(180deg, var(--cursed-mid), var(--gold));
+      transition: height 0.45s ease;
+    }
+    .pillar-card:hover::before { height: 100%; }
+    .pillar-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(147,51,234,0.06) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+    .pillar-card:hover::after { opacity: 1; }
+    .pillar-icon {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      display: block;
+      filter: drop-shadow(0 0 8px rgba(147,51,234,0.5));
+      transition: transform 0.3s;
+    }
+    .pillar-card:hover .pillar-icon { transform: scale(1.1) rotate(-5deg); }
+    .pillar-title {
+      font-family: 'Cinzel', serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 0.9rem;
+    }
+    .pillar-body {
+      font-size: 0.92rem;
+      line-height: 1.85;
+      color: var(--text-dim);
+    }
+    .pillar-body strong { color: var(--cursed-bright); }
+    .pillar-glyph {
+      position: absolute;
+      bottom: -0.5rem;
+      right: 0.5rem;
+      font-size: 5rem;
+      color: rgba(107,33,168,0.05);
+      line-height: 1;
+      pointer-events: none;
+      transition: color 0.3s;
+    }
+    .pillar-card:hover .pillar-glyph { color: rgba(107,33,168,0.09); }
+
+    /* ─── CURRENT SAGA ─── */
+    .saga-section {
+      padding: 5rem 0;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(180deg, var(--abyss) 0%, rgba(127,29,29,0.04) 50%, var(--abyss) 100%);
+    }
+    .saga-section::before {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(127,29,29,0.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .saga-frame {
+      max-width: 760px;
+      margin: 0 auto;
+      text-align: center;
+      position: relative;
+    }
+    .saga-ornament {
+      font-family: 'Cinzel Decorative', cursive;
+      font-size: clamp(2rem, 5.5vw, 3.4rem);
+      font-weight: 900;
+      color: transparent;
+      background: linear-gradient(135deg, var(--crimson-bright), var(--gold), var(--cursed-bright));
+      -webkit-background-clip: text;
+      background-clip: text;
+      filter: drop-shadow(0 0 25px rgba(220,38,38,0.45));
+      display: block;
+      margin-bottom: 1.2rem;
+      line-height: 1.2;
+    }
+    .saga-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.5em;
+      color: var(--text-faint);
+      text-transform: uppercase;
+      margin-bottom: 0.6rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+    }
+    .saga-label::before, .saga-label::after {
+      content: '';
+      width: 50px; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--crimson));
+    }
+    .saga-label::after { background: linear-gradient(90deg, var(--crimson), transparent); }
+    .saga-border {
+      border: 1px solid var(--border);
+      border-top: 2px solid rgba(220,38,38,0.5);
+      padding: 2.2rem 2.5rem;
+      background: linear-gradient(135deg, rgba(127,29,29,0.07), var(--panel));
+      margin-top: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .saga-border::before {
+      content: '⚔';
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 9rem;
+      color: rgba(220,38,38,0.04);
+      pointer-events: none;
+      line-height: 1;
+    }
+    .saga-border p {
+      font-style: italic;
+      color: var(--text-dim);
+      line-height: 2;
+      font-size: 1.05rem;
+      position: relative;
+    }
+
+    /* ─── RANKING BOARD (FORUM STYLE) ─── */
+    .ranking-section {
+      padding: 5.5rem 0;
+      position: relative;
+      background: linear-gradient(180deg, var(--abyss) 0%, rgba(212,168,83,0.02) 50%, var(--abyss) 100%);
+    }
+    .ranking-section::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 800px; height: 800px;
+      background: radial-gradient(circle, rgba(212,168,83,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .ranking-board {
+      max-width: 860px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .rank-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .rank-card:hover {
+      border-color: var(--border-glow);
+    }
+    .rank-header {
+      display: flex;
+      align-items: center;
+      padding: 1.5rem 2rem;
+      background: linear-gradient(90deg, rgba(255,255,255,0.02) 0%, transparent 100%);
+      position: relative;
+      z-index: 2;
+    }
+    .rank-number {
+      font-family: 'Cinzel Decorative', cursive;
+      font-size: 2.8rem;
+      font-weight: 900;
+      color: var(--text-faint);
+      margin-right: 2rem;
+      min-width: 70px;
+      text-align: right;
+      letter-spacing: -0.05em;
+      line-height: 1;
+    }
+    .rank-info { flex: 1; }
+    .rank-name {
+      font-family: 'Cinzel', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.3rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .rank-tag {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      font-style: italic;
+    }
+
+    /* Accordion / Details Styling */
+    .rank-details {
+      width: 100%;
+    }
+    .rank-summary {
+      list-style: none;
+      padding: 0.8rem 2rem;
+      background: rgba(0,0,0,0.2);
+      border-top: 1px solid var(--border);
+      font-family: 'Cinzel', serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      color: var(--gold-dim);
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 0.5rem;
+    }
+    .rank-summary::-webkit-details-marker { display: none; }
+    .rank-summary:hover {
+      color: var(--gold);
+      background: rgba(212,168,83,0.05);
+    }
+    .rank-details[open] .rank-summary {
+      border-bottom: 1px solid var(--border);
+      color: var(--cursed-bright);
+    }
+    
+    /* Forum Post Content */
+    .rank-content {
+      padding: 2rem;
+      background: var(--abyss);
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: var(--text-dim);
+      box-shadow: inset 0 0 30px rgba(0,0,0,0.5);
+    }
+    .rank-content h4 {
+      font-family: 'Cinzel Decorative', cursive;
+      font-size: 1.1rem;
+      color: var(--gold);
+      margin: 2rem 0 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .rank-content h4::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--border-glow), transparent);
+    }
+    .rank-content h4:first-child { margin-top: 0; }
+    .rank-content blockquote {
+      border-left: 2px solid var(--cursed-mid);
+      padding: 1rem 1.5rem;
+      margin: 1rem 0;
+      background: rgba(147,51,234,0.05);
+      font-style: italic;
+      color: var(--text);
+    }
+    .rank-content p { margin-bottom: 1rem; }
+    .rank-content strong { color: var(--cursed-light); }
+    
+    /* Specific Ranks Coloring */
+    .rank-card.top-1 {
+      border: 1px solid var(--gold);
+      border-left: 4px solid var(--crimson-bright);
+      box-shadow: 0 0 30px rgba(212,168,83,0.1);
+    }
+    .rank-card.top-1 .rank-header { background: linear-gradient(135deg, rgba(212,168,83,0.15), transparent); }
+    .rank-card.top-1 .rank-number { color: var(--gold); text-shadow: 0 0 15px rgba(212,168,83,0.5); font-size: 3.5rem; }
+    .rank-card.top-1 .rank-name { color: var(--gold-bright); }
+    .rank-card.top-1 .rank-content h4 { color: var(--crimson-bright); }
+    .rank-card.top-1 blockquote { border-left-color: var(--crimson-bright); background: rgba(220,38,38,0.05); }
+
+    .rank-card.top-2 { border-left: 3px solid var(--cursed-bright); }
+    .rank-card.top-2 .rank-header { background: linear-gradient(135deg, rgba(147,51,234,0.1), transparent); }
+    .rank-card.top-2 .rank-number { color: var(--cursed-bright); }
+    
+    .rank-card.top-3 { border-left: 3px solid var(--teal); }
+    .rank-card.top-3 .rank-number { color: var(--teal); }
+
+    .rank-card.top-4 { border-left: 3px solid #6b7280; } /* Silver/Grey for Castorice */
+    .rank-card.top-5 { border-left: 3px solid var(--crimson-mid); }
+;
+      background: var(--panel2);
+    }
+    .rank-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(255,255,255,0.03) 0%, transparent 100%);
+      pointer-events: none;
+    }
+    .rank-number {
+      font-family: 'Cinzel Decorative', cursive;
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: var(--text-faint);
+      margin-right: 2rem;
+      min-width: 60px;
+      text-align: right;
+      letter-spacing: -0.05em;
+    }
+    .rank-info { flex: 1; }
+    .rank-name {
+      font-family: 'Cinzel', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.2rem;
+    }
+    .rank-tag {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      font-style: italic;
+    }
+    
+    /* Top 1 Special Styling */
+    .rank-card.top-1 {
+      border: 1px solid var(--gold);
+      border-left: 4px solid var(--crimson-bright);
+      background: linear-gradient(135deg, rgba(212,168,83,0.1), var(--panel));
+      padding: 2rem;
+      box-shadow: 0 0 30px rgba(212,168,83,0.15);
+    }
+    .rank-card.top-1 .rank-number {
+      color: var(--gold);
+      text-shadow: 0 0 15px rgba(212,168,83,0.5);
+      font-size: 3rem;
+    }
+    .rank-card.top-1 .rank-name {
+      color: var(--gold-bright);
+      font-size: 1.4rem;
+    }
+    
+    /* Top 2 Special Styling (Tied) */
+    .rank-card.top-2 {
+      border-left: 3px solid var(--cursed-bright);
+      background: linear-gradient(135deg, rgba(147,51,234,0.08), var(--panel));
+    }
+    .rank-card.top-2 .rank-number { color: var(--cursed-bright); }
+    
+    /* Top 3 Special Styling */
+    .rank-card.top-3 {
+      border-left: 3px solid var(--teal);
+    }
+    .rank-card.top-3 .rank-number { color: var(--teal); }
+
     /* ─── LORE SECTION ─── */
     .lore-section {
-      padding: 5rem 0 4rem;
+      padding: 5.5rem 0 4.5rem;
       position: relative;
       overflow: hidden;
     }
@@ -663,13 +1147,51 @@
       position: absolute;
       top: 0; left: 50%;
       transform: translateX(-50%);
-      width: 800px;
-      height: 800px;
-      background: radial-gradient(circle, rgba(107,33,168,0.07) 0%, transparent 70%);
+      width: 900px; height: 900px;
+      background: radial-gradient(circle, rgba(107,33,168,0.06) 0%, transparent 70%);
       pointer-events: none;
     }
-
-    /* Timeline vertical line */
+    /* Tabs */
+    .lore-tabs {
+      display: flex;
+      gap: 0;
+      margin: 0 auto 2.8rem;
+      border: 1px solid var(--border);
+      max-width: 820px;
+      overflow: hidden;
+    }
+    .lore-tab {
+      flex: 1;
+      padding: 0.85rem 1rem;
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      text-align: center;
+      cursor: pointer;
+      color: var(--text-faint);
+      border-right: 1px solid var(--border);
+      background: transparent;
+      border-top: none; border-bottom: none; border-left: none;
+      transition: all 0.3s;
+      position: relative;
+    }
+    .lore-tab::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transition: transform 0.3s;
+    }
+    .lore-tab:last-child { border-right: none; }
+    .lore-tab.active { color: var(--gold); background: rgba(212,168,83,0.06); }
+    .lore-tab.active::after { transform: scaleX(1); }
+    .lore-tab:hover:not(.active) { color: var(--text-dim); background: rgba(107,33,168,0.05); }
+    .lore-panel { display: none; }
+    .lore-panel.active { display: block; }
+    /* Timeline */
     .lore-timeline {
       position: relative;
       max-width: 820px;
@@ -683,19 +1205,15 @@
       width: 1px;
       background: linear-gradient(to bottom, transparent, var(--cursed-mid), var(--gold), var(--cursed-mid), transparent);
     }
-
     .lore-entry {
       position: relative;
-      padding: 0 0 2.8rem 68px;
+      padding: 0 0 3rem 72px;
     }
     .lore-entry:last-child { padding-bottom: 0; }
-
     .lore-dot {
       position: absolute;
-      left: 12px;
-      top: 6px;
-      width: 22px;
-      height: 22px;
+      left: 12px; top: 6px;
+      width: 22px; height: 22px;
       border-radius: 50%;
       border: 1px solid var(--cursed-mid);
       background: var(--abyss);
@@ -704,32 +1222,34 @@
       justify-content: center;
       font-size: 0.6rem;
       color: var(--cursed-bright);
-      box-shadow: 0 0 12px rgba(147,51,234,0.35);
+      box-shadow: 0 0 15px rgba(147,51,234,0.4);
+      transition: box-shadow 0.3s;
     }
-    .lore-dot::after {
-      content: '✦';
+    .lore-entry:hover .lore-dot {
+      box-shadow: 0 0 25px rgba(147,51,234,0.7);
     }
-
+    .lore-dot::after { content: '✦'; }
     .lore-year {
       font-family: 'Cinzel', serif;
       font-size: 0.62rem;
       letter-spacing: 0.45em;
       color: var(--gold);
       text-transform: uppercase;
-      margin-bottom: 0.4rem;
+      margin-bottom: 0.5rem;
     }
     .lore-card {
       background: var(--panel);
       border: 1px solid var(--border);
       border-left: 2px solid var(--cursed-purple);
-      padding: 1.6rem 2rem;
+      padding: 1.8rem 2.2rem;
       position: relative;
       overflow: hidden;
-      transition: border-left-color 0.3s, box-shadow 0.3s;
+      transition: border-left-color 0.3s, box-shadow 0.3s, background 0.3s;
     }
     .lore-card:hover {
       border-left-color: var(--cursed-bright);
-      box-shadow: inset 0 0 30px rgba(107,33,168,0.06), -2px 0 12px rgba(147,51,234,0.2);
+      box-shadow: inset 0 0 40px rgba(107,33,168,0.07), -2px 0 16px rgba(147,51,234,0.25);
+      background: var(--panel2);
     }
     .lore-card-title {
       font-family: 'Cinzel', serif;
@@ -738,143 +1258,143 @@
       letter-spacing: 0.1em;
       color: var(--cursed-light);
       text-transform: uppercase;
-      margin-bottom: 0.9rem;
+      margin-bottom: 1rem;
     }
     .lore-card-body {
       font-style: italic;
       font-size: 0.97rem;
-      line-height: 1.95;
+      line-height: 2;
       color: var(--text-dim);
     }
     .lore-card-body strong { color: var(--gold); font-style: normal; }
     .lore-card-glyph {
       position: absolute;
-      bottom: -0.3rem;
-      right: 1rem;
-      font-size: 5rem;
+      bottom: -0.3rem; right: 1rem;
+      font-size: 5.5rem;
       color: rgba(107,33,168,0.04);
       line-height: 1;
       pointer-events: none;
     }
-
-    /* Sub-lore block */
+    /* Sub-lore */
     .sublore-block {
       max-width: 820px;
-      margin: 3rem auto 0;
+      margin: 0 auto;
       border: 1px solid var(--border);
       border-top: 2px solid var(--crimson-bright);
-      background: linear-gradient(135deg, rgba(127,29,29,0.06), var(--panel));
-      padding: 2.4rem 2.4rem;
+      background: linear-gradient(135deg, rgba(127,29,29,0.07), var(--panel));
+      padding: 2.5rem;
       position: relative;
       overflow: hidden;
     }
     .sublore-block::before {
       content: '⚔';
       position: absolute;
-      right: 1.5rem;
-      top: 50%;
+      right: 1.5rem; top: 50%;
       transform: translateY(-50%);
-      font-size: 8rem;
+      font-size: 9rem;
       color: rgba(220,38,38,0.04);
       pointer-events: none;
-      line-height: 1;
     }
     .sublore-title {
       font-family: 'Cinzel Decorative', cursive;
-      font-size: clamp(1rem, 2.5vw, 1.4rem);
+      font-size: clamp(1rem, 2.5vw, 1.5rem);
       color: var(--crimson-bright);
       margin-bottom: 0.5rem;
       letter-spacing: 0.06em;
+      filter: drop-shadow(0 0 10px rgba(239,68,68,0.3));
     }
     .sublore-subtitle {
       font-family: 'Cinzel', serif;
-      font-size: 0.65rem;
-      letter-spacing: 0.4em;
+      font-size: 0.62rem;
+      letter-spacing: 0.45em;
       color: var(--text-faint);
       text-transform: uppercase;
-      margin-bottom: 1.4rem;
+      margin-bottom: 1.5rem;
     }
     .sublore-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 1.2rem;
-      margin-bottom: 1.4rem;
+      margin-bottom: 1.5rem;
     }
     .sublore-fighter {
-      background: rgba(0,0,0,0.2);
+      background: rgba(0,0,0,0.25);
       border: 1px solid var(--border);
-      padding: 1rem 1.2rem;
+      padding: 1.2rem 1.4rem;
+      transition: border-color 0.3s;
     }
+    .sublore-fighter:hover { border-color: var(--crimson-mid); }
     .sublore-fighter-label {
       font-family: 'Cinzel', serif;
-      font-size: 0.62rem;
+      font-size: 0.6rem;
       letter-spacing: 0.35em;
       color: var(--gold);
       text-transform: uppercase;
-      margin-bottom: 0.3rem;
-    }
-    .sublore-fighter-name {
-      font-size: 0.95rem;
-      color: var(--text);
       margin-bottom: 0.4rem;
     }
+    .sublore-fighter-name {
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.05em;
+    }
     .sublore-fighter-desc {
-      font-size: 0.83rem;
+      font-size: 0.85rem;
       color: var(--text-dim);
       font-style: italic;
-      line-height: 1.6;
+      line-height: 1.7;
+    }
+    .sublore-detail-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.8rem;
+      margin: 1.2rem 0;
+    }
+    .sublore-detail {
+      text-align: center;
+      padding: 0.8rem;
+      background: rgba(0,0,0,0.18);
+      border: 1px solid var(--border);
+    }
+    .sublore-detail-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.52rem;
+      letter-spacing: 0.4em;
+      color: var(--text-faint);
+      text-transform: uppercase;
+      margin-bottom: 0.3rem;
+    }
+    .sublore-detail-value {
+      font-size: 0.88rem;
+      color: var(--cursed-bright);
     }
     .sublore-body {
-      font-size: 0.92rem;
-      line-height: 1.85;
+      font-size: 0.93rem;
+      line-height: 1.9;
       color: var(--text-dim);
       margin-bottom: 1rem;
     }
     .sublore-body strong { color: var(--text); }
     .sublore-quote {
       border-left: 2px solid var(--crimson-bright);
-      padding: 0.8rem 1.2rem;
-      margin: 1rem 0;
+      padding: 0.9rem 1.3rem;
+      margin: 1.2rem 0;
       font-style: italic;
       color: var(--text-dim);
-      font-size: 0.9rem;
-      background: rgba(127,29,29,0.06);
+      font-size: 0.95rem;
+      background: rgba(127,29,29,0.07);
     }
-    .sublore-detail-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 0.8rem;
-      margin-top: 1.2rem;
-    }
-    .sublore-detail {
-      text-align: center;
-      padding: 0.7rem;
-      background: rgba(0,0,0,0.15);
-      border: 1px solid var(--border);
-    }
-    .sublore-detail-label {
-      font-family: 'Cinzel', serif;
-      font-size: 0.55rem;
-      letter-spacing: 0.4em;
-      color: var(--text-faint);
-      text-transform: uppercase;
-      margin-bottom: 0.2rem;
-    }
-    .sublore-detail-value {
-      font-size: 0.85rem;
-      color: var(--cursed-bright);
-    }
-
-    /* Kamo aftermath */
+    /* Kamo */
     .kamo-block {
       max-width: 820px;
       margin: 1.5rem auto 0;
       background: var(--panel);
       border: 1px solid var(--border);
       border-left: 2px solid var(--gold);
-      padding: 1.6rem 2rem;
+      padding: 1.8rem 2.2rem;
       font-size: 0.93rem;
-      line-height: 1.9;
+      line-height: 1.95;
       color: var(--text-dim);
     }
     .kamo-block strong { color: var(--gold); }
@@ -885,7 +1405,7 @@
       letter-spacing: 0.4em;
       text-transform: uppercase;
       color: var(--gold);
-      margin-bottom: 1rem;
+      margin-bottom: 1.2rem;
       display: flex;
       align-items: center;
       gap: 0.8rem;
@@ -896,138 +1416,305 @@
       height: 1px;
       background: linear-gradient(90deg, var(--gold-dim), transparent);
     }
-
-    /* Events section */
+    /* Events */
     .events-section {
-      padding: 4rem 0;
-      background: linear-gradient(180deg, var(--abyss) 0%, rgba(127,29,29,0.04) 50%, var(--abyss) 100%);
+      padding: 4.5rem 0;
       position: relative;
     }
     .event-card {
       max-width: 820px;
-      margin: 0 auto;
+      margin: 0 auto 2rem;
       background: var(--panel);
       border: 1px solid var(--border);
       border-top: 2px solid var(--crimson-bright);
-      padding: 2.4rem;
+      padding: 2.6rem;
       position: relative;
       overflow: hidden;
+    }
+    .event-card.event-dark {
+      border-top-color: var(--cursed-mid);
     }
     .event-card::before {
       content: '';
       position: absolute;
       inset: 0;
-      background: radial-gradient(ellipse at top right, rgba(127,29,29,0.08), transparent 60%);
+      background: radial-gradient(ellipse at top right, rgba(127,29,29,0.09), transparent 60%);
       pointer-events: none;
+    }
+    .event-card.event-dark::before {
+      background: radial-gradient(ellipse at top right, rgba(147,51,234,0.09), transparent 60%);
     }
     .event-date-badge {
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
       font-family: 'Cinzel', serif;
-      font-size: 0.62rem;
+      font-size: 0.6rem;
       letter-spacing: 0.35em;
       text-transform: uppercase;
       color: var(--crimson-bright);
-      border: 1px solid rgba(220,38,38,0.3);
+      border: 1px solid rgba(220,38,38,0.35);
       padding: 0.3rem 0.9rem;
-      margin-bottom: 1.2rem;
-      background: rgba(127,29,29,0.1);
+      margin-bottom: 1.3rem;
+      background: rgba(127,29,29,0.12);
+    }
+    .event-date-badge.badge-dark {
+      color: var(--cursed-bright);
+      border-color: rgba(192,132,252,0.35);
+      background: rgba(147,51,234,0.12);
     }
     .event-title {
       font-family: 'Cinzel Decorative', cursive;
-      font-size: clamp(1.1rem, 3vw, 1.7rem);
+      font-size: clamp(1.2rem, 3.5vw, 1.9rem);
       color: var(--text);
-      margin-bottom: 1.4rem;
-      filter: drop-shadow(0 0 8px rgba(220,38,38,0.25));
+      margin-bottom: 1.5rem;
+      filter: drop-shadow(0 0 10px rgba(220,38,38,0.3));
+    }
+    .event-dark .event-title {
+      filter: drop-shadow(0 0 10px rgba(147,51,234,0.3));
     }
     .event-casualties {
       display: flex;
       flex-direction: column;
-      gap: 0.8rem;
-      margin: 1.4rem 0;
+      gap: 0.9rem;
+      margin: 1.5rem 0;
     }
     .event-casualty {
       display: flex;
-      gap: 0.8rem;
+      gap: 0.9rem;
       align-items: flex-start;
-      padding: 0.8rem 1rem;
-      background: rgba(127,29,29,0.08);
-      border: 1px solid rgba(220,38,38,0.15);
+      padding: 0.9rem 1.1rem;
+      background: rgba(127,29,29,0.09);
+      border: 1px solid rgba(220,38,38,0.18);
       border-left: 2px solid var(--crimson-bright);
+      transition: background 0.3s;
     }
-    .casualty-icon { font-size: 1rem; flex-shrink: 0; margin-top: 0.1rem; }
-    .casualty-text { font-size: 0.88rem; color: var(--text-dim); line-height: 1.65; }
+    .event-casualty:hover { background: rgba(127,29,29,0.15); }
+    .casualty-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 0.1rem; }
+    .casualty-text { font-size: 0.9rem; color: var(--text-dim); line-height: 1.7; }
     .casualty-text strong { color: var(--text); }
     .event-body {
-      font-size: 0.93rem;
-      line-height: 1.9;
+      font-size: 0.95rem;
+      line-height: 1.95;
       color: var(--text-dim);
       margin-bottom: 1rem;
     }
     .event-body strong { color: var(--text); }
     .event-alert {
-      background: rgba(127,29,29,0.15);
-      border: 1px solid rgba(220,38,38,0.4);
-      padding: 1rem 1.4rem;
-      margin: 1.2rem 0;
+      background: rgba(127,29,29,0.16);
+      border: 1px solid rgba(220,38,38,0.45);
+      padding: 1.1rem 1.5rem;
+      margin: 1.3rem 0;
       font-family: 'Cinzel', serif;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       letter-spacing: 0.12em;
       color: var(--crimson-bright);
       text-align: center;
       text-transform: uppercase;
-      line-height: 1.7;
+      line-height: 1.8;
       position: relative;
+      animation: alert-pulse 3s ease-in-out infinite;
     }
     .event-alert::before {
       content: '⚠';
       display: block;
-      font-size: 1.2rem;
-      margin-bottom: 0.4rem;
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+    }
+    @keyframes alert-pulse {
+      0%, 100% { box-shadow: 0 0 0 rgba(239,68,68,0); }
+      50% { box-shadow: 0 0 20px rgba(239,68,68,0.15); }
+    }
+
+    /* ─── GENERADOR Y MEDIDOR ─── */
+    .generator-section {
+      padding: 5.5rem 0;
+      background: linear-gradient(180deg, var(--dark) 0%, var(--abyss) 50%, var(--dark) 100%);
+    }
+    .generator-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .gen-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      padding: 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .gen-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--cursed-mid), transparent);
+    }
+    .gen-title {
+      font-family: 'Cinzel Decorative', cursive;
+      font-size: 1.5rem;
+      color: var(--cursed-light);
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+    .gen-subtitle {
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      color: var(--text-faint);
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    /* Meter */
+    .meter-container {
+      text-align: center;
+    }
+    .meter-display {
+      font-family: 'Cinzel Decorative', cursive;
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: var(--text-faint);
+      margin: 1.5rem 0 0.5rem;
+      transition: color 0.5s, text-shadow 0.5s;
+    }
+    .meter-rank {
+      font-family: 'Cinzel', serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.2em;
+      color: var(--gold);
+      min-height: 20px;
+      margin-bottom: 2rem;
+      text-transform: uppercase;
+    }
+    .meter-btn {
+      background: transparent;
+      border: 1px solid var(--cursed-mid);
+      color: var(--cursed-bright);
+      padding: 0.8rem 2rem;
+      font-family: 'Cinzel', serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .meter-btn:hover {
+      background: rgba(147,51,234,0.15);
+      box-shadow: var(--glow-purple);
+    }
+    .meter-bar-wrap {
+      height: 4px;
+      background: var(--border);
+      width: 100%;
+      margin-top: 1rem;
+      overflow: hidden;
+      border-radius: 2px;
+    }
+    .meter-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--cursed-mid), var(--crimson-bright));
+      transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Quiz */
+    .quiz-question {
+      margin-bottom: 1.5rem;
+      display: none;
+    }
+    .quiz-question.active {
+      display: block;
+      animation: fade-up 0.5s forwards;
+    }
+    .quiz-q-text {
+      font-size: 0.95rem;
+      color: var(--text);
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .quiz-option {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      padding: 0.8rem 1rem;
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+    .quiz-option:hover {
+      background: rgba(212,168,83,0.1);
+      border-color: var(--gold-dim);
+      color: var(--gold);
+    }
+    .quiz-result {
+      display: none;
+      text-align: center;
+      animation: fade-up 0.5s forwards;
+    }
+    .quiz-result.active { display: block; }
+    .quiz-result-clan {
+      font-family: 'Cinzel Decorative', cursive;
+      font-size: 1.8rem;
+      color: var(--gold);
+      margin: 1rem 0 0.5rem;
+    }
+    .quiz-result-desc {
+      font-size: 0.9rem;
+      color: var(--text-dim);
+      line-height: 1.6;
     }
 
     /* ─── RULES SECTION ─── */
     .rules-section {
-      padding: 5rem 0 4rem;
+      padding: 5.5rem 0 4.5rem;
       position: relative;
+      background: linear-gradient(180deg, var(--abyss) 0%, var(--dark) 50%, var(--abyss) 100%);
     }
     .rules-section::before {
       content: '';
       position: absolute;
       top: 0; left: 50%;
       transform: translateX(-50%);
-      width: 700px;
-      height: 600px;
-      background: radial-gradient(circle, rgba(212,168,83,0.04) 0%, transparent 70%);
+      width: 800px; height: 700px;
+      background: radial-gradient(circle, rgba(212,168,83,0.05) 0%, transparent 70%);
       pointer-events: none;
     }
-
     .rules-columns {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 2rem;
-      max-width: 1000px;
+      gap: 1.5rem;
+      max-width: 1020px;
       margin: 0 auto;
     }
-
     .rules-block {
       background: var(--panel);
       border: 1px solid var(--border);
       overflow: hidden;
+      transition: border-color 0.3s;
     }
+    .rules-block:hover { border-color: var(--border-glow); }
     .rules-block-header {
-      background: linear-gradient(90deg, rgba(107,33,168,0.15), transparent);
+      background: linear-gradient(90deg, rgba(107,33,168,0.18), transparent);
       border-bottom: 1px solid var(--border);
-      padding: 1.2rem 1.8rem;
+      padding: 1.3rem 2rem;
       display: flex;
       align-items: center;
-      gap: 0.8rem;
+      gap: 0.9rem;
     }
     .rules-block-header.gold-header {
-      background: linear-gradient(90deg, rgba(212,168,83,0.1), transparent);
+      background: linear-gradient(90deg, rgba(212,168,83,0.12), transparent);
     }
-    .rules-block-icon { font-size: 1.1rem; }
+    .rules-block-icon { font-size: 1.2rem; }
     .rules-block-label {
       font-family: 'Cinzel', serif;
       font-size: 0.72rem;
@@ -1035,27 +1722,27 @@
       text-transform: uppercase;
       color: var(--gold);
     }
-
-    .rules-list {
-      padding: 1.4rem 0;
-    }
+    .rules-list { padding: 1.2rem 0; }
     .rule-item {
       display: flex;
       gap: 1rem;
-      padding: 0.9rem 1.8rem;
-      border-bottom: 1px solid rgba(42,33,64,0.5);
-      transition: background 0.25s;
+      padding: 1rem 2rem;
+      border-bottom: 1px solid rgba(37,29,58,0.6);
+      transition: background 0.25s, padding-left 0.25s;
       align-items: flex-start;
     }
     .rule-item:last-child { border-bottom: none; }
-    .rule-item:hover { background: rgba(107,33,168,0.05); }
+    .rule-item:hover {
+      background: rgba(107,33,168,0.06);
+      padding-left: 2.3rem;
+    }
     .rule-number {
       font-family: 'Cinzel', serif;
-      font-size: 0.6rem;
+      font-size: 0.58rem;
       color: var(--cursed-mid);
       letter-spacing: 0.2em;
       flex-shrink: 0;
-      margin-top: 0.2rem;
+      margin-top: 0.25rem;
       min-width: 32px;
     }
     .rule-content { flex: 1; }
@@ -1066,127 +1753,411 @@
       letter-spacing: 0.12em;
       color: var(--text);
       text-transform: uppercase;
-      margin-bottom: 0.25rem;
+      margin-bottom: 0.3rem;
     }
     .rule-desc {
-      font-size: 0.88rem;
+      font-size: 0.9rem;
       color: var(--text-dim);
-      line-height: 1.65;
+      line-height: 1.7;
     }
-    .rule-badge {
-      font-size: 0.75rem;
-      flex-shrink: 0;
-      margin-top: 0.1rem;
-    }
-
+    .rule-badge { font-size: 0.8rem; flex-shrink: 0; margin-top: 0.1rem; }
     .rules-footer {
       text-align: center;
-      margin-top: 2.5rem;
-      padding: 1.2rem;
+      padding: 1.3rem;
       border: 1px solid var(--border);
-      background: linear-gradient(90deg, rgba(107,33,168,0.05), rgba(212,168,83,0.03), rgba(107,33,168,0.05));
-      max-width: 1000px;
-      margin: 2.5rem auto 0;
+      background: linear-gradient(90deg, rgba(107,33,168,0.06), rgba(212,168,83,0.04), rgba(107,33,168,0.06));
+      max-width: 1020px;
+      margin: 2rem auto 0;
       font-family: 'Cinzel', serif;
-      font-size: 0.68rem;
+      font-size: 0.66rem;
       letter-spacing: 0.4em;
       text-transform: uppercase;
       color: var(--text-faint);
+      overflow: hidden;
+      white-space: nowrap;
     }
     .rules-footer span { color: var(--cursed-bright); }
 
-    /* Lore sub-tabs */
-    .lore-tabs {
-      display: flex;
-      gap: 0;
-      margin-bottom: 2.5rem;
+    /* ─── DISCORD SECTION ─── */
+    .discord-section {
+      padding: 4rem 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(90deg, rgba(88,101,242,0.05), rgba(107,33,168,0.06), rgba(88,101,242,0.05));
+    }
+    .discord-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1.5px;
+      background: var(--border);
       border: 1px solid var(--border);
       max-width: 820px;
-      margin: 0 auto 2.5rem;
+      margin: 0 auto;
     }
-    .lore-tab {
-      flex: 1;
-      padding: 0.7rem 1rem;
+    .discord-item {
+      background: var(--panel);
+      padding: 2rem 1.5rem;
+      text-align: center;
+      transition: background 0.3s;
+    }
+    .discord-item:hover { background: var(--panel2); }
+    .discord-item-icon { font-size: 1.8rem; margin-bottom: 0.8rem; display: block; }
+    .discord-item-title {
+      font-family: 'Cinzel', serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.3em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    .discord-item-desc {
+      font-size: 0.88rem;
+      color: var(--text-dim);
+      line-height: 1.7;
+    }
+
+    /* ─── JOIN CTA ─── */
+    .join-section { padding: 5rem 0 6rem; }
+    .join-card {
+      background: linear-gradient(135deg, rgba(107,33,168,0.1), rgba(127,29,29,0.07), rgba(107,33,168,0.1));
+      border: 1px solid var(--border);
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 3.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .join-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        -45deg,
+        transparent, transparent 30px,
+        rgba(147,51,234,0.015) 30px, rgba(147,51,234,0.015) 31px
+      );
+      pointer-events: none;
+    }
+    .join-card::after {
+      content: '⛩️';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      font-size: 14rem;
+      opacity: 0.025;
+      pointer-events: none;
+    }
+    .join-top-line {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--cursed-mid), var(--gold), var(--cursed-mid), transparent);
+    }
+    .join-eyebrow {
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.55em;
+      color: var(--text-faint);
+      text-transform: uppercase;
+      margin-bottom: 1.2rem;
+    }
+    .join-title {
+      font-family: 'Cinzel Decorative', cursive;
+      font-size: clamp(1.5rem, 4vw, 2.2rem);
+      color: var(--text);
+      margin-bottom: 0.6rem;
+      filter: drop-shadow(0 0 20px rgba(147,51,234,0.3));
+    }
+    .join-sub {
+      font-style: italic;
+      color: var(--text-dim);
+      font-size: 1rem;
+      margin-bottom: 2.2rem;
+    }
+    .join-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      position: relative;
+    }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: 'Cinzel', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: #fff;
+      background: linear-gradient(135deg, var(--cursed-purple), #4c1d95);
+      padding: 1rem 2.2rem;
+      border: 1px solid var(--cursed-mid);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.35s;
+    }
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.09), transparent);
+      transition: left 0.5s;
+    }
+    .btn-primary:hover::before { left: 100%; }
+    .btn-primary:hover { box-shadow: var(--glow-purple); border-color: var(--cursed-bright); transform: translateY(-2px); }
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: 'Cinzel', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--gold);
+      background: transparent;
+      padding: 1rem 2.2rem;
+      border: 1px solid var(--gold-dim);
+      transition: all 0.35s;
+    }
+    .btn-secondary:hover {
+      background: rgba(212,168,83,0.09);
+      border-color: var(--gold);
+      box-shadow: var(--glow-gold);
+      transform: translateY(-2px);
+    }
+    .join-meta {
+      margin-top: 2.2rem;
+      display: flex;
+      gap: 2.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      position: relative;
+    }
+    .join-meta-item {
+      font-size: 0.78rem;
+      color: var(--text-faint);
+    }
+    .join-meta-item span { color: var(--cursed-bright); display: block; font-size: 1.1rem; font-family: 'Cinzel Decorative', cursive; }
+
+    /* ─── BACK TO TOP ─── */
+    .back-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 44px; height: 44px;
+      background: var(--panel2);
+      border: 1px solid var(--border-glow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 8000;
+      transition: all 0.3s;
+      opacity: 0;
+      transform: translateY(12px);
+      font-size: 1rem;
+      color: var(--cursed-bright);
+    }
+    .back-top.visible { opacity: 1; transform: translateY(0); }
+    .back-top:hover { background: rgba(147,51,234,0.2); box-shadow: var(--glow-purple); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 3rem 1.5rem 2rem;
+      text-align: center;
+      background: var(--dark);
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 2rem;
+      max-width: 800px;
+      margin: 0 auto 2.5rem;
+      text-align: left;
+    }
+    .footer-col-title {
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.9rem;
+    }
+    .footer-col-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+    .footer-col-links a {
+      font-size: 0.82rem;
+      color: var(--text-faint);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-col-links a:hover { color: var(--cursed-bright); }
+    .footer-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin-bottom: 1.8rem;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .footer-runes {
+      font-size: 1.3rem;
+      letter-spacing: 0.6em;
+      color: var(--cursed-mid);
+      margin-bottom: 1rem;
+      opacity: 0.45;
+    }
+    .footer-text {
       font-family: 'Cinzel', serif;
       font-size: 0.6rem;
       letter-spacing: 0.3em;
-      text-transform: uppercase;
-      text-align: center;
-      cursor: pointer;
       color: var(--text-faint);
-      border-right: 1px solid var(--border);
-      background: transparent;
-      border-top: none; border-bottom: none; border-left: none;
-      transition: all 0.3s;
+      text-transform: uppercase;
     }
-    .lore-tab:last-child { border-right: none; }
-    .lore-tab.active {
-      color: var(--gold);
-      background: rgba(212,168,83,0.06);
-    }
-    .lore-tab:hover:not(.active) {
-      color: var(--text-dim);
-      background: rgba(107,33,168,0.05);
-    }
-    .lore-panel { display: none; }
-    .lore-panel.active { display: block; }
+    .footer-text a { color: var(--cursed-bright); text-decoration: none; }
+    .footer-text a:hover { color: var(--cursed-light); }
 
     /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .stats-grid .stat-item:nth-child(2) { border-right: none; }
+      .pillars-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .generator-grid { grid-template-columns: 1fr; }
+    }
     @media (max-width: 700px) {
-      .about-card { padding: 1.8rem 1.4rem; }
-      .join-card { padding: 2rem 1.4rem; }
+      :root { --nav-h: 56px; }
+      .nav-links, .nav-discord { display: none; }
+      .nav-ham { display: flex; }
+      .about-card { padding: 1.8rem 1.5rem; }
+      .join-card { padding: 2.2rem 1.5rem; }
       .pillars-grid { grid-template-columns: 1fr; }
       .rules-columns { grid-template-columns: 1fr; }
       .sublore-row { grid-template-columns: 1fr; }
       .sublore-detail-grid { grid-template-columns: 1fr 1fr; }
       .lore-timeline::before { left: 14px; }
-      .lore-entry { padding-left: 50px; }
+      .lore-entry { padding-left: 52px; }
       .lore-dot { left: 4px; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .discord-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .hero-banner-frame img { max-height: 200px; }
+      .rank-card { flex-direction: column; text-align: center; gap: 0.5rem; padding: 1.5rem; }
+      .rank-number { margin-right: 0; text-align: center; }
+    }
+    @media (max-width: 480px) {
+      .hero-title { font-size: clamp(2.6rem, 11vw, 4rem); }
     }
   </style>
 </head>
 <body>
 
-<!-- PARTICLES -->
+<div class="loader" id="loader">
+  <div class="loader-ring"></div>
+  <p class="loader-text">Iniciando la Era Maldita</p>
+</div>
+
+<div class="cursor-orb" id="cursorOrb"></div>
+<div class="cursor-trail" id="cursorTrail"></div>
+
+<div class="scroll-progress" id="scrollProgress"></div>
+
 <div class="particles" id="particles"></div>
 
-<!-- ═══════════════════════════════ HERO ═══════════════════════════════ -->
+<button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">▲</button>
+
+<nav class="nav" id="nav">
+  <a href="#" class="nav-logo">⛩ Cursed Era II</a>
+  <ul class="nav-links">
+    <li><a href="#nosotros">El Servidor</a></li>
+    <li><a href="#ranking">Ranking</a></li>
+    <li><a href="#sistema">Sistema</a></li>
+    <li><a href="#lore">Lore</a></li>
+    <li><a href="#registro">Destino</a></li>
+    <li><a href="#reglas">Reglas</a></li>
+  </ul>
+  <a href="https://discord.gg/tf29Y4zN9W" target="_blank" class="nav-discord">⛩ Unirse</a>
+  <div class="nav-ham" id="navHam" onclick="toggleNav()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+<div class="nav-mobile" id="navMobile">
+  <a href="#nosotros" onclick="closeNav()">El Servidor</a>
+  <a href="#ranking" onclick="closeNav()">Ranking</a>
+  <a href="#sistema" onclick="closeNav()">Sistema</a>
+  <a href="#lore" onclick="closeNav()">Lore</a>
+  <a href="#registro" onclick="closeNav()">Destino</a>
+  <a href="#reglas" onclick="closeNav()">Reglas</a>
+  <a href="https://discord.gg/tf29Y4zN9W" target="_blank">⛩ Unirse al Discord</a>
+</div>
+
 <section class="hero">
-  <div class="hero-banner"></div>
-  <div class="hero-vignette"></div>
-  <div class="hero-bottom-fade"></div>
+  <div class="hero-bg"></div>
+  <div class="hero-bg-grid"></div>
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
 
   <div class="hero-content">
     <p class="hero-eyebrow">𓏲 ࣪ 🕯️ ﹒ 🪽 ﹒ ⛓️ ﹒ 🕯️ ࣪ 𓏲</p>
+
     <h1 class="hero-title">
-      <span>Cursed Era</span>
+      <span class="hero-title-sub">Cursed Era</span>
       II
     </h1>
+
     <div class="hero-divider"></div>
-    <p class="hero-runes">⛩️ &nbsp; ✦ &nbsp; ⛩️</p>
+
+    <div class="hero-banner-wrap">
+      <div class="hero-banner-frame">
+        <div class="corner tl"></div>
+        <div class="corner tr"></div>
+        <div class="corner bl"></div>
+        <div class="corner br"></div>
+        <img src="https://i.imgur.com/kdTZSsz.png" alt="Cursed Era II — Banner oficial" loading="eager" />
+      </div>
+    </div>
+
+    <p class="hero-runes">⛩️  ✦  ⛩️</p>
+
     <p class="hero-tagline">
       Donde la energía maldita es ley y tu destino se forja con cada rol.<br>
       La era de las sombras ha comenzado.
     </p>
+
+    <div class="hero-cta-row">
+      <a href="https://discord.gg/tf29Y4zN9W" target="_blank" class="btn-primary">⛩️   Unirse al Servidor</a>
+      <a href="#lore" class="btn-secondary">📜   Ver el Lore</a>
+    </div>
+  </div>
+
+  <div class="hero-scroll-hint">
+    <span>Descender</span>
+    <div class="hero-scroll-arrow"></div>
   </div>
 </section>
 
-<!-- SAGA STRIP -->
 <div class="saga-strip">
-  ⚔️ &nbsp; Saga Actual &nbsp;—&nbsp; <strong>Los Culling Games</strong> &nbsp; ⚔️
+  ⚔️   Saga Actual  —  <strong>Los Culling Games</strong>   ⚔️  ·  ⚔️   Saga Actual  —  <strong>Los Culling Games</strong>   ⚔️
 </div>
-
 <div class="energy-line"></div>
 
-<!-- ═══════════════════════════════ ABOUT ═══════════════════════════════ -->
-<section class="about-section">
+<section class="about-section" id="nosotros">
   <div class="container">
     <div class="section-header reveal">
-      <span class="label">✦ &nbsp; El Servidor &nbsp; ✦</span>
+      <span class="label">✦   El Servidor   ✦</span>
       <h2>¿Quiénes <em>Somos</em>?</h2>
-      <div class="rule"><span>𓆩 ✦ 𓆪</span></div>
+      <div class="section-divider"><span>𓆩 ✦ 𓆪</span></div>
     </div>
-
     <div class="about-card reveal">
       <span class="about-icon">🎐</span>
       <p>
@@ -1195,7 +2166,9 @@
       <div class="about-nav">
         <a href="#lore">📜 Lore</a>
         <a href="#reglas">⚖️ Reglas</a>
+        <a href="#sistema">⚙️ Sistema</a>
         <a href="https://discord.gg/tf29Y4zN9W" target="_blank">⛩️ Unirse</a>
+        <a href="https://open.spotify.com/track/65X2koe1LhDgQmRkNdJFv9" target="_blank">🎵 Soundtrack</a>
       </div>
     </div>
   </div>
@@ -1203,68 +2176,253 @@
 
 <div class="energy-line"></div>
 
-<!-- ═══════════════════════════════ PILLARS ═══════════════════════════════ -->
-<section class="pillars-section">
+<section class="stats-section">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-item reveal">
+        <span class="stat-icon">⚡</span>
+        <div class="stat-number" data-target="30" data-suffix="+">0</div>
+        <div class="stat-label">Técnicas Malditas</div>
+      </div>
+      <div class="stat-item reveal">
+        <span class="stat-icon">📈</span>
+        <div class="stat-number" data-target="200" data-suffix="%">0</div>
+        <div class="stat-label">Maestría Máxima</div>
+      </div>
+      <div class="stat-item reveal">
+        <span class="stat-icon">🌀</span>
+        <div class="stat-number" data-target="4" data-suffix=" Arcos">0</div>
+        <div class="stat-label">Sagas Completadas</div>
+      </div>
+      <div class="stat-item reveal">
+        <span class="stat-icon">⛩️</span>
+        <div class="stat-number" data-target="1" data-suffix=" Bot">0</div>
+        <div class="stat-label">Nyx System Exclusivo</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="energy-line"></div>
+
+<section class="ranking-section" id="ranking">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="label">𓆩 👑 Cúspide de la Hechicería 👑 𓆪</span>
+      <h2>Los Más <em>Fuertes</em></h2>
+      <div class="section-divider"><span>✦</span></div>
+    </div>
+    
+    <div class="ranking-board">
+      
+      <div class="rank-card top-1 reveal">
+        <div class="rank-header">
+          <div class="rank-number">01</div>
+          <div class="rank-info">
+            <div class="rank-name">🕯️ Sugawara Akeni</div>
+            <div class="rank-tag">El más fuerte de la Historia — ⸻ Dime, ¿Tú crees en el Destino?</div>
+          </div>
+        </div>
+        <details class="rank-details">
+          <summary class="rank-summary">≡ Leer Registros</summary>
+          <div class="rank-content">
+            <blockquote>
+              "Hay personas que entran a una habitación y la llenan de ruido. Akeni entra y la hace más silenciosa. No porque intimide en el sentido convencional, sino porque su presencia tiene un peso específico: el de alguien que ya procesó todo lo que los demás todavía están tratando de entender."
+            </blockquote>
+            <p>Es analítico hasta en los detalles más pequeños. El tono en que alguien habla antes de atacar, el segundo de duda antes de una decisión, la forma en que la energía maldita fluctúa. Suele usar onomatopeyas casi sin darse cuenta, pequeños sonidos que traducen en una sílaba lo que otros necesitarían un párrafo para describir.</p>
+            
+            <h4>✦ FILOSOFÍA ✦</h4>
+            <p>Akeni no cree en la igualdad de nacimiento. Desde esa base construyó la <strong>Teoría del Destino Adecuado</strong>. La idea es simple: cada persona tiene un destino que le pertenece genuinamente, uno que se alinea con lo que es capaz de alcanzar de forma natural. Perseguir ese destino con toda la disciplina y la inteligencia disponible es la única forma honesta de vivir.</p>
+            
+            <h4>✦ TÉCNICAS MALDITAS ✦</h4>
+            <p>Tiene tres. Nadie las conoce con certeza, porque simplemente no ha encontrado el momento ni la persona que justifiquen revelarlas. Akeni no cree en mostrar las cartas antes de que la partida lo requiera.</p>
+            
+            <h4>✦ RYOIKI TENKAI: Anamorphic Judgment ✦</h4>
+            <blockquote>
+              "Se manifiesta como una zona de exclusión lógica donde la realidad pierde su textura y profundidad, transformándose en un vasto esquema técnico bidimensional de líneas negras sobre un vacío blanco absoluto."
+            </blockquote>
+            <p>Cualquier acción emprendida por el oponente es interpretada por el dominio como una variable sin destino. Sus ataques no impactan, se congelan en el aire como bocetos sin terminar. Akeni, como único observador válido, puede manipular esos trazos. Es un dominio que no derrota al oponente por fuerza. <strong>Lo derrota por lógica.</strong></p>
+          </div>
+        </details>
+      </div>
+      
+      <div class="rank-card top-2 reveal">
+        <div class="rank-header">
+          <div class="rank-number">02</div>
+          <div class="rank-info">
+            <div class="rank-name">🌀 Sugawara Zenin Vincent</div>
+            <div class="rank-tag">Líder del Clan Zenin — "Qué lástima... Aún te falta."</div>
+          </div>
+        </div>
+        <details class="rank-details">
+          <summary class="rank-summary">≡ Leer Registros</summary>
+          <div class="rank-content">
+            <blockquote>
+              "Hay hechiceros que persiguen una meta en la Hechicería. Vincent vive como si esta meta lo persiguiera a él. Cuando entra a una habitación no hay urgencia en sus movimientos... Observa el campo con la distancia de alguien que no está tratando de sobrevivir, sino de reorganizarlo."
+            </blockquote>
+            
+            <h4>✦ FILOSOFÍA ✦</h4>
+            <p>Vincent no cree en la igualdad del talento. Para él, pretender que todos pueden llegar al mismo punto únicamente con voluntad es una forma de engañarse. Construyó la <strong>Lógica del Talento Real</strong>: la hechicería no recompensa a quien se esfuerza más, sino a quien entiende mejor cómo usar lo que le fue dado. Reconocer el propio límite no es rendirse, es ubicarse correctamente.</p>
+            
+            <h4>✦ TÉCNICAS INNATAS ✦</h4>
+            <p>Considerado un genio por su familia (la cual él niega), posee dos técnicas rituales. El <strong>Arte de las 10 Sombras</strong> para subyugar entidades, con el que moldea, humilla y rompe a maldiciones y brujos por igual transformando cada impacto en una ecuación perfecta.</p>
+
+            <h4>✦ DOMAIN EXPANSION: Chimera Shadow Garden ✦</h4>
+            <blockquote>
+              "El jardín deja de parecer un terreno caótico y revela su verdadera naturaleza: una prisión viva de oscuridad donde cada sombra pertenece a Vincent, cada movimiento es observado... y cada intento de resistencia ya ha sido absorbido."
+            </blockquote>
+            <p>El terreno se transforma en un océano de sombras vivas. Vincent se vuelve el eje del sistema; cualquier ataque iniciado desde el interior de una sombra es reconocido por el dominio como un fenómeno inevitable. No necesita alcanzar al objetivo; el dominio ya ha determinado su impacto.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="rank-card top-2 reveal">
+        <div class="rank-header">
+          <div class="rank-number">02</div>
+          <div class="rank-info">
+            <div class="rank-name">⚡ Zenin Scaramouche</div>
+            <div class="rank-tag">Prodigio del Clan Zenin — La Ira Implacable de Raijin</div>
+          </div>
+        </div>
+        <details class="rank-details">
+          <summary class="rank-summary">≡ Leer Registros</summary>
+          <div class="rank-content">
+            <blockquote>
+              "El anuncio tras la marea y la tormenta, capaz de iluminar mil noches y apagar mil días. La ira implacable de Raijin desciende del cielo, y misericordia sea dada ante el que se postre ante su mirada fría como el hielo."
+            </blockquote>
+            <p>La escoria del clan Zenin que existe por encima de la carne y mortalidad en su propia dimensión. Iluminando el cielo nublado por diversión, y reinando a mano de hierro por toda una nación.</p>
+            
+            <h4>✦ ESTILO DE COMBATE ✦</h4>
+            <p>Scaramouche es un peligroso peleador especializado en el cuerpo a cuerpo. Combina su kit de un físico admirable con una capacidad de análisis terrorífica; su herramienta más poderosa es la <strong>lógica de predicción simple</strong>. Mecánicamente, computa todo en una sola base de datos enteramente mental, volviendo posible proezas técnicas que la mayoría consideraría imposibles.</p>
+            <p>Si le muestras algo dos veces, no habrá una tercera. Se mueve como una golondrina en vuelo; majestuosamente. Manteniendo sus alas al alcance para que cuando extiendas tu mano, un relámpago sea lo que te impacte.</p>
+            
+            <h4>✦ ACTITUD ✦</h4>
+            <p>Gritando fuerza donde sea que va, con la actitud de un soberano caminando entre plebeyos, parándose encima de los más débiles como la realeza más divina. Jamás bajará de su trono... Solo no le digas a su mujer.</p>
+          </div>
+        </details>
+      </div>
+      
+      <div class="rank-card top-3 reveal">
+        <div class="rank-header">
+          <div class="rank-number">03</div>
+          <div class="rank-info">
+            <div class="rank-name">💍 Sugawara Ishi</div>
+            <div class="rank-tag">Ex-portador de la Reina de las Maldiciones — Mimetismo</div>
+          </div>
+        </div>
+        <details class="rank-details">
+          <summary class="rank-summary">≡ Leer Registros</summary>
+          <div class="rank-content">
+            <blockquote>
+              "Hay quienes nacen con poder para dominar, y quienes nacen con poder para proteger. Ishi pertenece irremediablemente a los segundos. Un corazón demasiado amable para un mundo tan cruel."
+            </blockquote>
+            <p>Conocido en los altos mandos como el honorable ex-portador de Rika Orimoto, la Reina de las Maldiciones. Su sola presencia en el campo de batalla emana un aura abrumadora, pero extrañamente cálida. Ishi no pelea por orgullo, ego o sed de sangre; pelea porque entiende que, si él no levanta su espada, alguien más sufrirá las consecuencias. Su determinación no nace del odio, sino de un amor profundo por la humanidad.</p>
+            
+            <h4>✦ TÉCNICA MALDITA: MIMETISMO ✦</h4>
+            <p>Poseedor de una cantidad descomunal de energía maldita, su técnica innata es el <strong>Mimetismo</strong>. Ishi es capaz de copiar las Técnicas Malditas de otros hechiceros y utilizarlas en combate, a menudo con mayor letalidad que sus portadores originales. Esta versatilidad lo convierte en un ejército de un solo hombre, capaz de adaptarse a cualquier situación o enemigo sin perder la compostura.</p>
+          </div>
+        </details>
+      </div>
+      
+      <div class="rank-card top-4 reveal">
+        <div class="rank-header">
+          <div class="rank-number">04</div>
+          <div class="rank-info">
+            <div class="rank-name">🌘 Castorice</div>
+            <div class="rank-tag">El Equilibrio de las Sombras — La chica que aparece cuando algo termina</div>
+          </div>
+        </div>
+        <details class="rank-details">
+          <summary class="rank-summary">≡ Leer Registros</summary>
+          <div class="rank-content">
+            <blockquote>
+              "Castorice no busca salvar a las personas, pero tampoco desea su caída. No actúa desde la compasión ni desde la crueldad. Su forma de existir se sitúa en un punto intermedio, distante."
+            </blockquote>
+            
+            <h4>✦ FILOSOFÍA ✦</h4>
+            <p>Castorice ve la energía maldita no como algo que deba ser erradicado, sino como una consecuencia inevitable de la existencia humana. Para ella, las maldiciones son manifestaciones de emociones que nunca desaparecerán. No cree en el deber impuesto ni en la idea de proteger a toda costa. Percibe la energía maldita como un flujo constante; intervenir demasiado pronto puede ser tan peligroso como no intervenir en absoluto. La luz sin sombra es tan inestable como la sombra sin luz.</p>
+            
+            <h4>✦ HISTORIA ✦</h4>
+            <p>Durante mucho tiempo fue solo una figura que surgía en los restos de enfrentamientos o en lugares donde la energía maldita se volvía inestable. Su ascenso en los rankings carecía de espectáculo: ganaba, desaparecía y el orden cambiaba. Su presencia sigue siendo un misterio; únicamente tres personas han llegado a verla con vida, y solo una de ellas continúa viva para contarlo. Se dice que su conexión con la energía maldita es distinta, casi antinatural, como si no la utilizara del todo, sino que coexistiera con ella.</p>
+          </div>
+        </details>
+      </div>
+      
+      <div class="rank-card top-5 reveal">
+        <div class="rank-header">
+          <div class="rank-number">05</div>
+          <div class="rank-info">
+            <div class="rank-name">🩸 Gabimaru</div>
+            <div class="rank-tag">El Asesino Letal — Santuario Moderno</div>
+          </div>
+        </div>
+        <details class="rank-details">
+          <summary class="rank-summary">≡ Leer Registros</summary>
+          <div class="rank-content">
+            <blockquote>
+              "Silencioso. Eficiente. Inevitable. Gabimaru no ve la hechicería como un medio de grandeza ni como una vocación heroica, sino estrictamente como una herramienta de ejecución."
+            </blockquote>
+            <p>Forjado en la dureza de la sangre y el entrenamiento más estricto, Gabimaru es un asesino que no titubea, no alardea y rara vez falla. A diferencia de los hechiceros que disfrutan del combate o buscan probar su valía, él entra al campo de batalla con un solo objetivo: eliminar la variable objetivo de la manera más rápida posible. Su honor no radica en peleas justas, sino en la impecable profesionalidad de su oficio.</p>
+            
+            <h4>✦ TÉCNICA MALDITA: SANTUARIO MODERNO ✦</h4>
+            <p>Su técnica, el <strong>Santuario Moderno (Modern Shrine)</strong>, es una adaptación letal de cortes invisibles que desmantelan el espacio mismo. A diferencia de las expansiones caóticas, Gabimaru utiliza su ritual con una precisión quirúrgica escalofriante, seccionando la materia física y la energía maldita de sus oponentes a nivel molecular. La mayoría de sus objetivos mueren antes de que su sistema nervioso registre siquiera que han sido cortados.</p>
+          </div>
+        </details>
+      </div>
+
+    </div>
+  </div>
+
+<div class="energy-line"></div>
+
+<section class="pillars-section" id="sistema">
   <div class="container">
     <div class="section-header reveal">
       <span class="label">𓆩 Pilares del Servidor 𓆪</span>
       <h2>El Sistema <em>Maldito</em></h2>
-      <div class="rule"><span>✦</span></div>
+      <div class="section-divider"><span>✦</span></div>
     </div>
-
     <div class="pillars-grid">
 
       <div class="pillar-card reveal">
         <span class="pillar-icon">📿</span>
         <div class="pillar-title">Gestión Automatizada — Nyx System</div>
-        <p class="pillar-body">
-          Olvídate de las hojas de personaje manuales. Contamos con un <strong>bot exclusivo</strong> desarrollado internamente que procesa tus estadísticas, niveles y XP de forma automática. Tú solo preocúpate por rolear.
-        </p>
+        <p class="pillar-body">Olvídate de las hojas de personaje manuales. Contamos con un <strong>bot exclusivo</strong> desarrollado internamente que procesa tus estadísticas, niveles y XP de forma automática. Tú solo preocúpate por rolear.</p>
         <div class="pillar-glyph">⚙</div>
       </div>
 
       <div class="pillar-card reveal">
         <span class="pillar-icon">☯️</span>
         <div class="pillar-title">Maestría Progresiva (0–200%)</div>
-        <p class="pillar-body">
-          Implementamos un sistema de crecimiento escalonado basado en el canon. Tu personaje no será estático: mediante la constancia, podrás desbloquear el <strong>200% de tu potencial</strong> con evolución orgánica.
-        </p>
+        <p class="pillar-body">Implementamos un sistema de crecimiento escalonado basado en el canon. Tu personaje no será estático: mediante la constancia, podrás desbloquear el <strong>200% de tu potencial</strong> con evolución orgánica.</p>
         <div class="pillar-glyph">∞</div>
       </div>
 
       <div class="pillar-card reveal">
         <span class="pillar-icon">🪷</span>
         <div class="pillar-title">Rituales Canónicos y Customs</div>
-        <p class="pillar-body">
-          Disponemos de un catálogo de <strong>más de 30 técnicas malditas</strong>. Las habilidades originales del anime y las creaciones únicas de la comunidad brillan por igual en combate.
-        </p>
+        <p class="pillar-body">Disponemos de un catálogo de <strong>más de 30 técnicas malditas</strong>. Las habilidades originales del anime y las creaciones únicas de la comunidad brillan por igual en combate.</p>
         <div class="pillar-glyph">呪</div>
       </div>
 
       <div class="pillar-card reveal">
         <span class="pillar-icon">🔗</span>
         <div class="pillar-title">Ataduras Celestiales y Especiales</div>
-        <p class="pillar-body">
-          ¿Sin energía maldita pero con fuerza sobrehumana? ¿Un pacto que limite tu poder a cambio de una recompensa masiva? Las <strong>Restricciones</strong> permiten builds de personaje verdaderamente únicas.
-        </p>
+        <p class="pillar-body">¿Sin energía maldita pero con fuerza sobrehumana? Las <strong>Restricciones</strong> permiten builds de personaje verdaderamente únicos con trade-offs interesantes.</p>
         <div class="pillar-glyph">⛓</div>
       </div>
 
       <div class="pillar-card reveal">
         <span class="pillar-icon">🪙</span>
         <div class="pillar-title">Economía y Objetos Malditos</div>
-        <p class="pillar-body">
-          Participa en misiones y eventos para ganar divisas. En la <strong>Shop</strong> encontrarás herramientas de grado especial, ítems únicos y mucho más para potenciar tu rol.
-        </p>
+        <p class="pillar-body">Participa en misiones y eventos para ganar divisas. En la <strong>Shop</strong> encontrarás herramientas de grado especial, ítems únicos y mucho más para potenciar tu rol.</p>
         <div class="pillar-glyph">◈</div>
       </div>
 
       <div class="pillar-card reveal">
         <span class="pillar-icon">🌀</span>
         <div class="pillar-title">Eventos Globales y Reworks</div>
-        <p class="pillar-body">
-          El mundo está vivo. Realizamos <strong>arcos narrativos constantes</strong> donde tus decisiones afectan el futuro del servidor. Balance dinámico garantizado en cada encuentro.
-        </p>
+        <p class="pillar-body">El mundo está vivo. Realizamos <strong>arcos narrativos constantes</strong> donde tus decisiones afectan el futuro del servidor. Balance dinámico garantizado en cada encuentro.</p>
         <div class="pillar-glyph">⊕</div>
       </div>
 
@@ -1274,23 +2432,20 @@
 
 <div class="energy-line"></div>
 
-<!-- ═══════════════════════════════ CURRENT SAGA ═══════════════════════════════ -->
 <section class="saga-section">
   <div class="container">
     <div class="section-header reveal">
       <span class="label">🎞️ Arco Narrativo Activo 🎞️</span>
       <h2>Saga <em>Actual</em></h2>
-      <div class="rule"><span>⚔️</span></div>
+      <div class="section-divider"><span>⚔️</span></div>
     </div>
-
     <div class="saga-frame reveal">
       <p class="saga-label">— En curso —</p>
       <span class="saga-ornament">Los Culling Games</span>
-
       <div class="saga-border">
         <p>
-          El Juego de la Purga ha comenzado. Las colonias están activas, los hechiceros y las maldiciones compiten por puntos en un tablero donde la muerte es la única moneda que vale. 
-          ¿Eres lo suficientemente fuerte para sobrevivir, o simplemente serás otra pieza sacrificada? 
+          El Juego de la Purga ha comenzado. Las colonias están activas, los hechiceros y las maldiciones compiten por puntos en un tablero donde la muerte es la única moneda que vale.
+          ¿Eres lo suficientemente fuerte para sobrevivir, o simplemente serás otra pieza sacrificada?
           Tu destino en los Culling Games dependerá de cada decisión, cada alianza y cada técnica maldita que domines.
         </p>
       </div>
@@ -1300,45 +2455,42 @@
 
 <div class="energy-line"></div>
 
-<!-- ═══════════════════════════════ LORE ═══════════════════════════════ -->
 <section class="lore-section" id="lore">
   <div class="container">
     <div class="section-header reveal">
-      <span class="label">۩❦۩ &nbsp; Historia del Mundo &nbsp; ۩❦۩</span>
+      <span class="label">۩❦۩   Historia del Mundo   ۩❦۩</span>
       <h2>El <em>Lore</em> Maldito</h2>
-      <div class="rule"><span>𓆩 ✦ 𓆪</span></div>
+      <div class="section-divider"><span>𓆩 ✦ 𓆪</span></div>
     </div>
 
-    <!-- Tab buttons -->
     <div class="lore-tabs reveal">
       <button class="lore-tab active" onclick="switchTab('lore-principal', this)">📜 Lore Principal</button>
       <button class="lore-tab" onclick="switchTab('lore-sub', this)">⚔️ Sub Lore</button>
       <button class="lore-tab" onclick="switchTab('lore-eventos', this)">🔥 Progresión & Eventos</button>
     </div>
 
-    <!-- ─── PANEL: LORE PRINCIPAL ─── -->
     <div class="lore-panel active" id="lore-principal">
       <div class="lore-timeline">
 
         <div class="lore-entry reveal">
           <div class="lore-dot"></div>
-          <p class="lore-year">⟿ &nbsp; 1990 — 1997</p>
+          <p class="lore-year">⟿   1990 — 1997</p>
           <div class="lore-card">
             <div class="lore-card-title">El Ascenso del Apóstata</div>
             <p class="lore-card-body">
-              Todo rastro de orden se extinguió en <strong>1990</strong>. Durante una misión de alto riesgo sentenciada al fracaso por la negligencia de los Altos Mandos, un joven hechicero llamado <strong>Félix</strong> alcanzó el umbral de la muerte. En su último aliento, forzó el acceso a la <strong>Técnica Inversa</strong>, reconstruyendo no solo su cuerpo, sino su percepción de la realidad. Aquel milagro fracturó su mente; desarrolló un trastorno mental profundo, una mezcla de mesianismo y desprecio por la debilidad, que lo llevó a traicionar a la sociedad de Jujutsu para convertirse en el brujo más poderoso de su tiempo.
+              Durante siete años, un hechicero conocido como <strong>Félix</strong> ascendió por las filas de la escuela de hechicería con una velocidad inaudita. Su talento era innegable, pero su disconformidad con los métodos arcaicos del establishment comenzó a forjar en él una ideología peligrosa: la creencia de que el sistema estaba podrido desde adentro.
             </p>
-            <div class="lore-card-glyph">呪</div>
+            <div class="lore-card-glyph">✦</div>
           </div>
         </div>
 
         <div class="lore-entry reveal">
           <div class="lore-dot"></div>
-          <p class="lore-year">⟿ &nbsp; 1998</p>
+          <p class="lore-year">⟿   1998</p>
           <div class="lore-card">
             <div class="lore-card-title">Llama Eterna y la Paradoja del Príncipe</div>
             <p class="lore-card-body">
-              Félix fundó la organización <strong>Llama Eterna</strong> con un propósito sombrío: vigilar que el Jujutsu no volviera a cometer negligencias, actuando como jueces y verdugos de la jerarquía antigua. En <strong>1998</strong>, la tensión estalló en una guerra total que culminó en un duelo contra su mejor amigo, <strong>Yuto</strong>. Félix, sumido en su inestabilidad psicológica, se suicidó a medio combate. Sin embargo, una chica de su antiguo grupo lo había maldecido, impidiendo su descanso y obligándolo a renacer como una <strong>Maldición superior al Grado Especial</strong>. Al conservar el uso de la energía inversa siendo un espíritu, alcanzó un estado superior; había creado su propia versión maldita de la RCT para invertir su ritual, siendo apodado desde entonces como el <strong>"Príncipe de las Maldiciones"</strong>.
+              Félix fundó la organization <strong>Llama Eterna</strong> con un propósito sombrío: vigilar que el Jujutsu no volviera a cometer negligencias, actuando como jueces y verdugos de la jerarquía antigua. En <strong>1998</strong>, la tensión estalló en una guerra total que culminó en un duelo contra su mejor amigo, <strong>Yuto</strong>. Félix, sumido en su inestabilidad psicológica, se suicidó a medio combate. Sin embargo, una chica de su antiguo grupo lo había maldecido, impidiendo su descanso y obligándolo a renacer como una <strong>Maldición superior al Grado Especial</strong>. Al conservar el uso de la energía inversa siendo un espíritu, alcanzó un estado superior; había creado su propia versión maldita de la RCT para invertir su ritual, siendo apodado desde entonces como el <strong>"Príncipe de las Maldiciones"</strong>.
             </p>
             <div class="lore-card-glyph">☽</div>
           </div>
@@ -1346,7 +2498,7 @@
 
         <div class="lore-entry reveal">
           <div class="lore-dot"></div>
-          <p class="lore-year">⟿ &nbsp; 1999 — 2004</p>
+          <p class="lore-year">⟿   1999 — 2004</p>
           <div class="lore-card">
             <div class="lore-card-title">La Dictadura y la Noche de la Advertencia</div>
             <p class="lore-card-body">
@@ -1358,7 +2510,7 @@
 
         <div class="lore-entry reveal">
           <div class="lore-dot"></div>
-          <p class="lore-year">⟿ &nbsp; 2009 — Presente</p>
+          <p class="lore-year">⟿   2009 — Presente</p>
           <div class="lore-card">
             <div class="lore-card-title">La Supuesta Tranquilidad</div>
             <p class="lore-card-body">
@@ -1371,7 +2523,6 @@
       </div>
     </div>
 
-    <!-- ─── PANEL: SUB LORE ─── -->
     <div class="lore-panel" id="lore-sub">
       <div class="sublore-block reveal">
         <p class="sublore-subtitle">⌣ ‿ ‿ El Choque de las Eras ‿ ‿ ⌣</p>
@@ -1379,20 +2530,18 @@
         <p class="sublore-body">
           El calendario ha marcado la fecha final. Lo que por años fue un susurro entre las sombras de la hechicería se materializa en el corazón de Tokio. <strong>Shibuya</strong> no será solo un escenario, será el epicentro del conflicto definitivo donde el pasado y el presente colisionarán para decidir quién ostenta el derecho absoluto sobre la realidad.
         </p>
-
         <div class="sublore-row">
           <div class="sublore-fighter">
-            <p class="sublore-fighter-label">⚔️ Pasado &nbsp;—&nbsp; El más fuerte de la Historia</p>
+            <p class="sublore-fighter-label">⚔️ Pasado  —  El más fuerte de la Historia</p>
             <p class="sublore-fighter-name">Akeni Sugawara</p>
             <p class="sublore-fighter-desc">Aquel que detuvo el trazo final de Ryu, el hombre que ha navegado por los trastornos de la energía maldita y ha editado la existencia misma con su Anamorfosis. Representa la culminación técnica y el legado de una era de caos.</p>
           </div>
           <div class="sublore-fighter">
-            <p class="sublore-fighter-label">🛡️ Presente &nbsp;—&nbsp; El más fuerte de la Actualidad</p>
+            <p class="sublore-fighter-label">🛡️ Presente  —  El más fuerte de la Actualidad</p>
             <p class="sublore-fighter-name">Daisuke</p>
             <p class="sublore-fighter-desc">La respuesta de la era moderna ante el desbalance. Se alza como el muro infranqueable de 2009, el hechicero que porta el título del más fuerte en una actualidad que lucha por no ser consumida.</p>
           </div>
         </div>
-
         <div class="sublore-detail-grid">
           <div class="sublore-detail">
             <p class="sublore-detail-label">📍 Ubicación</p>
@@ -1407,18 +2556,16 @@
             <p class="sublore-detail-value">Liberación sin precedentes</p>
           </div>
         </div>
-
         <div class="sublore-quote">
           "En la noche donde el mundo celebra la luz, solo uno quedará en pie para reclamar la oscuridad."
         </div>
-
         <p class="sublore-body">
           La batalla que significó un antes y un después para la hechicería moderna llegó a su fin tras la <strong>victoria de los más fuertes</strong> en el último intercambio entre Akeni y Daisuke. Fue abiertamente unilateral hasta el final; mientras que Daisuke quedó como lo más cercano a un narco video, Akeni salió prácticamente ileso. El poder disperso en aquel combate trajo una <strong>sobre generación de energía maldita</strong>, causando una evolución natural: las maldiciones subirán un grado automáticamente debido a la nula contención del velo.
         </p>
       </div>
 
       <div class="kamo-block reveal">
-        <div class="kamo-header">🏯 &nbsp; Secuela — Clan Kamo</div>
+        <div class="kamo-header">🏯   Secuela — Clan Kamo</div>
         <p>Tras el <strong>wipeo a Noritoshi Kamo</strong>, su cadáver desapareció del templo. La estructura del clan quedó débil y sin líder. Una miembro del clan se presentó ante el mismo: <strong>Kromer</strong>, quien, debido a su estatus neutral, hazañas de curación y el respaldo del líder del clan Zenin, asumió el liderazgo llevando el peso del clan sobre sus hombros. Los úteros malditos y usuarios miembros del clan seguirían con vida.</p>
         <br>
         <p>Como el deceso de Noritoshi ocurrió de forma repentina, el equipo de defensa quedó libre de cargo, manteniendo sus puestos. La joven líder cuenta con un guardaespaldas personal proveniente del <strong>clan Ashiya</strong>, conocido como <strong>Yugen</strong>, con acceso a todo lugar donde ella se encuentre.</p>
@@ -1427,16 +2574,29 @@
       </div>
     </div>
 
-    <!-- ─── PANEL: PROGRESIÓN Y EVENTOS ─── -->
     <div class="lore-panel" id="lore-eventos">
-      <div class="event-card reveal">
-        <span class="event-date-badge">🗓️ &nbsp; 10 de Marzo de 2010</span>
-        <h3 class="event-title">Masacre en Shinjuku</h3>
-
+      
+      <div class="event-card event-dark reveal">
+        <span class="event-date-badge badge-dark">🗓️   30 de Noviembre de 2009</span>
+        <h3 class="event-title">El Incidente 30/11: Las Torres de Shinjuku</h3>
         <p class="event-body">
-          Este <strong>10 de Marzo de 2010</strong>, hubo una catástrofe. En Shinjuku se soltaron Usuarios Malditos traídos a la vida nuevamente causando destrucción a su paso. Usuarios Malditos de esta era también participaron en esto. Se enviaron hechiceros para intentar detenerlos, pero nadie salió bien parado.
+          Lo que comenzó como una tarde normal en Shinjuku se transformó en una pesadilla geométrica. <strong>Ryu</strong>, un arquitecto del caos, desplegó un Velo que atrapó a cientos de civiles. Las leyes de la física fueron ejecutadas: la Torre Kagami sufrió cortes isométricos perfectos, mientras que la Torre Hikari fue comprimida por una gravedad negativa hasta estallar, convirtiéndose en un campo de escombros flotantes que desafiaban la realidad.
         </p>
+        <div class="sublore-quote" style="border-left-color: var(--cursed-mid); background: rgba(147,51,234,0.05); margin-top: 2rem;">
+          <strong>La Hora Cero y el Ritual de Ryu:</strong> El cielo se detuvo en un crepúsculo eterno mientras Ryu, desde su trono de ruinas, orquestaba el sacrificio masivo de los civiles atrapados. Su objetivo final era utilizar la tensión isométrica de las torres para romper el sello de Félix y desatar al Príncipe de las Maldiciones en su forma completa. El aire se volvió irrespirable y el pánico se transformó en un latido mecánico que amenazaba con aplanar todo rastro de vida en el sector.
+        </div>
+        <div class="event-alert" style="background: rgba(147,51,234,0.08); border-color: rgba(192,132,252,0.4); color: var(--cursed-bright);">
+          <strong>El Desenlace: Akeni vs. Ryu</strong><br><br>
+          La batalla final se libró entre los restos suspendidos de la Torre Hikari. Akeni Sugawara, enfrentándose a la voluntad del Arquitecto, logró romper la distorsión temporal y espacial. En un duelo de desgaste psicológico y técnico, Akeni interceptó el trazo final de Ryu, asesinándolo antes de que el ritual alcanzara su punto de no retorno. Con la muerte de Ryu, el Velo se colapsó, las torres cayeron definitivamente y la amenaza de la liberación de Félix fue supuestamente contenida (Solo Ryu sabía esto), aunque a un costo humano incalculable.
+        </div>
+      </div>
 
+      <div class="event-card reveal">
+        <span class="event-date-badge">🗓️   10 de Marzo de 2010</span>
+        <h3 class="event-title">Masacre en Shinjuku</h3>
+        <p class="event-body">
+          Hubo una catástrofe. En Shinjuku se soltaron Usuarios Malditos traídos a la vida nuevamente causando destrucción a su paso. Usuarios Malditos de esta era también participaron en esto. Se enviaron hechiceros para intentar detenerlos, pero nadie salió bien parado.
+        </p>
         <p class="event-body"><strong>Bajas confirmadas:</strong></p>
         <div class="event-casualties">
           <div class="event-casualty">
@@ -1452,14 +2612,12 @@
             <p class="casualty-text"><strong>El brujo Aisuke</strong> — Hermano del anterior. Asesinado de forma similar; intentó matar a los hechiceros en un acto de cobardía utilizando una técnica similar a un agujero negro. Múltiples hechiceros quedaron gravemente heridos.</p>
           </div>
         </div>
-
         <p class="event-body">
           Los hechiceros presentes no han fallecido pero están recibiendo asistencia médica. Múltiples edificios y superficies han sido severados. La población fue evacuada y está intentando reconstruir su vida.
         </p>
         <p class="event-body">
           Mientras esto sucedía, uno de los hechiceros más poderosos, <strong>Akeni</strong>, ha sido sellado en la herramienta de Grado Especial: <strong>Gokumonkyo</strong>. Su liberación es primera prioridad para la escuela de hechicería. A su vez, varias barreras han aparecido por todo territorio Nipón; las ventanas están investigando su origen.
         </p>
-
         <div class="event-alert">
           Todo hechicero vinculado a la escuela de hechicería que entre será considerado un Usuario Maldito.<br>
           Se niega la entrada a hechiceros hasta que se confirmen las condiciones de las barreras.<br><br>
@@ -1474,25 +2632,96 @@
 
 <div class="energy-line"></div>
 
-<!-- ═══════════════════════════════ RULES ═══════════════════════════════ -->
+<section class="generator-section" id="registro">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="label">⛩️ Registro de Hechiceros ⛩️</span>
+      <h2>Descubre tu <em>Destino</em></h2>
+      <div class="section-divider"><span>☯️</span></div>
+    </div>
+
+    <div class="generator-grid">
+      
+      <div class="gen-card reveal-left">
+        <h3 class="gen-title">Medidor de Energía</h3>
+        <p class="gen-subtitle">Calcula tu densidad maldita latente</p>
+        
+        <div class="meter-container">
+          <div class="meter-display" id="meterDisplay">000,000</div>
+          <div class="meter-rank" id="meterRank">Sin Registrar</div>
+          <button class="meter-btn" id="meterBtn">Medir Energía</button>
+          
+          <div class="meter-bar-wrap">
+            <div class="meter-bar-fill" id="meterBarFill"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="gen-card reveal-right">
+        <h3 class="gen-title">El Oráculo</h3>
+        <p class="gen-subtitle">¿A qué linaje perteneces?</p>
+        
+        <div id="quiz-container">
+          <div class="quiz-question active" id="q1">
+            <p class="quiz-q-text">1. ¿Qué es lo que verdaderamente te impulsa a luchar?</p>
+            <div class="quiz-options">
+              <div class="quiz-option" onclick="answer(1, 'zenin')">El poder absoluto y someter a mis enemigos.</div>
+              <div class="quiz-option" onclick="answer(1, 'sugawara')">La obligación de proteger a los más débiles.</div>
+              <div class="quiz-option" onclick="answer(1, 'kamo')">El conocimiento y el honor de mi linaje.</div>
+              <div class="quiz-option" onclick="answer(1, 'celestial')">Sobrevivir cueste lo que cueste.</div>
+            </div>
+          </div>
+          
+          <div class="quiz-question" id="q2">
+            <p class="quiz-q-text">2. En un combate a muerte, ¿cuál es tu mayor ventaja?</p>
+            <div class="quiz-options">
+              <div class="quiz-option" onclick="answer(2, 'celestial')">Mi fuerza física, velocidad e instintos.</div>
+              <div class="quiz-option" onclick="answer(2, 'sugawara')">Mi talento innato y abrumadora energía.</div>
+              <div class="quiz-option" onclick="answer(2, 'kamo')">La precisión, la táctica y mi técnica heredada.</div>
+              <div class="quiz-option" onclick="answer(2, 'zenin')">Mi brutalidad y el uso de herramientas malditas.</div>
+            </div>
+          </div>
+          
+          <div class="quiz-question" id="q3">
+            <p class="quiz-q-text">3. Si para obtener un poder inmenso tuvieras que hacer un Voto Vinculante, ¿qué sacrificarías?</p>
+            <div class="quiz-options">
+              <div class="quiz-option" onclick="answer(3, 'kamo')">Un órgano o mi propia sangre.</div>
+              <div class="quiz-option" onclick="answer(3, 'sugawara')">Mis conexiones emocionales con otros.</div>
+              <div class="quiz-option" onclick="answer(3, 'zenin')">Mi cordura, abrazando el caos interno.</div>
+              <div class="quiz-option" onclick="answer(3, 'celestial')">Toda mi energía maldita a cambio de un cuerpo perfecto.</div>
+            </div>
+          </div>
+
+          <div class="quiz-result" id="quiz-result">
+            <p class="quiz-q-text">Las sombras han hablado. Perteneces al:</p>
+            <div class="quiz-result-clan" id="quiz-clan-name">Clan ...</div>
+            <p class="quiz-result-desc" id="quiz-clan-desc">...</p>
+            <button class="meter-btn" style="margin-top: 1rem;" onclick="resetQuiz()">Reintentar</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="energy-line"></div>
+
 <section class="rules-section" id="reglas">
   <div class="container">
     <div class="section-header reveal">
-      <span class="label">✎ ( ˶ᵔᴗᵔ˶ ) ✧ &nbsp; Normativa &nbsp; ✧ ( ˶ᵔᴗᵔ˶ ) ✎</span>
+      <span class="label">✎ ( ˶ᵔᴗᵔ˶ ) ✧   Normativa   ✧ ( ˶ᵔᴗᵔ˶ ) ✎</span>
       <h2>Las <em>Reglas</em></h2>
-      <div class="rule"><span>♡ ⋆｡˚</span></div>
+      <div class="section-divider"><span>♡ ⋆｡˚</span></div>
     </div>
 
     <div class="rules-columns">
-
-      <!-- Reglas Generales -->
-      <div class="rules-block reveal">
+      <div class="rules-block reveal-left">
         <div class="rules-block-header">
           <span class="rules-block-icon">🌸</span>
           <span class="rules-block-label">Reglas Generales</span>
         </div>
         <div class="rules-list">
-
           <div class="rule-item">
             <span class="rule-number">001</span>
             <div class="rule-content">
@@ -1501,7 +2730,6 @@
             </div>
             <span class="rule-badge">★☆</span>
           </div>
-
           <div class="rule-item">
             <span class="rule-number">002</span>
             <div class="rule-content">
@@ -1510,7 +2738,6 @@
             </div>
             <span class="rule-badge">☆★</span>
           </div>
-
           <div class="rule-item">
             <span class="rule-number">003</span>
             <div class="rule-content">
@@ -1519,7 +2746,6 @@
             </div>
             <span class="rule-badge">💭</span>
           </div>
-
           <div class="rule-item">
             <span class="rule-number">004</span>
             <div class="rule-content">
@@ -1528,7 +2754,6 @@
             </div>
             <span class="rule-badge">☆★</span>
           </div>
-
           <div class="rule-item">
             <span class="rule-number">005</span>
             <div class="rule-content">
@@ -1537,18 +2762,15 @@
             </div>
             <span class="rule-badge">🌸</span>
           </div>
-
         </div>
       </div>
 
-      <!-- Reglas RP -->
-      <div class="rules-block reveal">
+      <div class="rules-block reveal-right">
         <div class="rules-block-header gold-header">
           <span class="rules-block-icon">⚔️</span>
           <span class="rules-block-label">Reglas de Rol</span>
         </div>
         <div class="rules-list">
-
           <div class="rule-item">
             <span class="rule-number">001</span>
             <div class="rule-content">
@@ -1557,7 +2779,6 @@
             </div>
             <span class="rule-badge">🌸</span>
           </div>
-
           <div class="rule-item">
             <span class="rule-number">002</span>
             <div class="rule-content">
@@ -1566,7 +2787,6 @@
             </div>
             <span class="rule-badge">☆★</span>
           </div>
-
           <div class="rule-item">
             <span class="rule-number">003</span>
             <div class="rule-content">
@@ -1575,7 +2795,6 @@
             </div>
             <span class="rule-badge">💭</span>
           </div>
-
           <div class="rule-item">
             <span class="rule-number">004</span>
             <div class="rule-content">
@@ -1584,7 +2803,6 @@
             </div>
             <span class="rule-badge">★☆</span>
           </div>
-
           <div class="rule-item">
             <span class="rule-number">005</span>
             <div class="rule-content">
@@ -1593,88 +2811,179 @@
             </div>
             <span class="rule-badge">🌸</span>
           </div>
-
         </div>
       </div>
     </div>
 
     <div class="rules-footer reveal">
-      ๑‧˚₊꒷︶ &nbsp; <span>Respeta las reglas</span> &nbsp; ︶꒷꒦⊹ &nbsp; ♡₊˚ &nbsp; ⋆｡˚ &nbsp; Incumplir conlleva sanciones &nbsp; ˚⊹ &nbsp; ꒦꒷︶ &nbsp; <span>Respeta las reglas</span> &nbsp; ︶꒷˚₊‧๑
+      ๑‧˚₊꒷︶   <span>Respeta las reglas</span>   ︶꒷꒦⊹   ♡₊˚   ⋆｡˚   Incumplir conlleva sanciones   ˚⊹   ꒦꒷︶   <span>Respeta las reglas</span>   ︶꒷˚₊‧๑
     </div>
   </div>
 </section>
 
+<div class="energy-line"></div>
+
+<section class="discord-section">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="label">🌸 Información del Servidor 🌸</span>
+      <h2>¿Por qué <em>Unirte</em>?</h2>
+      <div class="section-divider"><span>⛩️</span></div>
+    </div>
+    <div class="discord-grid">
+      <div class="discord-item reveal">
+        <span class="discord-item-icon">🤖</span>
+        <div class="discord-item-title">Bot Nyx Exclusivo</div>
+        <p class="discord-item-desc">Sistema automatizado que gestiona estadísticas, XP y progresión sin hojas manuales.</p>
+      </div>
+      <div class="discord-item reveal">
+        <span class="discord-item-icon">🌍</span>
+        <div class="discord-item-title">Mundo Vivo</div>
+        <p class="discord-item-desc">Arcos narrativos constantemente activos. Tus decisiones moldean el destino del servidor.</p>
+      </div>
+      <div class="discord-item reveal">
+        <span class="discord-item-icon">⚖️</span>
+        <div class="discord-item-title">Balance Justo</div>
+        <p class="discord-item-desc">Sistema diseñado para ser equitativo, con reworks y balance dinámico garantizado.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="energy-line"></div>
 
 <section class="join-section">
   <div class="container">
     <div class="join-card reveal">
+      <div class="join-top-line"></div>
       <p class="join-eyebrow">𓏲 ⛩️ 𓏲</p>
       <h2 class="join-title">Une tu Destino</h2>
       <p class="join-sub">El sello de la era maldita aguarda tu nombre.</p>
-
       <div class="join-buttons">
-        <a href="https://discord.gg/tf29Y4zN9W" target="_blank" class="btn-primary">
-          ⛩️ &nbsp; Unirse al Servidor
-        </a>
-        <a href="https://open.spotify.com/track/65X2koe1LhDgQmRkNdJFv9" target="_blank" class="btn-secondary">
-          🎵 &nbsp; Soundtrack Oficial
-        </a>
+        <a href="https://discord.gg/tf29Y4zN9W" target="_blank" class="btn-primary">⛩️   Unirse al Servidor</a>
+        <a href="https://open.spotify.com/track/65X2koe1LhDgQmRkNdJFv9" target="_blank" class="btn-secondary">🎵   Soundtrack Oficial</a>
       </div>
-
       <div class="join-meta">
-        <div class="join-meta-item">Técnicas malditas <span>30+</span></div>
-        <div class="join-meta-item">Maestría <span>0 → 200%</span></div>
-        <div class="join-meta-item">Bot exclusivo <span>Nyx System</span></div>
+        <div class="join-meta-item"><span>30+</span>Técnicas malditas</div>
+        <div class="join-meta-item"><span>0→200%</span>Maestría</div>
+        <div class="join-meta-item"><span>Nyx</span>Bot exclusivo</div>
+        <div class="join-meta-item"><span>∞</span>Lore activo</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════ FOOTER ═══════════════════════════════ -->
 <footer>
-  <div class="footer-runes">◌ 🍥 ◌ 🍥 ◌ 🍥 ◌</div>
-  <p class="footer-text">
-    Cursed Era II &nbsp;—&nbsp; Comunidad de Rol JJK &nbsp;·&nbsp;
-    <a href="https://discord.gg/tf29Y4zN9W" target="_blank">Discord</a>
-  </p>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-col-title">Cursed Era II</div>
+        <ul class="footer-col-links">
+          <li><a href="#nosotros">El Servidor</a></li>
+          <li><a href="#sistema">Sistema Maldito</a></li>
+          <li><a href="#ranking">Ranking</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Lore</div>
+        <ul class="footer-col-links">
+          <li><a href="#lore">Historia Principal</a></li>
+          <li><a href="#lore">Sub Lore</a></li>
+          <li><a href="#lore">Progresión</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Links</div>
+        <ul class="footer-col-links">
+          <li><a href="https://discord.gg/tf29Y4zN9W" target="_blank">⛩ Discord</a></li>
+          <li><a href="https://open.spotify.com/track/65X2koe1LhDgQmRkNdJFv9" target="_blank">🎵 Spotify</a></li>
+          <li><a href="#reglas">⚖️ Reglas</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-divider"></div>
+    <div class="footer-runes">◌ 🍥 ◌ 🍥 ◌ 🍥 ◌</div>
+    <p class="footer-text">
+      Cursed Era II  —  Comunidad de Rol JJK  · 
+      <a href="https://discord.gg/tf29Y4zN9W" target="_blank">Discord</a>
+       ·  © 2024 — La Era Maldita
+    </p>
+  </div>
 </footer>
 
-<!-- ═══════════════════════════════ SCRIPTS ═══════════════════════════════ -->
 <script>
-  // Particles
+  // ─── LOADING ───
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      document.getElementById('loader').classList.add('hidden');
+    }, 1200);
+  });
+
+  // ─── CUSTOM CURSOR ───
+  const orb = document.getElementById('cursorOrb');
+  const trail = document.getElementById('cursorTrail');
+  let mx = 0, my = 0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    orb.style.left = mx + 'px';
+    orb.style.top = my + 'px';
+  });
+  setInterval(() => {
+    trail.style.left = mx + 'px';
+    trail.style.top = my + 'px';
+  }, 80);
+
+  // ─── SCROLL PROGRESS ───
+  const progress = document.getElementById('scrollProgress');
+  const nav = document.getElementById('nav');
+  const backTop = document.getElementById('backTop');
+  window.addEventListener('scroll', () => {
+    const s = document.documentElement.scrollTop;
+    const h = document.documentElement.scrollHeight - window.innerHeight;
+    progress.style.width = (s / h * 100) + '%';
+    nav.classList.toggle('scrolled', s > 60);
+    backTop.classList.toggle('visible', s > 400);
+  });
+
+  // ─── PARTICLES ───
   (function () {
     const container = document.getElementById('particles');
-    for (let i = 0; i < 28; i++) {
+    for (let i = 0; i < 40; i++) {
       const p = document.createElement('div');
       p.className = 'particle';
-      const size = Math.random() * 2 + 1;
+      const size = Math.random() * 3 + 1;
+      const isGold = Math.random() > 0.6;
+      const isCrimson = Math.random() > 0.85;
+      const color = isCrimson ? 'rgba(220,38,38,0.5)' : isGold ? 'rgba(212,168,83,0.5)' : 'rgba(192,132,252,0.6)';
       p.style.cssText = `
         left: ${Math.random() * 100}%;
         width: ${size}px;
         height: ${size}px;
-        --drift: ${(Math.random() - 0.5) * 120}px;
-        animation-duration: ${8 + Math.random() * 14}s;
-        animation-delay: ${Math.random() * 10}s;
-        opacity: ${0.3 + Math.random() * 0.5};
-        background: ${Math.random() > 0.5 ? 'var(--cursed-bright)' : 'var(--gold)'};
+        --drift: ${(Math.random() - 0.5) * 150}px;
+        animation-duration: ${10 + Math.random() * 18}s;
+        animation-delay: ${Math.random() * 12}s;
+        background: ${color};
+        border-radius: ${Math.random() > 0.3 ? '50%' : '1px'};
+        box-shadow: 0 0 ${size * 3}px ${color};
       `;
       container.appendChild(p);
     }
   })();
 
-  // Lore tabs
+  // ─── LORE TABS ───
   function switchTab(panelId, btn) {
     document.querySelectorAll('.lore-panel').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.lore-tab').forEach(t => t.classList.remove('active'));
     document.getElementById(panelId).classList.add('active');
     btn.classList.add('active');
-    // Re-trigger reveals inside newly active panel
-    const newEls = document.querySelectorAll('#' + panelId + ' .reveal:not(.visible)');
-    newEls.forEach((el, i) => setTimeout(() => el.classList.add('visible'), i * 80));
+    const newEls = document.querySelectorAll('#' + panelId + ' .reveal:not(.visible), #' + panelId + ' .reveal-left:not(.visible), #' + panelId + ' .reveal-right:not(.visible)');
+    newEls.forEach((el, i) => setTimeout(() => el.classList.add('visible'), i * 100));
   }
 
+  // ─── REVEAL ON SCROLL ───
   (function () {
-    const els = document.querySelectorAll('.reveal');
+    const selectors = '.reveal, .reveal-left, .reveal-right';
+    const els = document.querySelectorAll(selectors);
     const obs = new IntersectionObserver((entries) => {
       entries.forEach((e, i) => {
         if (e.isIntersecting) {
@@ -1682,9 +2991,160 @@
           obs.unobserve(e.target);
         }
       });
-    }, { threshold: 0.12 });
+    }, { threshold: 0.1 });
     els.forEach(el => obs.observe(el));
   })();
+
+  // ─── ANIMATED COUNTERS ───
+  (function () {
+    const counters = document.querySelectorAll('.stat-number[data-target]');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        const el = e.target;
+        const target = +el.dataset.target;
+        const suffix = el.dataset.suffix || '';
+        let current = 0;
+        const duration = 1800;
+        const step = target / (duration / 16);
+        const timer = setInterval(() => {
+          current += step;
+          if (current >= target) {
+            current = target;
+            clearInterval(timer);
+          }
+          el.textContent = Math.floor(current) + suffix;
+        }, 16);
+        obs.unobserve(el);
+      });
+    }, { threshold: 0.5 });
+    counters.forEach(c => obs.observe(c));
+  })();
+
+  // ─── PILLAR MOUSE GLOW ───
+  document.querySelectorAll('.pillar-card').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const rect = card.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width * 100).toFixed(1);
+      const y = ((e.clientY - rect.top) / rect.height * 100).toFixed(1);
+      card.style.setProperty('--mx', x + '%');
+      card.style.setProperty('--my', y + '%');
+    });
+  });
+
+  // ─── NAV MOBILE ───
+  function toggleNav() {
+    const ham = document.getElementById('navHam');
+    const mobile = document.getElementById('navMobile');
+    ham.classList.toggle('open');
+    mobile.classList.toggle('open');
+  }
+  function closeNav() {
+    document.getElementById('navHam').classList.remove('open');
+    document.getElementById('navMobile').classList.remove('open');
+  }
+
+  // ─── MEDIDOR DE ENERGÍA MALDITA ───
+  document.getElementById('meterBtn').addEventListener('click', function() {
+    const display = document.getElementById('meterDisplay');
+    const rank = document.getElementById('meterRank');
+    const bar = document.getElementById('meterBarFill');
+    
+    // Animar cálculo
+    let tempVal = 0;
+    const calcInterval = setInterval(() => {
+      tempVal = Math.floor(Math.random() * 500000);
+      display.textContent = tempVal.toLocaleString();
+    }, 50);
+
+    setTimeout(() => {
+      clearInterval(calcInterval);
+      const finalCE = Math.floor(Math.random() * 600000);
+      display.textContent = finalCE.toLocaleString();
+      
+      let percentage = (finalCE / 600000) * 100;
+      if (percentage > 100) percentage = 100;
+      if (percentage < 5) percentage = 5;
+
+      bar.style.width = percentage + '%';
+
+      if (finalCE < 10000) {
+        rank.textContent = "Grado 4 — Escasa";
+        rank.style.color = "var(--text-dim)";
+        display.style.color = "var(--text-dim)";
+        display.style.textShadow = "none";
+      } else if (finalCE < 50000) {
+        rank.textContent = "Grado 3 — Común";
+        rank.style.color = "#3b82f6";
+        display.style.color = "#3b82f6";
+        display.style.textShadow = "0 0 15px rgba(59,130,246,0.5)";
+      } else if (finalCE < 150000) {
+        rank.textContent = "Grado 2 — Promedio";
+        rank.style.color = "var(--teal)";
+        display.style.color = "var(--teal)";
+        display.style.textShadow = "0 0 15px rgba(13,148,136,0.5)";
+      } else if (finalCE < 400000) {
+        rank.textContent = "Grado 1 — Sobresaliente";
+        rank.style.color = "var(--gold)";
+        display.style.color = "var(--gold)";
+        display.style.textShadow = "0 0 15px rgba(212,168,83,0.5)";
+      } else {
+        rank.textContent = "Grado Especial — Monstruosa";
+        rank.style.color = "var(--crimson-bright)";
+        display.style.color = "var(--crimson-bright)";
+        display.style.textShadow = "0 0 20px rgba(239,68,68,0.8)";
+      }
+    }, 800);
+  });
+
+  // ─── GENERADOR DE PERSONAJE (QUIZ) ───
+  let quizScores = { zenin: 0, sugawara: 0, kamo: 0, celestial: 0 };
+  
+  function answer(questionNum, trait) {
+    quizScores[trait]++;
+    
+    document.getElementById('q' + questionNum).classList.remove('active');
+    
+    if (questionNum < 3) {
+      document.getElementById('q' + (questionNum + 1)).classList.add('active');
+    } else {
+      showQuizResult();
+    }
+  }
+
+  function showQuizResult() {
+    let highestTrait = Object.keys(quizScores).reduce((a, b) => quizScores[a] > quizScores[b] ? a : b);
+    
+    const nameEl = document.getElementById('quiz-clan-name');
+    const descEl = document.getElementById('quiz-clan-desc');
+    
+    document.getElementById('quiz-result').classList.add('active');
+
+    if (highestTrait === 'zenin') {
+      nameEl.textContent = "Clan Zenin";
+      nameEl.style.color = "var(--crimson-bright)";
+      descEl.innerHTML = "La fuerza bruta y las herramientas malditas son tu camino. Eres agresivo, letal y no dudas en aplastar a quienes se interponen. Tu energía es inestable pero devastadora.";
+    } else if (highestTrait === 'sugawara') {
+      nameEl.textContent = "Sangre Sugawara / Gojo";
+      nameEl.style.color = "var(--cursed-bright)";
+      descEl.innerHTML = "Has sido bendecido con un talento innato que roza lo divino. Tienes una enorme reserva de energía y proteges a los tuyos por pura obligación moral hacia los más débiles.";
+    } else if (highestTrait === 'kamo') {
+      nameEl.textContent = "Clan Kamo";
+      nameEl.style.color = "var(--gold)";
+      descEl.innerHTML = "El conocimiento, la sangre y la tradición te guían. Eres táctico, paciente y prefieres un combate meticuloso y técnico antes que el caos desorganizado.";
+    } else {
+      nameEl.textContent = "Restricción Celestial";
+      nameEl.style.color = "var(--teal)";
+      descEl.innerHTML = "Has nacido con cero energía maldita, pero el mundo te ha compensado con capacidades físicas sobrehumanas. Eres un fantasma para los hechiceros, letal e impredecible.";
+    }
+  }
+
+  function resetQuiz() {
+    quizScores = { zenin: 0, sugawara: 0, kamo: 0, celestial: 0 };
+    document.getElementById('quiz-result').classList.remove('active');
+    document.getElementById('q1').classList.add('active');
+  }
+
 </script>
 </body>
 </html>
