@@ -1,0 +1,23 @@
+{
+  "name": "Cursed Era II",
+  "short_name": "Cursed Era",
+  "description": "Donde la energía maldita es ley. Comunidad de rol de Jujutsu Kaisen.",
+  "start_url": "/index.html",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#04030a",
+  "theme_color": "#6b21a8",
+  "icons": [
+    {
+      "src": "https://i.imgur.com/464sxVf.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://i.imgur.com/464sxVf.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
